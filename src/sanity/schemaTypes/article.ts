@@ -54,6 +54,13 @@ export const article = defineType({
       description: 'A short summary used in card feeds.',
     }),
     defineField({
+      name: 'takeaways',
+      title: 'Key Takeaways',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'Bulleted key takeaways for the article.',
+    }),
+    defineField({
       name: 'publishedAt',
       title: 'Published at',
       type: 'datetime',

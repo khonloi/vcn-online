@@ -50,6 +50,7 @@ export const ARTICLE_BY_SLUG_QUERY = groq`*[_type == "article" && slug.current =
   "author": author->name,
   isBreaking,
   summary,
+  takeaways,
   body,
   publishedAt,
   _createdAt,
