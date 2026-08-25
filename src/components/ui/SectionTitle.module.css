@@ -1,0 +1,61 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 2px solid var(--color-border-strong);
+  margin-bottom: var(--space-5);
+  padding-top: var(--space-5);
+  position: relative;
+}
+
+.heading {
+  font-family: var(--font-family-headline);
+  font-weight: var(--font-weight-black);
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Sizes */
+.sizeSm {
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wider);
+}
+
+.sizeMd {
+  font-size: var(--font-size-base);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.sizeLg {
+  font-size: var(--font-size-xl);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.link {
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.link:hover {
+  color: var(--color-primary);
+}
+
+.action {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.action:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}

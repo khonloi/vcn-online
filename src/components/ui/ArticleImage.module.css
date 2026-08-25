@@ -1,0 +1,39 @@
+.imageContainer {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-none);
+  background-color: var(--color-surface-muted);
+  width: 100%;
+}
+
+.ratio16x9 {
+  aspect-ratio: 16 / 9;
+}
+
+.ratio4x3 {
+  aspect-ratio: 4 / 3;
+}
+
+.ratio3x2 {
+  aspect-ratio: 3 / 2;
+}
+
+.ratio1x1 {
+  aspect-ratio: 1 / 1;
+}
+
+.ratioCustom {
+  /* Controlled by parent container or height/width */
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-slow);
+}
+
+.zoomOnHover:hover .image {
+  transform: scale(1.02);
+}

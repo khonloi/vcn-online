@@ -1,0 +1,103 @@
+.footerWrapper {
+  background-color: var(--color-surface-subtle);
+  padding: var(--space-12) 0 var(--space-8) 0;
+  margin-top: var(--space-16);
+  border-top: 3px solid var(--color-border-strong);
+}
+
+.footerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-8);
+  margin-bottom: var(--space-8);
+  border-bottom: 1px solid var(--color-border);
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.footerLogo {
+  font-family: var(--font-family-headline);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-text-primary);
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.footerLogo span {
+  color: var(--color-primary);
+}
+
+.newsletterForm {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.newsletterInput {
+  height: 38px;
+  padding: 0 var(--space-3);
+  font-size: var(--font-size-xs);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  width: 260px;
+  outline: none;
+}
+
+.newsletterInput:focus {
+  border-color: var(--color-border-strong);
+}
+
+.footerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-8);
+  margin-bottom: var(--space-10);
+}
+
+.footerColumnTitle {
+  font-family: var(--font-family-headline);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-black);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.footerLinks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.footerLink {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-fast);
+}
+
+.footerLink:hover {
+  color: var(--color-primary);
+}
+
+.footerBottom {
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.disclaimer {
+  max-width: 650px;
+  line-height: var(--line-height-normal);
+}
