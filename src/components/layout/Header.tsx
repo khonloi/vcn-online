@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Button, SearchInput } from '@/components/ui';
+import { CurrentDateTime } from './CurrentDateTime';
 import styles from './Header.module.css';
 
 export const Header: React.FC = () => {
@@ -38,6 +39,7 @@ export const Header: React.FC = () => {
           </div>
 
           <div className={styles.topBarActions}>
+            <CurrentDateTime className={styles.dateTimeText} />
             <div className={styles.editionSelector}>
               <span>US</span> | <span>INTL</span> | <span>VC</span>
             </div>
@@ -54,11 +56,8 @@ export const Header: React.FC = () => {
 
           <div className={styles.headerRight}>
             <SearchInput placeholder="Search stocks, topics, people..." />
-            <Button variant="outline" size="sm" href="/subscribe">
+            <Button variant="primary" size="sm" href="/subscribe">
               Subscribe
-            </Button>
-            <Button variant="secondary" size="sm" href="/login">
-              Sign In
             </Button>
           </div>
         </div>
@@ -88,7 +87,7 @@ export const Header: React.FC = () => {
                 <Link href={`/topic/${topic.toLowerCase().replace(/\s+/g, '-')}`} className={styles.trendingItem}>
                   {topic}
                 </Link>
-                {index < trendingTopics.length - 1 && <span style={{ color: 'var(--color-border)' }}>&bull;</span>}
+                {index < trendingTopics.length - 1 && <span className={styles.bulletDivider}>&bull;</span>}
               </React.Fragment>
             ))}
           </div>

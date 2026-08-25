@@ -1,6 +1,6 @@
 import { groq } from 'next-sanity';
 
-export const ALL_ARTICLES_QUERY = groq`*[_type == "article"] | order(publishedAt desc) {
+export const ALL_ARTICLES_QUERY = groq`*[_type == "article"] | order(isBreaking desc, coalesce(publishedAt, _updatedAt, _createdAt) desc) {
   _id,
   title,
   "slug": slug.current,
@@ -11,10 +11,12 @@ export const ALL_ARTICLES_QUERY = groq`*[_type == "article"] | order(publishedAt
   summary,
   takeaways,
   publishedAt,
+  _createdAt,
+  _updatedAt,
   mainImage
 }`;
 
-export const LATEST_ARTICLES_QUERY = groq`*[_type == "article"] | order(publishedAt desc)[0...12] {
+export const LATEST_ARTICLES_QUERY = groq`*[_type == "article"] | order(isBreaking desc, coalesce(publishedAt, _updatedAt, _createdAt) desc)[0...20] {
   _id,
   title,
   "slug": slug.current,
@@ -25,10 +27,12 @@ export const LATEST_ARTICLES_QUERY = groq`*[_type == "article"] | order(publishe
   summary,
   takeaways,
   publishedAt,
+  _createdAt,
+  _updatedAt,
   mainImage
 }`;
 
-export const SPOTLIGHT_ARTICLES_QUERY = groq`*[_type == "article" && (lower(category->title) == "spotlight" || lower(category->title) == "tech")] | order(publishedAt desc)[0...4] {
+export const SPOTLIGHT_ARTICLES_QUERY = groq`*[_type == "article" && (lower(category->title) == "spotlight" || lower(category->title) == "tech")] | order(coalesce(publishedAt, _createdAt) desc)[0...4] {
   _id,
   title,
   "slug": slug.current,
@@ -36,6 +40,7 @@ export const SPOTLIGHT_ARTICLES_QUERY = groq`*[_type == "article" && (lower(cate
   "author": author->name,
   summary,
   publishedAt,
+  _createdAt,
   mainImage
 }`;
 
@@ -50,10 +55,11 @@ export const ARTICLE_BY_SLUG_QUERY = groq`*[_type == "article" && slug.current =
   takeaways,
   body,
   publishedAt,
+  _createdAt,
   mainImage
 }`;
 
-export const ARTICLES_BY_CATEGORY_QUERY = groq`*[_type == "article" && lower(category->slug.current) == lower($category)] | order(publishedAt desc) {
+export const ARTICLES_BY_CATEGORY_QUERY = groq`*[_type == "article" && lower(category->slug.current) == lower($category)] | order(isBreaking desc, coalesce(publishedAt, _createdAt) desc) {
   _id,
   title,
   "slug": slug.current,
@@ -62,5 +68,6 @@ export const ARTICLES_BY_CATEGORY_QUERY = groq`*[_type == "article" && lower(cat
   isBreaking,
   summary,
   publishedAt,
+  _createdAt,
   mainImage
 }`;

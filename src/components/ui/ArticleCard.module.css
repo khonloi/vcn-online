@@ -30,6 +30,10 @@
   letter-spacing: var(--letter-spacing-tight);
   margin: 0;
   transition: color var(--transition-fast);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card:hover .title {
@@ -42,6 +46,10 @@
   font-size: var(--font-size-sm);
   line-height: var(--line-height-relaxed);
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .bulletList {
@@ -50,7 +58,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-3);
 }
 
 .bulletItem {
@@ -67,7 +75,8 @@
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   font-weight: var(--font-weight-medium);
-  margin-top: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-3);
 }
 
 .author {
@@ -81,6 +90,13 @@
 .featured {
   flex-direction: column;
   gap: var(--space-4);
+  height: 100%;
+}
+
+.featuredContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .featured .title {
@@ -101,7 +117,7 @@
 .horizontal {
   flex-direction: row;
   gap: var(--space-3);
-  align-items: flex-start;
+  align-items: stretch;
   padding-bottom: var(--space-4);
   border-bottom: 1px solid var(--color-border);
 }
@@ -120,6 +136,7 @@
   .horizontal {
     gap: var(--space-4);
   }
+
   .horizontalImageWrapper {
     width: 110px;
   }
@@ -156,6 +173,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  flex: 1;
 }
 
 /* ==========================================================================
@@ -164,7 +182,7 @@
 .minimal {
   flex-direction: row;
   gap: var(--space-3);
-  align-items: flex-start;
+  align-items: stretch;
   padding: var(--space-3) 0;
   border-bottom: 1px solid var(--color-border);
 }

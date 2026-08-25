@@ -112,7 +112,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           />
         </Link>
       )}
-      <div className={variant === 'vertical' ? styles.verticalContent : undefined}>
+      <div className={variant === 'vertical' ? styles.verticalContent : styles.featuredContent}>
         {category && <span className={kickerClass}>{category}</span>}
         <HeadingTag className={styles.title}>
           <Link href={href}>{title}</Link>

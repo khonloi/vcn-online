@@ -19,6 +19,7 @@ interface SanityArticle {
   summary?: string;
   takeaways?: string[];
   publishedAt?: string;
+  _createdAt?: string;
   mainImage?: any;
 }
 
@@ -36,32 +37,39 @@ interface FormattedArticle {
 }
 
 export default async function Home() {
-  // Fetch dynamic articles from Sanity
+  // Fetch dynamic articles from Sanity with no-store cache
   let articles: SanityArticle[] = [];
   try {
-    articles = await client.fetch(LATEST_ARTICLES_QUERY);
+    articles = await client.fetch(
+      LATEST_ARTICLES_QUERY,
+      {},
+      { cache: 'no-store', next: { revalidate: 0 } }
+    );
   } catch (error) {
     console.error('Error fetching articles from Sanity:', error);
   }
 
   // Format helper
-  const formatArticle = (art: SanityArticle, fallbackImgSeed: string): FormattedArticle => ({
-    id: art._id,
-    title: art.title,
-    href: `/article/${art.slug}`,
-    image: {
-      src: art.mainImage ? urlFor(art.mainImage).url() : `https://picsum.photos/seed/${art.slug || fallbackImgSeed}/900/506`,
-      alt: art.title,
-    },
-    category: art.category || 'NEWS',
-    isBreaking: art.isBreaking || false,
-    author: art.author || 'Vice City Staff',
-    publishedAt: art.publishedAt
-      ? new Date(art.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-      : 'Just now',
-    summary: art.summary,
-    bullets: art.takeaways,
-  });
+  const formatArticle = (art: SanityArticle, fallbackImgSeed: string): FormattedArticle => {
+    const dateSource = art.publishedAt || art._createdAt;
+    return {
+      id: art._id,
+      title: art.title,
+      href: `/article/${art.slug}`,
+      image: {
+        src: art.mainImage ? urlFor(art.mainImage).url() : `https://picsum.photos/seed/${art.slug || fallbackImgSeed}/900/506`,
+        alt: art.title,
+      },
+      category: art.category || 'NEWS',
+      isBreaking: art.isBreaking || false,
+      author: art.author || 'Vice City Staff',
+      publishedAt: dateSource
+        ? new Date(dateSource).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : 'Just now',
+      summary: art.summary,
+      bullets: art.takeaways,
+    };
+  };
 
   if (articles.length === 0) {
     return (
@@ -81,11 +89,25 @@ export default async function Home() {
     );
   }
 
-  // Assign real stories from Sanity
-  const leadStory: FormattedArticle = formatArticle(articles[0], 'lead-story');
-  const topFeed: FormattedArticle[] = articles.slice(1, 5).map((a, idx) => formatArticle(a, `top-${idx}`));
-  const spotlightFeed: FormattedArticle[] = (articles.length > 2 ? articles.slice(2, 6) : articles).map((a, idx) => formatArticle(a, `spotlight-${idx}`));
-  const analysisFeed: FormattedArticle[] = articles.map((a, idx) => formatArticle(a, `analysis-${idx}`));
+  // Pick the lead story (Breaking news takes priority, otherwise the latest article)
+  const breakingIndex = articles.findIndex((a) => a.isBreaking);
+  const leadIndex = breakingIndex !== -1 ? breakingIndex : 0;
+  const leadStory: FormattedArticle = formatArticle(articles[leadIndex], 'lead-story');
+
+  // Filter out the lead article from secondary feeds so it doesn't duplicate
+  const remainingArticles = articles.filter((_, idx) => idx !== leadIndex);
+
+  const topFeed: FormattedArticle[] = (remainingArticles.length > 0 ? remainingArticles : articles)
+    .slice(0, 4)
+    .map((a, idx) => formatArticle(a, `top-${idx}`));
+
+  const spotlightFeed: FormattedArticle[] = (remainingArticles.length > 4 ? remainingArticles.slice(4, 8) : articles)
+    .slice(0, 4)
+    .map((a, idx) => formatArticle(a, `spotlight-${idx}`));
+
+  const analysisFeed: FormattedArticle[] = (remainingArticles.length > 0 ? remainingArticles : articles)
+    .map((a, idx) => formatArticle(a, `analysis-${idx}`));
+
   const trendingRankings = articles.slice(0, 5).map((a, idx) => ({
     id: a._id,
     ranking: idx + 1,
