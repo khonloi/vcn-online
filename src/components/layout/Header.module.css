@@ -52,10 +52,16 @@
 }
 
 .topBarActions {
-  display: flex;
+  display: none;
   gap: var(--space-4);
   align-items: center;
   font-size: var(--font-size-xs);
+}
+
+@media (min-width: 768px) {
+  .topBarActions {
+    display: flex;
+  }
 }
 
 .editionSelector {
@@ -69,20 +75,26 @@
 
 /* Main Brand Header */
 .mainHeader {
-  padding: var(--space-4) 0;
+  padding: var(--space-3) 0;
   border-bottom: 1px solid var(--color-border-subtle);
+}
+
+@media (min-width: 768px) {
+  .mainHeader {
+    padding: var(--space-4) 0;
+  }
 }
 
 .mainHeaderContent {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--space-6);
+  gap: var(--space-4);
 }
 
 .logo {
   font-family: var(--font-family-headline);
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-xl);
   font-weight: var(--font-weight-black);
   color: var(--color-text-primary);
   letter-spacing: -0.04em;
@@ -93,21 +105,40 @@
   gap: 4px;
 }
 
+@media (min-width: 768px) {
+  .logo {
+    font-size: var(--font-size-2xl);
+  }
+}
+
 .logoBadge {
   background-color: var(--color-primary);
   color: var(--color-text-inverse);
-  font-size: 10px;
+  font-size: 9px;
   font-weight: var(--font-weight-black);
-  padding: 2px 5px;
+  padding: 2px 4px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   vertical-align: middle;
 }
 
+@media (min-width: 768px) {
+  .logoBadge {
+    font-size: 10px;
+    padding: 2px 5px;
+  }
+}
+
 .headerRight {
-  display: flex;
+  display: none;
   align-items: center;
   gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .headerRight {
+    display: flex;
+  }
 }
 
 /* Category Navigation Bar */
@@ -117,10 +148,17 @@
 
 .navLinks {
   display: flex;
-  gap: var(--space-5);
+  gap: var(--space-4);
   padding: var(--space-2) 0;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+}
+
+@media (min-width: 768px) {
+  .navLinks {
+    gap: var(--space-5);
+  }
 }
 
 .navLinks::-webkit-scrollbar {

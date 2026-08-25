@@ -1,178 +1,168 @@
 import React from 'react';
 import { ArticleCard, SectionTitle, Grid, Button } from '@/components/ui';
 import styles from './page.module.css';
+import { client } from '@/sanity/lib/client';
+import { LATEST_ARTICLES_QUERY } from '@/sanity/lib/queries';
+import { urlFor } from '@/sanity/lib/image';
 
-export default function Home() {
-  const topStories = [
-    {
-      id: 1,
-      title: 'Nvidia unveils next-generation Blackwell Ultra chips as AI data center demand hits unprecedented highs',
-      href: '/article/nvidia-blackwell-ultra-ai-datacenter',
-      image: { src: 'https://picsum.photos/seed/tech1/200/200', alt: 'AI Chips' },
-      category: 'TECH',
-      author: 'Alistair Barr',
-      publishedAt: '15m ago',
-    },
-    {
-      id: 2,
-      title: 'Federal Reserve hints at calibrated rate path as inflation data shows persistent services pressure',
-      href: '/article/fed-interest-rates-inflation-outlook',
-      image: { src: 'https://picsum.photos/seed/fed2/200/200', alt: 'Federal Reserve' },
-      category: 'ECONOMY',
-      author: 'Jennifer Sor',
-      publishedAt: '45m ago',
-    },
-    {
-      id: 3,
-      title: 'Inside OpenAI’s internal restructuring as it transitions toward a fully for-profit enterprise model',
-      href: '/article/openai-restructuring-enterprise-shift',
-      image: { src: 'https://picsum.photos/seed/openai3/200/200', alt: 'AI Architecture' },
-      category: 'EXCLUSIVE',
-      isBreaking: true,
-      author: 'Kali Hays',
-      publishedAt: '1h ago',
-    },
-    {
-      id: 4,
-      title: 'Wall Street analysts double down on semiconductor stocks despite geopolitical supply chain headwinds',
-      href: '/article/wall-street-semiconductors-forecast',
-      image: { src: 'https://picsum.photos/seed/stocks4/200/200', alt: 'Wall Street Trading' },
-      category: 'MARKETS',
-      author: 'Matthew Fox',
-      publishedAt: '2h ago',
-    },
-  ];
+export const dynamic = 'force-dynamic';
+export const revalidate = 0; // Fresh data on every load
 
-  const spotlightStories = [
-    {
-      id: 1,
-      title: 'Why early-stage venture capital is shifting aggressively from SaaS toward physical AI and robotics',
-      href: '/article/venture-capital-robotics-physical-ai',
-      image: { src: 'https://picsum.photos/seed/spotlight1/400/225', alt: 'Robotics lab' },
-      category: 'VENTURE CAPITAL',
-      author: 'Ben Bergman',
-      publishedAt: '3h ago',
-    },
-    {
-      id: 2,
-      title: 'How remote work executives are quietly rethinking return-to-office mandates for senior engineers',
-      href: '/article/rto-mandates-engineering-talent',
-      image: { src: 'https://picsum.photos/seed/spotlight2/400/225', alt: 'Modern Office' },
-      category: 'STRATEGY',
-      author: 'Emily Stewart',
-      publishedAt: '4h ago',
-    },
-    {
-      id: 3,
-      title: 'The commercial real estate reset: Why major European banks are speeding up distress debt sales',
-      href: '/article/commercial-real-estate-debt-sales',
-      image: { src: 'https://picsum.photos/seed/spotlight3/400/225', alt: 'City Skyline' },
-      category: 'FINANCE',
-      author: 'Will Daniel',
-      publishedAt: '5h ago',
-    },
-    {
-      id: 4,
-      title: 'Electric vehicle price wars intensify as legacy automakers ramp up hybrid battery production',
-      href: '/article/ev-price-wars-hybrid-production',
-      image: { src: 'https://picsum.photos/seed/spotlight4/400/225', alt: 'Electric Vehicle' },
-      category: 'AUTOMOTIVE',
-      author: 'Nora Naughton',
-      publishedAt: '6h ago',
-    },
-  ];
+interface SanityArticle {
+  _id: string;
+  title: string;
+  slug: string;
+  category?: string;
+  categorySlug?: string;
+  author?: string;
+  isBreaking?: boolean;
+  summary?: string;
+  takeaways?: string[];
+  publishedAt?: string;
+  mainImage?: any;
+}
 
-  const latestAnalysis = [
-    {
-      id: 1,
-      title: 'Big Tech is pouring billions into custom silicon. Here is what that means for traditional chipmakers.',
-      href: '/article/big-tech-custom-silicon-race',
-      image: { src: 'https://picsum.photos/seed/analysis1/600/340', alt: 'Silicon wafer' },
-      category: 'TECH ANALYSIS',
-      summary: 'Tech giants like Microsoft, Google, and Amazon are increasingly fabricating their own ASICs to reduce dependence on merchant silicon, reshaping the entire semiconductor ecosystem.',
-      author: 'Hasan Chowdhury',
-      publishedAt: '2h ago',
-    },
-    {
-      id: 2,
-      title: 'Private equity firms are sitting on a record $2.6 trillion in dry powder. The dealmaking dam is about to break.',
-      href: '/article/private-equity-dry-powder-dealmaking',
-      image: { src: 'https://picsum.photos/seed/analysis2/600/340', alt: 'Dealmaking' },
-      category: 'WALL STREET',
-      summary: 'With interest rates stabilizing and valuation gaps narrowing, institutional buyout funds are preparing for the biggest merger wave since 2021.',
-      author: 'Alex Morrell',
-      publishedAt: '3h ago',
-    },
-    {
-      id: 3,
-      title: 'The hidden costs of corporate AI adoption: Cloud computing bills, specialized talent, and legal uncertainty.',
-      href: '/article/corporate-ai-adoption-hidden-costs',
-      image: { src: 'https://picsum.photos/seed/analysis3/600/340', alt: 'Cloud Server Room' },
-      category: 'ENTERPRISE',
-      summary: 'While generative AI promises rapid productivity gains, CIOs report surprising compute expenses and mounting compliance overhead.',
-      author: 'Paayal Zaveri',
-      publishedAt: '4h ago',
-    },
-    {
-      id: 4,
-      title: 'How top startup founders are restructuring their equity compensation to navigate the secondary market discount.',
-      href: '/article/startup-equity-compensation-secondary-markets',
-      image: { src: 'https://picsum.photos/seed/analysis4/600/340', alt: 'Startup team' },
-      category: 'CAREERS & WEALTH',
-      summary: 'With IPO windows remaining selective, startup executives are pioneering new liquidity mechanisms for early employees.',
-      author: 'Melia Russell',
-      publishedAt: '5h ago',
-    },
-  ];
+interface FormattedArticle {
+  id: string;
+  title: string;
+  href: string;
+  image: { src: string; alt: string };
+  category: string;
+  isBreaking?: boolean;
+  author: string;
+  publishedAt: string;
+  summary?: string;
+  bullets?: string[];
+}
 
-  const trendingRankings = [
-    {
-      id: 1,
-      ranking: 1,
-      title: '7 high-paying tech skills that are seeing the fastest salary growth this quarter',
-      href: '/article/top-paying-tech-skills-growth',
-      category: 'CAREERS',
-      author: 'Courtney Connley',
-      publishedAt: '124k reads',
+export default async function Home() {
+  // Fetch dynamic articles from Sanity
+  let articles: SanityArticle[] = [];
+  try {
+    articles = await client.fetch(LATEST_ARTICLES_QUERY);
+  } catch (error) {
+    console.error('Error fetching articles from Sanity:', error);
+  }
+
+  // Format helper
+  const formatArticle = (art: SanityArticle, fallbackImgSeed: string): FormattedArticle => ({
+    id: art._id,
+    title: art.title,
+    href: `/article/${art.slug}`,
+    image: {
+      src: art.mainImage ? urlFor(art.mainImage).url() : `https://picsum.photos/seed/${art.slug || fallbackImgSeed}/900/506`,
+      alt: art.title,
     },
-    {
-      id: 2,
-      ranking: 2,
-      title: 'A leaked internal memo reveals Amazon’s updated performance evaluation metrics for engineers',
-      href: '/article/leaked-amazon-evaluation-memo',
-      category: 'EXCLUSIVE',
-      isBreaking: true,
-      author: 'Eugene Kim',
-      publishedAt: '98k reads',
-    },
-    {
-      id: 3,
-      ranking: 3,
-      title: 'The exact prompts a top hedge fund manager uses with Claude and ChatGPT to analyze quarterly earnings',
-      href: '/article/hedge-fund-ai-prompts-earnings-analysis',
-      category: 'INVESTING',
-      author: 'Filip De Mott',
-      publishedAt: '85k reads',
-    },
-    {
-      id: 4,
-      ranking: 4,
-      title: 'Why seasoned real estate investors are pivoting from coastal luxury to Midwest logistics hubs',
-      href: '/article/real-estate-midwest-logistics-pivot',
-      category: 'REAL ESTATE',
-      author: 'Alcynna Lloyd',
-      publishedAt: '72k reads',
-    },
-    {
-      id: 5,
-      ranking: 5,
-      title: 'The 10 fastest-growing AI startups founded by ex-Google and DeepMind researchers',
-      href: '/article/top-ai-startups-deepmind-alumni',
-      category: 'STARTUPS',
-      author: 'Hugh Langley',
-      publishedAt: '64k reads',
-    },
-  ];
+    category: art.category || 'NEWS',
+    isBreaking: art.isBreaking || false,
+    author: art.author || 'Vice City Staff',
+    publishedAt: art.publishedAt
+      ? new Date(art.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+      : 'Just now',
+    summary: art.summary,
+    bullets: art.takeaways,
+  });
+
+  // Assign stories
+  const leadStory: FormattedArticle = articles.length > 0
+    ? formatArticle(articles[0], 'lead-story')
+    : {
+        id: 'default-lead',
+        title: 'Inside the $100 Billion AI Infrastructure Race: Tech Giants Forge Mega-Alliances to Secure Sovereign Power Grids',
+        href: '/article/100-billion-ai-infrastructure-power-grid-race',
+        image: { src: 'https://picsum.photos/seed/bifeatured/900/506', alt: 'AI Infrastructure' },
+        category: 'EXCLUSIVE REPORT',
+        isBreaking: true,
+        summary: 'As hyperscale AI cluster power requirements exceed municipal capacity, tech conglomerates are directly negotiating with utility operators to build private energy corridors.',
+        bullets: [
+          'Hyperscalers are committing billions to long-term power purchase agreements with zero-carbon energy providers.',
+          'Sovereign AI initiatives across Europe and Asia are creating intense competition for high-voltage transformers and specialized cooling infrastructure.',
+          'Wall Street expects energy capital expenditure to surpass traditional server silicon spend by 2027.',
+        ],
+        author: 'Alistair Barr & Kali Hays',
+        publishedAt: '35m ago',
+      };
+
+  const topFeed: FormattedArticle[] = articles.length > 1
+    ? articles.slice(1, 5).map((a, idx) => formatArticle(a, `top-${idx}`))
+    : [
+        {
+          id: '1',
+          title: 'Nvidia unveils next-generation Blackwell Ultra chips as AI data center demand hits unprecedented highs',
+          href: '/article/nvidia-blackwell-ultra-ai-datacenter',
+          image: { src: 'https://picsum.photos/seed/tech1/200/200', alt: 'AI Chips' },
+          category: 'TECH',
+          isBreaking: false,
+          author: 'Alistair Barr',
+          publishedAt: '15m ago',
+          summary: 'Nvidia expands its enterprise semiconductor roadmap with enhanced thermal efficiency and interconnect bandwidth.',
+        },
+        {
+          id: '2',
+          title: 'Federal Reserve hints at calibrated rate path as inflation data shows persistent services pressure',
+          href: '/article/fed-interest-rates-inflation-outlook',
+          image: { src: 'https://picsum.photos/seed/fed2/200/200', alt: 'Federal Reserve' },
+          category: 'ECONOMY',
+          isBreaking: false,
+          author: 'Jennifer Sor',
+          publishedAt: '45m ago',
+          summary: 'Central bankers signal a cautious approach toward further rate adjustments as labor markets remain resilient.',
+        },
+        {
+          id: '3',
+          title: 'Inside OpenAI’s internal restructuring as it transitions toward a fully for-profit enterprise model',
+          href: '/article/openai-restructuring-enterprise-shift',
+          image: { src: 'https://picsum.photos/seed/openai3/200/200', alt: 'AI Architecture' },
+          category: 'EXCLUSIVE',
+          isBreaking: true,
+          author: 'Kali Hays',
+          publishedAt: '1h ago',
+          summary: 'Key leadership shifts and corporate structure modifications reflect a direct push toward institutional enterprise software.',
+        },
+        {
+          id: '4',
+          title: 'Wall Street analysts double down on semiconductor stocks despite geopolitical supply chain headwinds',
+          href: '/article/wall-street-semiconductors-forecast',
+          image: { src: 'https://picsum.photos/seed/stocks4/200/200', alt: 'Wall Street Trading' },
+          category: 'MARKETS',
+          isBreaking: false,
+          author: 'Matthew Fox',
+          publishedAt: '2h ago',
+          summary: 'Equity analysts remain bullish on capital equipment suppliers as global foundry capacity expands.',
+        },
+      ];
+
+  const spotlightFeed = articles.length > 2
+    ? articles.slice(2, 6).map((a, idx) => formatArticle(a, `spotlight-${idx}`))
+    : topFeed;
+
+  const analysisFeed = articles.length > 0
+    ? articles.map((a, idx) => formatArticle(a, `analysis-${idx}`))
+    : topFeed;
+
+  const trendingRankings = articles.length > 0
+    ? articles.slice(0, 5).map((a, idx) => ({
+        id: a._id,
+        ranking: idx + 1,
+        title: a.title,
+        href: `/article/${a.slug}`,
+        category: a.category || 'TRENDING',
+        isBreaking: a.isBreaking,
+        author: a.author || 'Vice City Staff',
+        publishedAt: 'Trending now',
+      }))
+    : [
+        {
+          id: '1',
+          ranking: 1,
+          title: '7 high-paying tech skills that are seeing the fastest salary growth this quarter',
+          href: '/article/top-paying-tech-skills-growth',
+          category: 'CAREERS',
+          isBreaking: false,
+          author: 'Courtney Connley',
+          publishedAt: '124k reads',
+        },
+      ];
 
   return (
     <div className={`container ${styles.page}`}>
@@ -183,32 +173,25 @@ export default function Home() {
           <Grid.Col span={12} spanLg={7}>
             <ArticleCard
               variant="featured"
-              category="EXCLUSIVE REPORT"
-              isBreaking={true}
-              title="Inside the $100 Billion AI Infrastructure Race: Tech Giants Forge Mega-Alliances to Secure Sovereign Power Grids"
-              summary="As hyperscale AI cluster power requirements exceed the capacity of municipal grids, tech conglomerates are directly negotiating with nuclear energy operators and sovereign wealth funds to build private energy corridors."
-              bullets={[
-                'Hyperscalers are committing billions to long-term power purchase agreements with zero-carbon energy providers.',
-                'Sovereign AI initiatives across Europe and Asia are creating intense competition for high-voltage transformers and specialized cooling infrastructure.',
-                'Wall Street expects energy capital expenditure to surpass traditional server silicon spend by 2027.',
-              ]}
-              author="Alistair Barr & Kali Hays"
-              publishedAt="35m ago"
-              href="/article/100-billion-ai-infrastructure-power-grid-race"
-              image={{
-                src: 'https://picsum.photos/seed/bifeatured/900/506',
-                alt: 'AI Data Center Infrastructure',
-              }}
+              category={leadStory.category}
+              isBreaking={leadStory.isBreaking}
+              title={leadStory.title}
+              summary={leadStory.summary}
+              bullets={leadStory.bullets}
+              author={leadStory.author}
+              publishedAt={leadStory.publishedAt}
+              href={leadStory.href}
+              image={leadStory.image}
             />
           </Grid.Col>
 
           {/* Right Feed (5 Cols) */}
           <Grid.Col span={12} spanLg={5}>
             <SectionTitle size="sm" actionText="More Breaking News" actionHref="/news">
-              Top Stories & Breaking
+              Top Stories &amp; Breaking
             </SectionTitle>
             <div className={styles.storyList}>
-              {topStories.map((story) => (
+              {topFeed.map((story) => (
                 <ArticleCard
                   key={story.id}
                   variant="horizontal"
@@ -229,11 +212,11 @@ export default function Home() {
       {/* 2. SPOTLIGHT 4-COLUMN STRIP */}
       <section className={styles.spotlightSection} aria-label="Market Spotlight">
         <SectionTitle size="md" actionText="Explore Sectors" actionHref="/markets">
-          Markets & Tech Spotlight
+          Markets &amp; Tech Spotlight
         </SectionTitle>
 
         <Grid cols={12} gap="md">
-          {spotlightStories.map((story) => (
+          {spotlightFeed.map((story) => (
             <Grid.Col key={story.id} span={12} spanMd={6} spanLg={3}>
               <ArticleCard
                 variant="vertical"
@@ -254,11 +237,11 @@ export default function Home() {
         {/* Main Column: In-Depth Analysis (8 cols) */}
         <Grid.Col span={12} spanLg={8}>
           <SectionTitle size="md" actionText="View All Analysis" actionHref="/analysis">
-            In-Depth Analysis & Executive Strategy
+            In-Depth Analysis &amp; Executive Strategy
           </SectionTitle>
 
           <Grid cols={12} gap="lg">
-            {latestAnalysis.map((item) => (
+            {analysisFeed.map((item) => (
               <Grid.Col key={item.id} span={12} spanMd={6}>
                 <ArticleCard
                   variant="vertical"

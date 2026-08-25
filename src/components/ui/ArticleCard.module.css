@@ -100,7 +100,7 @@
    ========================================================================== */
 .horizontal {
   flex-direction: row;
-  gap: var(--space-4);
+  gap: var(--space-3);
   align-items: flex-start;
   padding-bottom: var(--space-4);
   border-bottom: 1px solid var(--color-border);
@@ -112,14 +112,24 @@
 }
 
 .horizontalImageWrapper {
-  width: 110px;
+  width: 90px;
   flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .horizontal {
+    gap: var(--space-4);
+  }
+  .horizontalImageWrapper {
+    width: 110px;
+  }
 }
 
 .horizontalContent {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .horizontal .title {
@@ -178,6 +188,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .minimal .title {

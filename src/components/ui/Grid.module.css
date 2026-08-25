@@ -18,9 +18,15 @@
 /* Gaps */
 .gapNone { gap: 0; }
 .gapSm { gap: var(--space-2); }
-.gapMd { gap: var(--space-4); }
-.gapLg { gap: var(--space-6); }
-.gapXl { gap: var(--space-8); }
+.gapMd { gap: var(--space-3); }
+.gapLg { gap: var(--space-4); }
+.gapXl { gap: var(--space-5); }
+
+@media (min-width: 768px) {
+  .gapMd { gap: var(--space-4); }
+  .gapLg { gap: var(--space-6); }
+  .gapXl { gap: var(--space-8); }
+}
 
 /* Column spans (for 12-column grid) */
 .colSpan1 { grid-column: span 1 / span 1; }

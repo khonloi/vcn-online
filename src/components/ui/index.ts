@@ -4,3 +4,4 @@ export * from './SectionTitle';
 export * from './ArticleImage';
 export * from './ArticleCard';
 export * from './Grid';
+export * from './CustomPortableText';

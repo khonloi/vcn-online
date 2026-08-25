@@ -1,6 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
 import { SectionTitle, Grid, ArticleCard, Button } from '@/components/ui';
+import { client } from '@/sanity/lib/client';
+import { ARTICLES_BY_CATEGORY_QUERY } from '@/sanity/lib/queries';
+import { urlFor } from '@/sanity/lib/image';
 
 interface CategoryPageProps {
   params: Promise<{
@@ -8,11 +11,30 @@ interface CategoryPageProps {
   }>;
 }
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params;
   const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1);
 
-  const categoryArticles = [
+  // Fetch articles from Sanity
+  const sanityArticles = await client.fetch(ARTICLES_BY_CATEGORY_QUERY, { category }).catch(() => []);
+
+  const categoryArticles = sanityArticles.length > 0 ? sanityArticles.map((s: any) => ({
+    id: s._id,
+    title: s.title,
+    href: `/article/${s.slug}`,
+    image: {
+      src: s.mainImage ? urlFor(s.mainImage).url() : `https://picsum.photos/seed/${s.slug || 'category-hero'}/600/340`,
+      alt: s.title,
+    },
+    category: s.category || categoryTitle.toUpperCase(),
+    summary: s.summary,
+    isBreaking: s.isBreaking,
+    author: s.author,
+    publishedAt: s.publishedAt ? new Date(s.publishedAt).toLocaleDateString() : 'Just now',
+  })) : [
     {
       id: 1,
       title: `${categoryTitle} Mega-Trends: The 5 forces disrupting global markets in 2026`,
@@ -74,7 +96,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       </SectionTitle>
 
       <Grid cols={12} gap="lg">
-        {categoryArticles.map((article) => (
+        {categoryArticles.map((article: any) => (
           <Grid.Col key={article.id} span={12} spanMd={6}>
             <ArticleCard
               variant="vertical"
