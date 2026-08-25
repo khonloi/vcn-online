@@ -63,106 +63,39 @@ export default async function Home() {
     bullets: art.takeaways,
   });
 
-  // Assign stories
-  const leadStory: FormattedArticle = articles.length > 0
-    ? formatArticle(articles[0], 'lead-story')
-    : {
-        id: 'default-lead',
-        title: 'Inside the $100 Billion AI Infrastructure Race: Tech Giants Forge Mega-Alliances to Secure Sovereign Power Grids',
-        href: '/article/100-billion-ai-infrastructure-power-grid-race',
-        image: { src: 'https://picsum.photos/seed/bifeatured/900/506', alt: 'AI Infrastructure' },
-        category: 'EXCLUSIVE REPORT',
-        isBreaking: true,
-        summary: 'As hyperscale AI cluster power requirements exceed municipal capacity, tech conglomerates are directly negotiating with utility operators to build private energy corridors.',
-        bullets: [
-          'Hyperscalers are committing billions to long-term power purchase agreements with zero-carbon energy providers.',
-          'Sovereign AI initiatives across Europe and Asia are creating intense competition for high-voltage transformers and specialized cooling infrastructure.',
-          'Wall Street expects energy capital expenditure to surpass traditional server silicon spend by 2027.',
-        ],
-        author: 'Alistair Barr & Kali Hays',
-        publishedAt: '35m ago',
-      };
+  if (articles.length === 0) {
+    return (
+      <div className={`container ${styles.page}`}>
+        <div style={{ textAlign: 'center', padding: 'var(--space-16) 0', color: 'var(--color-text-muted)' }}>
+          <SectionTitle size="lg" as="h1">
+            Welcome to Vice City News
+          </SectionTitle>
+          <p style={{ fontSize: 'var(--font-size-lg)', marginTop: 'var(--space-4)', marginBottom: 'var(--space-6)' }}>
+            No published articles found in the database. Open Sanity Studio to create and publish content.
+          </p>
+          <Button variant="primary" size="md" href="/studio">
+            Open Sanity Studio &rarr;
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
-  const topFeed: FormattedArticle[] = articles.length > 1
-    ? articles.slice(1, 5).map((a, idx) => formatArticle(a, `top-${idx}`))
-    : [
-        {
-          id: '1',
-          title: 'Nvidia unveils next-generation Blackwell Ultra chips as AI data center demand hits unprecedented highs',
-          href: '/article/nvidia-blackwell-ultra-ai-datacenter',
-          image: { src: 'https://picsum.photos/seed/tech1/200/200', alt: 'AI Chips' },
-          category: 'TECH',
-          isBreaking: false,
-          author: 'Alistair Barr',
-          publishedAt: '15m ago',
-          summary: 'Nvidia expands its enterprise semiconductor roadmap with enhanced thermal efficiency and interconnect bandwidth.',
-        },
-        {
-          id: '2',
-          title: 'Federal Reserve hints at calibrated rate path as inflation data shows persistent services pressure',
-          href: '/article/fed-interest-rates-inflation-outlook',
-          image: { src: 'https://picsum.photos/seed/fed2/200/200', alt: 'Federal Reserve' },
-          category: 'ECONOMY',
-          isBreaking: false,
-          author: 'Jennifer Sor',
-          publishedAt: '45m ago',
-          summary: 'Central bankers signal a cautious approach toward further rate adjustments as labor markets remain resilient.',
-        },
-        {
-          id: '3',
-          title: 'Inside OpenAI’s internal restructuring as it transitions toward a fully for-profit enterprise model',
-          href: '/article/openai-restructuring-enterprise-shift',
-          image: { src: 'https://picsum.photos/seed/openai3/200/200', alt: 'AI Architecture' },
-          category: 'EXCLUSIVE',
-          isBreaking: true,
-          author: 'Kali Hays',
-          publishedAt: '1h ago',
-          summary: 'Key leadership shifts and corporate structure modifications reflect a direct push toward institutional enterprise software.',
-        },
-        {
-          id: '4',
-          title: 'Wall Street analysts double down on semiconductor stocks despite geopolitical supply chain headwinds',
-          href: '/article/wall-street-semiconductors-forecast',
-          image: { src: 'https://picsum.photos/seed/stocks4/200/200', alt: 'Wall Street Trading' },
-          category: 'MARKETS',
-          isBreaking: false,
-          author: 'Matthew Fox',
-          publishedAt: '2h ago',
-          summary: 'Equity analysts remain bullish on capital equipment suppliers as global foundry capacity expands.',
-        },
-      ];
-
-  const spotlightFeed = articles.length > 2
-    ? articles.slice(2, 6).map((a, idx) => formatArticle(a, `spotlight-${idx}`))
-    : topFeed;
-
-  const analysisFeed = articles.length > 0
-    ? articles.map((a, idx) => formatArticle(a, `analysis-${idx}`))
-    : topFeed;
-
-  const trendingRankings = articles.length > 0
-    ? articles.slice(0, 5).map((a, idx) => ({
-        id: a._id,
-        ranking: idx + 1,
-        title: a.title,
-        href: `/article/${a.slug}`,
-        category: a.category || 'TRENDING',
-        isBreaking: a.isBreaking,
-        author: a.author || 'Vice City Staff',
-        publishedAt: 'Trending now',
-      }))
-    : [
-        {
-          id: '1',
-          ranking: 1,
-          title: '7 high-paying tech skills that are seeing the fastest salary growth this quarter',
-          href: '/article/top-paying-tech-skills-growth',
-          category: 'CAREERS',
-          isBreaking: false,
-          author: 'Courtney Connley',
-          publishedAt: '124k reads',
-        },
-      ];
+  // Assign real stories from Sanity
+  const leadStory: FormattedArticle = formatArticle(articles[0], 'lead-story');
+  const topFeed: FormattedArticle[] = articles.slice(1, 5).map((a, idx) => formatArticle(a, `top-${idx}`));
+  const spotlightFeed: FormattedArticle[] = (articles.length > 2 ? articles.slice(2, 6) : articles).map((a, idx) => formatArticle(a, `spotlight-${idx}`));
+  const analysisFeed: FormattedArticle[] = articles.map((a, idx) => formatArticle(a, `analysis-${idx}`));
+  const trendingRankings = articles.slice(0, 5).map((a, idx) => ({
+    id: a._id,
+    ranking: idx + 1,
+    title: a.title,
+    href: `/article/${a.slug}`,
+    category: a.category || 'TRENDING',
+    isBreaking: a.isBreaking,
+    author: a.author || 'Vice City Staff',
+    publishedAt: 'Trending now',
+  }));
 
   return (
     <div className={`container ${styles.page}`}>
