@@ -132,6 +132,43 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </div>
       </header>
 
+      {/* Key Summary Box */}
+      {article.summary && (
+        <div
+          style={{
+            backgroundColor: "var(--color-surface-subtle)",
+            borderLeft: "4px solid var(--color-primary)",
+            padding: "var(--space-4) var(--space-5)",
+            marginBottom: "var(--space-6)",
+          }}
+        >
+          <h3
+            style={{
+              fontFamily: "var(--font-family-headline)",
+              fontSize: "var(--font-size-xs)",
+              fontWeight: "var(--font-weight-black)",
+              textTransform: "uppercase",
+              letterSpacing: "var(--letter-spacing-wider)",
+              marginBottom: "var(--space-2)",
+              color: "var(--color-primary)",
+            }}
+          >
+            Key Summary
+          </h3>
+          <p
+            style={{
+              fontFamily: "var(--font-family-serif)",
+              fontSize: "var(--font-size-base)",
+              lineHeight: "var(--line-height-relaxed)",
+              color: "var(--color-text-secondary)",
+              margin: 0,
+            }}
+          >
+            {article.summary}
+          </p>
+        </div>
+      )}
+
       {/* Main Image */}
       <div style={{ marginBottom: "var(--space-6)" }}>
         <ArticleImage
