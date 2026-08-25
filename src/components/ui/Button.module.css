@@ -42,14 +42,14 @@
 /* Variants */
 .variantPrimary {
   background-color: var(--color-primary);
-  color: var(--color-text-inverse);
+  color: #ffffff;
   border-color: var(--color-primary);
 }
 
 .variantPrimary:hover:not(:disabled) {
   background-color: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
-  color: var(--color-text-inverse);
+  color: #ffffff;
 }
 
 .variantSecondary {

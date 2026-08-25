@@ -11,7 +11,6 @@ export interface ArticleCardProps {
     alt?: string;
   };
   summary?: string;
-  bullets?: string[];
   category?: string;
   isBreaking?: boolean;
   author?: string;
@@ -26,7 +25,6 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   href,
   image,
   summary,
-  bullets,
   category,
   isBreaking = false,
   author,
@@ -118,15 +116,6 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           <Link href={href}>{title}</Link>
         </HeadingTag>
         {summary && <p className={styles.summary}>{summary}</p>}
-        {bullets && bullets.length > 0 && (
-          <ul className={styles.bulletList}>
-            {bullets.map((bullet, idx) => (
-              <li key={idx} className={styles.bulletItem}>
-                {bullet}
-              </li>
-            ))}
-          </ul>
-        )}
         {(author || publishedAt) && (
           <div className={styles.meta}>
             {author && <span className={styles.author}>{author}</span>}

@@ -17,7 +17,6 @@ interface SanityArticle {
   author?: string;
   isBreaking?: boolean;
   summary?: string;
-  takeaways?: string[];
   publishedAt?: string;
   _createdAt?: string;
   mainImage?: any;
@@ -33,7 +32,6 @@ interface FormattedArticle {
   author: string;
   publishedAt: string;
   summary?: string;
-  bullets?: string[];
 }
 
 export default async function Home() {
@@ -67,7 +65,6 @@ export default async function Home() {
         ? new Date(dateSource).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
         : 'Just now',
       summary: art.summary,
-      bullets: art.takeaways,
     };
   };
 
@@ -132,7 +129,6 @@ export default async function Home() {
               isBreaking={leadStory.isBreaking}
               title={leadStory.title}
               summary={leadStory.summary}
-              bullets={leadStory.bullets}
               author={leadStory.author}
               publishedAt={leadStory.publishedAt}
               href={leadStory.href}

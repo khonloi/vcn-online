@@ -1,8 +1,10 @@
 .container {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  align-items: baseline;
   justify-content: space-between;
-  margin-bottom: var(--space-5);
+  gap: var(--space-2) var(--space-4);
+  margin-bottom: var(--space-4);
   position: relative;
 }
 
@@ -15,6 +17,7 @@
   margin: 0;
   display: inline-flex;
   align-items: center;
+  flex-shrink: 1;
 }
 
 /* Sizes */
@@ -51,6 +54,10 @@
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wide);
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
 }
 
 .action:hover {

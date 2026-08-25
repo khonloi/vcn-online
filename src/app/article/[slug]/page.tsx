@@ -132,48 +132,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </div>
       </header>
 
-      {/* Key Takeaways Box (Signature BI element) */}
-      {article.takeaways && article.takeaways.length > 0 && (
-        <div
-          style={{
-            backgroundColor: "var(--color-surface-subtle)",
-            borderLeft: "4px solid var(--color-primary)",
-            padding: "var(--space-5)",
-            marginBottom: "var(--space-6)",
-          }}
-        >
-          <h3
-            style={{
-              fontFamily: "var(--font-family-headline)",
-              fontSize: "var(--font-size-sm)",
-              fontWeight: "var(--font-weight-black)",
-              textTransform: "uppercase",
-              letterSpacing: "var(--letter-spacing-wide)",
-              marginBottom: "var(--space-3)",
-              color: "var(--color-text-primary)",
-            }}
-          >
-            Key Takeaways
-          </h3>
-          <ul
-            style={{
-              margin: 0,
-              paddingLeft: "var(--space-4)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "var(--space-2)",
-              fontSize: "var(--font-size-sm)",
-              color: "var(--color-text-secondary)",
-              listStyleType: "disc",
-            }}
-          >
-            {article.takeaways.map((takeaway: string, idx: number) => (
-              <li key={idx}>{takeaway}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
       {/* Main Image */}
       <div style={{ marginBottom: "var(--space-6)" }}>
         <ArticleImage
