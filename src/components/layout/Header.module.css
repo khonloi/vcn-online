@@ -1,9 +1,16 @@
 .headerWrapper {
-  border-bottom: 1px solid var(--color-border);
   background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+/* Sticky Group: Navbar & Trending Bar stays pinned when scrolling */
+.stickyNavGroup {
   position: sticky;
   top: 0;
   z-index: 100;
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 /* Markets / Edition Top Bar */
@@ -188,7 +195,8 @@
   transition: all var(--transition-fast);
 }
 
-.navLink:hover {
+.navLink:hover,
+.navLinkActive {
   color: var(--color-primary);
   border-bottom-color: var(--color-primary);
 }

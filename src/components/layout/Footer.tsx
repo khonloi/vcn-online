@@ -1,9 +1,19 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui';
 import styles from './Footer.module.css';
 
 export const Footer: React.FC = () => {
+  const pathname = usePathname();
+
+  // Hide the footer completely when inside Sanity Studio
+  if (pathname?.startsWith('/studio')) {
+    return null;
+  }
+
   return (
     <footer className={styles.footerWrapper}>
       <div className="container">
@@ -25,46 +35,48 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Multi-column editorial taxonomy */}
+        {/* Multi-column editorial taxonomy covering every news sector */}
         <div className={styles.footerGrid}>
           <div>
-            <h4 className={styles.footerColumnTitle}>Tech</h4>
+            <h4 className={styles.footerColumnTitle}>Tech &amp; Innovation</h4>
             <div className={styles.footerLinks}>
-              <Link href="/tech/ai" className={styles.footerLink}>Artificial Intelligence</Link>
-              <Link href="/tech/big-tech" className={styles.footerLink}>Big Tech</Link>
-              <Link href="/tech/startups" className={styles.footerLink}>Startups & VC</Link>
-              <Link href="/tech/cybersecurity" className={styles.footerLink}>Cybersecurity</Link>
-              <Link href="/tech/enterprise" className={styles.footerLink}>Enterprise</Link>
+              <Link href="/tech" className={styles.footerLink}>Technology Hub</Link>
+              <Link href="/science" className={styles.footerLink}>Science &amp; Biotech</Link>
+              <Link href="/energy" className={styles.footerLink}>Energy &amp; CleanTech</Link>
+              <Link href="/topic/ai-boom" className={styles.footerLink}>Artificial Intelligence</Link>
+              <Link href="/topic/silicon-valley" className={styles.footerLink}>Silicon Valley</Link>
             </div>
           </div>
 
           <div>
-            <h4 className={styles.footerColumnTitle}>Finance & Markets</h4>
+            <h4 className={styles.footerColumnTitle}>Markets &amp; Finance</h4>
             <div className={styles.footerLinks}>
-              <Link href="/markets/stocks" className={styles.footerLink}>Stock Market</Link>
-              <Link href="/markets/crypto" className={styles.footerLink}>Cryptocurrency</Link>
-              <Link href="/finance/banking" className={styles.footerLink}>Wall Street</Link>
-              <Link href="/finance/economy" className={styles.footerLink}>Global Economy</Link>
-              <Link href="/finance/real-estate" className={styles.footerLink}>Real Estate</Link>
+              <Link href="/markets" className={styles.footerLink}>Financial Markets</Link>
+              <Link href="/finance" className={styles.footerLink}>Banking &amp; Wall St</Link>
+              <Link href="/economy" className={styles.footerLink}>Global Economy</Link>
+              <Link href="/real-estate" className={styles.footerLink}>Real Estate &amp; Housing</Link>
+              <Link href="/business" className={styles.footerLink}>Corporate Business</Link>
             </div>
           </div>
 
           <div>
-            <h4 className={styles.footerColumnTitle}>Strategy & Careers</h4>
+            <h4 className={styles.footerColumnTitle}>Global &amp; Society</h4>
             <div className={styles.footerLinks}>
-              <Link href="/strategy/leadership" className={styles.footerLink}>Leadership</Link>
-              <Link href="/strategy/workplace" className={styles.footerLink}>Future of Work</Link>
-              <Link href="/strategy/management" className={styles.footerLink}>Executive Insights</Link>
-              <Link href="/strategy/careers" className={styles.footerLink}>Career Advice</Link>
+              <Link href="/politics" className={styles.footerLink}>Politics &amp; Policy</Link>
+              <Link href="/world" className={styles.footerLink}>World News</Link>
+              <Link href="/lifestyle" className={styles.footerLink}>Executive Lifestyle</Link>
+              <Link href="/opinion" className={styles.footerLink}>Opinion &amp; Essays</Link>
+              <Link href="/sports" className={styles.footerLink}>Sports &amp; Culture</Link>
             </div>
           </div>
 
           <div>
-            <h4 className={styles.footerColumnTitle}>Company & Legal</h4>
+            <h4 className={styles.footerColumnTitle}>Company &amp; Studio</h4>
             <div className={styles.footerLinks}>
               <Link href="/about" className={styles.footerLink}>About Us</Link>
+              <Link href="/studio" className={styles.footerLink}>Editorial Studio (CMS)</Link>
               <Link href="/careers" className={styles.footerLink}>Work For Us</Link>
-              <Link href="/contact" className={styles.footerLink}>Contact & Tips</Link>
+              <Link href="/contact" className={styles.footerLink}>Contact &amp; Tips</Link>
               <Link href="/terms" className={styles.footerLink}>Terms of Service</Link>
               <Link href="/privacy" className={styles.footerLink}>Privacy Policy</Link>
             </div>

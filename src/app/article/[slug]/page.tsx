@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -20,6 +21,63 @@ interface ArticlePageProps {
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const article = await client
+    .fetch(ARTICLE_BY_SLUG_QUERY, { slug })
+    .catch(() => null);
+
+  if (!article) {
+    return {
+      title: "Article Not Found",
+      description: "The requested article could not be located.",
+    };
+  }
+
+  const imageUrl = article.mainImage
+    ? urlFor(article.mainImage).width(1200).height(675).url()
+    : "/og-image.jpg";
+  const url = `/article/${slug}`;
+  const description =
+    article.summary ||
+    `Read full reporting and market intelligence on "${article.title}" on Vice City News.`;
+
+  return {
+    title: article.title,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      type: "article",
+      url,
+      title: `${article.title} | Vice City News`,
+      description,
+      publishedTime: article.publishedAt,
+      modifiedTime: article._updatedAt || article.publishedAt,
+      authors: [article.author || "Vice City Staff"],
+      section: article.category || "News",
+      siteName: "Vice City News",
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 675,
+          alt: article.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: "@VCNews",
+      creator: "@VCNews",
+      title: `${article.title} | Vice City News`,
+      description,
+      images: [imageUrl],
+    },
+  };
+}
+
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
 
@@ -33,15 +91,53 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     notFound();
   }
 
+  const imageUrl = article.mainImage
+    ? urlFor(article.mainImage).url()
+    : `https://picsum.photos/seed/${article.slug || "article-hero"}/900/506`;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.title,
+    description: article.summary || article.title,
+    image: [imageUrl],
+    datePublished: article.publishedAt || new Date().toISOString(),
+    dateModified: article._updatedAt || article.publishedAt || new Date().toISOString(),
+    author: [
+      {
+        "@type": "Person",
+        name: article.author || "Vice City Staff",
+      },
+    ],
+    publisher: {
+      "@type": "Organization",
+      name: "Vice City News",
+      logo: {
+        "@type": "ImageObject",
+        url: "/og-image.jpg",
+      },
+    },
+    articleSection: article.category || "News",
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `/article/${slug}`,
+    },
+  };
+
   return (
-    <article
-      className="container"
-      style={{
-        maxWidth: "820px",
-        paddingTop: "var(--space-6)",
-        paddingBottom: "var(--space-16)",
-      }}
-    >
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <article
+        className="container"
+        style={{
+          maxWidth: "820px",
+          paddingTop: "var(--space-6)",
+          paddingBottom: "var(--space-16)",
+        }}
+      >
       {/* Breadcrumb */}
       <div
         style={{
@@ -215,5 +311,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </div>
       </div>
     </article>
-  );
+  </>
+);
 }
