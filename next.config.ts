@@ -1,5 +1,33 @@
 import type { NextConfig } from "next";
 
+const siteCsp = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://cdn.sanity.io https://picsum.photos https://fastly.picsum.photos",
+  "font-src 'self'",
+  "connect-src 'self' https://*.sanity.io https://*.sanity.api.sanity.io wss://*.sanity.io",
+  "media-src 'self' https://cdn.sanity.io",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+  "upgrade-insecure-requests",
+].join("; ");
+
+const studioCsp = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://cdn.sanity.io https://*.sanity.io",
+  "font-src 'self' data:",
+  "connect-src 'self' https://*.sanity.io https://*.sanity.api.sanity.io wss://*.sanity.io",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self' https://*.sanity.io",
+].join("; ");
+
 const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
@@ -21,8 +49,21 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/:path*",
+        source: "/studio/:path*",
         headers: [
+          {
+            key: "Content-Security-Policy",
+            value: studioCsp,
+          },
+        ],
+      },
+      {
+        source: "/((?!studio).*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: siteCsp,
+          },
           {
             key: "X-DNS-Prefetch-Control",
             value: "on",
