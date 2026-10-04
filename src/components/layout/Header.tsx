@@ -1,27 +1,13 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { Button, SearchInput } from "@/components/ui";
+import { Button } from "@/components/ui";
 import { CurrentDateTime } from "./CurrentDateTime";
-import { CATEGORIES, MARKET_INDICES, TRENDING_TOPICS } from "@/lib/constants";
+import { NavLinks } from "./NavLinks";
+import { HeaderSearch } from "./HeaderSearch";
+import { MARKET_INDICES, TRENDING_TOPICS } from "@/lib/constants";
 import styles from "./Header.module.css";
 
 export const Header: React.FC = () => {
-  const pathname = usePathname();
-  const router = useRouter();
-
-  // Hide the header completely when inside Sanity Studio
-  if (pathname?.startsWith("/studio")) {
-    return null;
-  }
-
-  const isCategoryActive = (href: string) => {
-    if (href === "/") return pathname === "/";
-    return pathname === href || pathname?.startsWith(`${href}/`);
-  };
-
   return (
     <>
       <a href="#main" className={styles.skipLink}>
@@ -38,53 +24,49 @@ export const Header: React.FC = () => {
               aria-label="Market Data (Indicative snapshot, 15-min delay)"
               title="Indicative market snapshot • Delayed 15m"
             >
-              {MARKET_INDICES.map((item) => (
-                <div key={item.name} className={styles.marketItem}>
-                  <span>{item.name}</span>
+              <span className={styles.tickerDelayBadge} aria-hidden="true">
+                15M DELAY
+              </span>
+              {MARKET_INDICES.map((idx) => (
+                <div key={idx.name} className={styles.tickerItem}>
+                  <span className={styles.tickerName}>{idx.name}</span>
+                  <span className={styles.tickerValue}>{idx.value}</span>
                   <span
-                    className={
-                      item.positive
-                        ? styles.marketPositive
-                        : styles.marketNegative
-                    }
+                    className={`${styles.tickerChange} ${
+                      idx.positive ? styles.tickerPositive : styles.tickerNegative
+                    }`}
                   >
-                    {item.value} ({item.change})
+                    {idx.change}
                   </span>
                 </div>
               ))}
             </div>
 
-            <div className={styles.topBarActions}>
-              <CurrentDateTime className={styles.dateTimeText} />
+            <div className={styles.topBarRight}>
+              <CurrentDateTime className={styles.dateTime} />
               <div className={styles.editionSelector}>
-                <span>US</span> | <span>INTL</span> | <span>VC</span>
+                <span className={styles.editionLabel}>Edition:</span>
+                <span className={styles.editionCurrent}>US (Global)</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* 2. Main Brand Header */}
+        {/* 2. Main Brand / Logo Header */}
         <div className={styles.mainHeader}>
           <div className={`container ${styles.mainHeaderContent}`}>
-            <Link
-              href="/"
-              className={styles.logo}
-              aria-label="Vice City News Homepage"
-            >
-              VICE CITY <span>NEWS</span>{" "}
-              <span className={styles.logoBadge}>ONLINE</span>
-            </Link>
+            <div className={styles.logoSection}>
+              <Link href="/" className={styles.logoLink} aria-label="Vice City News Homepage">
+                <span className={styles.logoVCN}>VICE CITY</span>
+                <span className={styles.logoNews}>NEWS</span>
+              </Link>
+              <p className={styles.tagline}>
+                Breaking Business, Tech, &amp; Market Intelligence
+              </p>
+            </div>
 
-            <div className={styles.headerRight}>
-              <SearchInput
-                placeholder="Search stocks, topics, people..."
-                onSearch={(q) => {
-                  const term = q.trim();
-                  if (term) {
-                    router.push(`/${encodeURIComponent(term.toLowerCase().replace(/\s+/g, "-"))}`);
-                  }
-                }}
-              />
+            <div className={styles.headerActions}>
+              <HeaderSearch />
               <Button variant="primary" size="md" href="#newsletter">
                 Subscribe
               </Button>
@@ -93,24 +75,11 @@ export const Header: React.FC = () => {
         </div>
       </header>
 
-      {/* 3 & 4: Sticky Navbar & Trending Bar (stays along when scrolling down) */}
+      {/* 3 & 4: Sticky Navbar & Trending Bar */}
       <div className={styles.stickyNavGroup}>
-        {/* 3. Category Navigation Bar */}
+        {/* 3. Category Navigation Bar (Client Island for Active Route State) */}
         <nav className={styles.navBar} aria-label="Main Navigation">
-          <div className={`container ${styles.navLinks}`}>
-            {CATEGORIES.map((cat) => {
-              const active = isCategoryActive(cat.href);
-              return (
-                <Link
-                  key={cat.href}
-                  href={cat.href}
-                  className={`${styles.navLink} ${active ? styles.navLinkActive : ""}`}
-                >
-                  {cat.name}
-                </Link>
-              );
-            })}
-          </div>
+          <NavLinks />
         </nav>
 
         {/* 4. Trending Topics Sub-bar */}
@@ -140,4 +109,3 @@ export const Header: React.FC = () => {
 };
 
 export default Header;
-

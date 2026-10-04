@@ -4,7 +4,7 @@ const siteCsp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://cdn.sanity.io https://picsum.photos https://fastly.picsum.photos",
+  "img-src 'self' data: blob: https://cdn.sanity.io",
   "font-src 'self'",
   "connect-src 'self' https://*.sanity.io https://*.sanity.api.sanity.io wss://*.sanity.io",
   "media-src 'self' https://cdn.sanity.io",
@@ -35,14 +35,6 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "cdn.sanity.io",
-      },
-      {
-        protocol: "https",
-        hostname: "picsum.photos",
-      },
-      {
-        protocol: "https",
-        hostname: "fastly.picsum.photos",
       },
     ],
   },

@@ -56,13 +56,12 @@ export function formatArticleDate(
  * Formats a raw Sanity article document into clean props for ArticleCard.
  */
 export function mapSanityToCard(
-  art: RawSanityArticle,
-  fallbackSeed: string = "news-hero"
+  art: RawSanityArticle
 ): FormattedArticleCardData {
   const dateSource = art.publishedAt || art._createdAt;
   const imageSource = art.mainImage
     ? urlFor(art.mainImage).url()
-    : `https://picsum.photos/seed/${art.slug || fallbackSeed}/900/506`;
+    : "/images/fallback-article.webp";
 
   return {
     id: art._id,

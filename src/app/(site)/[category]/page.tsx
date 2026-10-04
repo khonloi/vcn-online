@@ -78,19 +78,16 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const isKnown = KNOWN_CATEGORY_SLUGS.has(category.toLowerCase());
   const categoryTitle = formatCategoryTitle(category);
 
-  // Fetch articles from Sanity with ISR cache
+  // Fetch articles from Sanity with ISR cache (errors handled by error.tsx)
   const sanityArticles: RawSanityArticle[] = await client
-    .fetch(ARTICLES_BY_CATEGORY_QUERY, { category }, { next: { revalidate: 60 } })
-    .catch(() => []);
+    .fetch(ARTICLES_BY_CATEGORY_QUERY, { category }, { next: { revalidate: 60 } });
 
   // Prevent soft-404: if unknown category and has no articles, trigger 404
   if (!isKnown && sanityArticles.length === 0) {
     notFound();
   }
 
-  const categoryArticles = sanityArticles.map((s, idx) =>
-    mapSanityToCard(s, `${category}-${idx}`)
-  );
+  const categoryArticles = sanityArticles.map((s) => mapSanityToCard(s));
 
   const quickSectors = CONTENT_CATEGORIES.slice(0, 8);
 

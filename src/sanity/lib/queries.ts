@@ -58,7 +58,7 @@ export const ARTICLE_BY_SLUG_QUERY = groq`*[_type == "article" && slug.current =
   mainImage
 }`;
 
-export const ARTICLES_BY_CATEGORY_QUERY = groq`*[_type == "article" && (lower(category->slug.current) == lower($category) || lower(category->title) == lower($category))] | order(isBreaking desc, coalesce(publishedAt, _createdAt) desc) {
+export const ARTICLES_BY_CATEGORY_QUERY = groq`*[_type == "article" && (lower(category->slug.current) == lower($category) || lower(category->title) == lower($category))] | order(isBreaking desc, coalesce(publishedAt, _createdAt) desc)[0...24] {
   _id,
   title,
   "slug": slug.current,

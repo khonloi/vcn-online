@@ -1,66 +1,18 @@
-"use client";
-
-import React, { useActionState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Button } from '@/components/ui';
-import { subscribeToNewsletter, NewsletterState } from '@/app/actions/newsletter';
+import { NewsletterForm } from './NewsletterForm';
 import styles from './Footer.module.css';
 
-const initialNewsletterState: NewsletterState = {
-  status: 'idle',
-  message: '',
-};
-
 export const Footer: React.FC = () => {
-  const pathname = usePathname();
-  const [state, formAction, isPending] = useActionState(subscribeToNewsletter, initialNewsletterState);
-
-  // Hide the footer completely when inside Sanity Studio
-  if (pathname?.startsWith('/studio')) {
-    return null;
-  }
-
   return (
     <footer className={styles.footerWrapper}>
       <div className="container">
-        {/* Top bar with Logo & Newsletter */}
+        {/* Top bar with Logo & Newsletter Client Island */}
         <div className={styles.footerTop} id="newsletter">
           <Link href="/" className={styles.footerLogo}>
             VICE CITY <span>NEWS</span>
           </Link>
-          <div className={styles.newsletterForm}>
-            {state.status === 'success' ? (
-              <span style={{ color: 'var(--color-primary)', fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-semibold)' }}>
-                {state.message}
-              </span>
-            ) : (
-              <form action={formAction} aria-label="Newsletter Subscription">
-                <div className={styles.newsletterInputs}>
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Enter email for daily morning briefing..."
-                    className={styles.newsletterInput}
-                    aria-label="Email address for newsletter"
-                    required
-                    disabled={isPending}
-                  />
-                  <Button variant="secondary" size="md" type="submit" disabled={isPending}>
-                    {isPending ? 'Subscribing...' : 'Sign Up'}
-                  </Button>
-                </div>
-                {state.status === 'error' && (
-                  <p style={{ color: 'var(--color-breaking)', fontSize: 'var(--font-size-xs)', marginTop: '4px' }}>
-                    {state.message}
-                  </p>
-                )}
-                <p className={styles.newsletterConsent}>
-                  By subscribing, you agree to our <Link href="/terms">Terms of Service</Link> and <Link href="/privacy">Privacy Policy</Link>. Unsubscribe at any time.
-                </p>
-              </form>
-            )}
-          </div>
+          <NewsletterForm />
         </div>
 
         {/* Multi-column editorial taxonomy covering every news sector */}

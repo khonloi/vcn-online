@@ -37,7 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let articleRoutes: MetadataRoute.Sitemap = [];
   try {
-    const articles: SitemapArticle[] = await client.fetch(ALL_ARTICLES_QUERY).catch(() => []);
+    const articles: SitemapArticle[] = await client.fetch(ALL_ARTICLES_QUERY);
     articleRoutes = articles
       .filter((a): a is SitemapArticle & { slug: string } => Boolean(a.slug))
       .map((article): MetadataRoute.Sitemap[number] => ({

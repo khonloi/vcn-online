@@ -42,21 +42,21 @@ export default async function Home() {
   // Pick the lead story (Breaking news takes priority, otherwise the latest article)
   const breakingIndex = articles.findIndex((a) => a.isBreaking);
   const leadIndex = breakingIndex !== -1 ? breakingIndex : 0;
-  const leadStory: FormattedArticleCardData = mapSanityToCard(articles[leadIndex], 'lead-story');
+  const leadStory: FormattedArticleCardData = mapSanityToCard(articles[leadIndex]);
 
   // Filter out the lead article from secondary feeds so it doesn't duplicate
   const remainingArticles = articles.filter((_, idx) => idx !== leadIndex);
 
   const topFeed: FormattedArticleCardData[] = (remainingArticles.length > 0 ? remainingArticles : articles)
     .slice(0, 4)
-    .map((a, idx) => mapSanityToCard(a, `top-${idx}`));
+    .map((a) => mapSanityToCard(a));
 
   const spotlightFeed: FormattedArticleCardData[] = (remainingArticles.length > 4 ? remainingArticles.slice(4, 8) : remainingArticles)
     .slice(0, 4)
-    .map((a, idx) => mapSanityToCard(a, `spotlight-${idx}`));
+    .map((a) => mapSanityToCard(a));
 
   const analysisFeed: FormattedArticleCardData[] = (remainingArticles.length > 8 ? remainingArticles.slice(8) : remainingArticles)
-    .map((a, idx) => mapSanityToCard(a, `analysis-${idx}`));
+    .map((a) => mapSanityToCard(a));
 
   const trendingRankings = articles.slice(0, 5).map((a, idx) => ({
     id: a._id,

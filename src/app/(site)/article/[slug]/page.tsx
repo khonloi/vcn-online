@@ -13,6 +13,8 @@ import { ARTICLE_BY_SLUG_QUERY } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import styles from "./article.module.css";
 
+import { cache } from "react";
+
 interface ArticlePageProps {
   params: Promise<{
     slug: string;
@@ -23,11 +25,19 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const revalidate = 120; // Revalidate article page every 2 minutes (ISR)
 
+const getArticle = cache(async (slug: string) => {
+  return await client.fetch(
+    ARTICLE_BY_SLUG_QUERY,
+    { slug },
+    { next: { revalidate: 120 } }
+  );
+});
+
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
   let article = null;
   try {
-    article = await client.fetch(ARTICLE_BY_SLUG_QUERY, { slug }, { next: { revalidate: 120 } });
+    article = await getArticle(slug);
   } catch {
     article = null;
   }
@@ -86,12 +96,8 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
 
-  // Fetch article from Sanity with ISR cache
-  const article = await client.fetch(
-    ARTICLE_BY_SLUG_QUERY,
-    { slug },
-    { next: { revalidate: 120 } }
-  );
+  // Fetch article from Sanity (memoized via React cache())
+  const article = await getArticle(slug);
 
   // If article does not exist in Sanity, trigger 404
   if (!article) {
