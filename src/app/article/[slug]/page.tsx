@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
-  SectionTitle,
   ArticleImage,
   Button,
   CustomPortableText,
@@ -82,9 +81,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
 
   // Fetch article from Sanity with fresh data
-  const article = await client
-    .fetch(ARTICLE_BY_SLUG_QUERY, { slug })
-    .catch(() => null);
+  const article = await client.fetch(ARTICLE_BY_SLUG_QUERY, { slug });
 
   // If article does not exist in Sanity, trigger 404
   if (!article) {
@@ -128,7 +125,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       <article
         className="container"

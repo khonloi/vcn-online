@@ -6,6 +6,21 @@ import { client } from '@/sanity/lib/client';
 import { ARTICLES_BY_CATEGORY_QUERY } from '@/sanity/lib/queries';
 import { urlFor } from '@/sanity/lib/image';
 
+import type { SanityImageSource } from '@sanity/image-url';
+
+interface SanityCategoryArticle {
+  _id: string;
+  title: string;
+  slug: string;
+  category?: string;
+  author?: string;
+  isBreaking?: boolean;
+  summary?: string;
+  publishedAt?: string;
+  _createdAt?: string;
+  mainImage?: SanityImageSource;
+}
+
 interface CategoryPageProps {
   params: Promise<{
     category: string;
@@ -66,9 +81,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const categoryTitle = formatCategoryTitle(category);
 
   // Fetch articles from Sanity
-  const sanityArticles = await client.fetch(ARTICLES_BY_CATEGORY_QUERY, { category }).catch(() => []);
+  const sanityArticles: SanityCategoryArticle[] = await client
+    .fetch(ARTICLES_BY_CATEGORY_QUERY, { category })
+    .catch(() => []);
 
-  const categoryArticles = sanityArticles.map((s: any) => ({
+  const categoryArticles = sanityArticles.map((s) => ({
     id: s._id,
     title: s.title,
     href: `/article/${s.slug}`,
@@ -113,7 +130,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
       {categoryArticles.length > 0 ? (
         <Grid cols={12} gap="lg">
-          {categoryArticles.map((article: any) => (
+          {categoryArticles.map((article) => (
             <Grid.Col key={article.id} span={12} spanMd={6}>
               <ArticleCard
                 variant="vertical"

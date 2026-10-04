@@ -38,12 +38,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Dynamic article routes from Sanity
+  interface SitemapArticle {
+    slug?: string;
+    publishedAt?: string;
+    _updatedAt?: string;
+  }
+
   let articleRoutes: MetadataRoute.Sitemap = [];
   try {
-    const articles = await client.fetch(ALL_ARTICLES_QUERY).catch(() => []);
+    const articles: SitemapArticle[] = await client.fetch(ALL_ARTICLES_QUERY).catch(() => []);
     articleRoutes = articles
-      .filter((a: any) => a.slug)
-      .map((article: any): MetadataRoute.Sitemap[number] => ({
+      .filter((a): a is SitemapArticle & { slug: string } => Boolean(a.slug))
+      .map((article): MetadataRoute.Sitemap[number] => ({
         url: `${baseUrl}/article/${article.slug}`,
         lastModified: article._updatedAt || article.publishedAt || new Date(),
         changeFrequency: "daily",

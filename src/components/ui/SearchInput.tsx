@@ -9,7 +9,7 @@ export interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputEle
 }
 
 export const SearchInput: React.FC<SearchInputProps> = ({
-  placeholder = 'Tìm kiếm...',
+  placeholder = 'Search articles...',
   className = '',
   onSearch,
   onKeyDown,

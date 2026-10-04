@@ -5,6 +5,8 @@ import { client } from '@/sanity/lib/client';
 import { LATEST_ARTICLES_QUERY } from '@/sanity/lib/queries';
 import { urlFor } from '@/sanity/lib/image';
 
+import type { SanityImageSource } from '@sanity/image-url';
+
 export const dynamic = 'force-dynamic';
 export const revalidate = 0; // Fresh data on every load
 
@@ -19,7 +21,7 @@ interface SanityArticle {
   summary?: string;
   publishedAt?: string;
   _createdAt?: string;
-  mainImage?: any;
+  mainImage?: SanityImageSource;
 }
 
 interface FormattedArticle {

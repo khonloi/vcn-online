@@ -4,7 +4,7 @@ import { ArticleImage } from '@/components/ui';
 import { urlFor } from '@/sanity/lib/image';
 
 interface CustomPortableTextProps {
-  value: any;
+  value: React.ComponentProps<typeof PortableText>['value'];
 }
 
 const components: PortableTextComponents = {
@@ -36,10 +36,24 @@ const components: PortableTextComponents = {
   },
   marks: {
     link: ({ children, value }) => {
-      const rel = !value.href.startsWith('/') ? 'noreferrer noopener' : undefined;
-      const target = !value.href.startsWith('/') ? '_blank' : undefined;
+      const rawHref = typeof value?.href === 'string' ? value.href.trim() : '';
+      const isInternal = rawHref.startsWith('/');
+      const isExternal = rawHref.startsWith('https://') || rawHref.startsWith('http://');
+      const isContact = rawHref.startsWith('mailto:') || rawHref.startsWith('tel:');
+
+      if (!rawHref || (!isInternal && !isExternal && !isContact)) {
+        return <span>{children}</span>;
+      }
+
+      const rel = isExternal ? 'noreferrer noopener' : undefined;
+      const target = isExternal ? '_blank' : undefined;
       return (
-        <a href={value.href} rel={rel} target={target} style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>
+        <a
+          href={rawHref}
+          rel={rel}
+          target={target}
+          style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}
+        >
           {children}
         </a>
       );
