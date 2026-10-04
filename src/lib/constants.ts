@@ -24,6 +24,22 @@ export const CATEGORIES: CategoryConfig[] = [
 export const CONTENT_CATEGORIES = CATEGORIES.filter((c) => c.slug !== "");
 export const KNOWN_CATEGORY_SLUGS = new Set(CONTENT_CATEGORIES.map((c) => c.slug));
 
+export interface StaticPageConfig {
+  name: string;
+  slug: string;
+  href: string;
+}
+
+export const STATIC_PAGES: StaticPageConfig[] = [
+  { name: "About", slug: "about", href: "/about" },
+  { name: "Editorial Standards", slug: "editorial-standards", href: "/editorial-standards" },
+  { name: "Contact & Tips", slug: "contact", href: "/contact" },
+  { name: "Privacy Policy", slug: "privacy", href: "/privacy" },
+  { name: "Terms of Service", slug: "terms", href: "/terms" },
+];
+
+export const STATIC_PAGE_SLUGS = new Set(STATIC_PAGES.map((p) => p.slug));
+
 export const MARKET_INDICES = [
   { name: "S&P 500", value: "5,983.25", change: "+0.42%", positive: true },
   { name: "NASDAQ", value: "18,972.40", change: "+0.88%", positive: true },
@@ -32,15 +48,20 @@ export const MARKET_INDICES = [
   { name: "OIL", value: "$72.15", change: "-1.05%", positive: false },
 ];
 
-export const TRENDING_TOPICS = [
-  "AI Boom",
-  "Tech Stocks",
-  "Federal Reserve",
-  "Silicon Valley",
-  "Electric Vehicles",
-  "Real Estate Trends",
-  "Energy Transition",
-  "Global Trade",
+export interface TrendingTopicConfig {
+  name: string;
+  href: string;
+}
+
+export const TRENDING_TOPICS: TrendingTopicConfig[] = [
+  { name: "AI Boom", href: "/tech" },
+  { name: "Tech Stocks", href: "/markets" },
+  { name: "Federal Reserve", href: "/economy" },
+  { name: "Silicon Valley", href: "/tech" },
+  { name: "Electric Vehicles", href: "/tech" },
+  { name: "Real Estate Trends", href: "/real-estate" },
+  { name: "Energy Transition", href: "/energy" },
+  { name: "Global Trade", href: "/world" },
 ];
 
 export const SITE_CONFIG = {

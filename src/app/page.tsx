@@ -26,13 +26,13 @@ export default async function Home() {
       <div className={`container ${styles.page}`}>
         <div style={{ textAlign: 'center', padding: 'var(--space-16) 0', color: 'var(--color-text-muted)' }}>
           <SectionTitle size="lg" as="h1">
-            Welcome to Vice City News
+            Vice City News
           </SectionTitle>
           <p style={{ fontSize: 'var(--font-size-lg)', marginTop: 'var(--space-4)', marginBottom: 'var(--space-6)' }}>
-            No published articles found in the database. Open Sanity Studio to create and publish content.
+            No published dispatches are currently available. Check back shortly for breaking market dispatches and investigative reports.
           </p>
-          <Button variant="primary" size="md" href="/studio">
-            Open Sanity Studio &rarr;
+          <Button variant="outline" size="md" href="/markets">
+            Explore Market Dispatches &rarr;
           </Button>
         </div>
       </div>

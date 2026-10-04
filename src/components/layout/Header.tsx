@@ -85,7 +85,7 @@ export const Header: React.FC = () => {
                   }
                 }}
               />
-              <Button variant="primary" size="md" href="/subscribe">
+              <Button variant="primary" size="md" href="#newsletter">
                 Subscribe
               </Button>
             </div>
@@ -119,12 +119,12 @@ export const Header: React.FC = () => {
             <span className={styles.trendingLabel}>Trending:</span>
             <div className={styles.trendingItems}>
               {TRENDING_TOPICS.map((topic, index) => (
-                <React.Fragment key={topic}>
+                <React.Fragment key={topic.name}>
                   <Link
-                    href={`/topic/${topic.toLowerCase().replace(/\s+/g, "-")}`}
+                    href={topic.href}
                     className={styles.trendingItem}
                   >
-                    {topic}
+                    {topic.name}
                   </Link>
                   {index < TRENDING_TOPICS.length - 1 && (
                     <span className={styles.bulletDivider}>&bull;</span>

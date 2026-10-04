@@ -46,11 +46,33 @@
   width: 100%;
 }
 
+.newsletterInputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
 @media (min-width: 600px) {
-  .newsletterForm {
+  .newsletterInputs {
     flex-direction: row;
-    width: auto;
+    align-items: center;
   }
+}
+
+.newsletterConsent {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  line-height: var(--line-height-normal);
+  margin-top: 4px;
+}
+
+.newsletterConsent a {
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+}
+
+.newsletterConsent a:hover {
+  color: var(--color-primary);
 }
 
 .newsletterInput {

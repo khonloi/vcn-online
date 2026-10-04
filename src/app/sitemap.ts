@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { client } from "@/sanity/lib/client";
 import { ALL_ARTICLES_QUERY } from "@/sanity/lib/queries";
-import { CONTENT_CATEGORIES, SITE_CONFIG } from "@/lib/constants";
+import { CONTENT_CATEGORIES, SITE_CONFIG, STATIC_PAGES } from "@/lib/constants";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_CONFIG.url;
@@ -19,6 +19,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "hourly",
       priority: 0.8,
+    })),
+    ...STATIC_PAGES.map((page): MetadataRoute.Sitemap[number] => ({
+      url: `${baseUrl}${page.href}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
     })),
   ];
 

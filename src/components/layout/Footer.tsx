@@ -1,76 +1,83 @@
 "use client";
 
-import React from 'react';
+import React, { useActionState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui';
+import { subscribeToNewsletter, NewsletterState } from '@/app/actions/newsletter';
 import styles from './Footer.module.css';
+
+const initialNewsletterState: NewsletterState = {
+  status: 'idle',
+  message: '',
+};
 
 export const Footer: React.FC = () => {
   const pathname = usePathname();
-  const [email, setEmail] = React.useState('');
-  const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const [state, formAction, isPending] = useActionState(subscribeToNewsletter, initialNewsletterState);
 
   // Hide the footer completely when inside Sanity Studio
   if (pathname?.startsWith('/studio')) {
     return null;
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !email.includes('@')) return;
-    setIsSubmitted(true);
-    setEmail('');
-    setTimeout(() => setIsSubmitted(false), 5000);
-  };
-
   return (
     <footer className={styles.footerWrapper}>
       <div className="container">
         {/* Top bar with Logo & Newsletter */}
-        <div className={styles.footerTop}>
+        <div className={styles.footerTop} id="newsletter">
           <Link href="/" className={styles.footerLogo}>
             VICE CITY <span>NEWS</span>
           </Link>
-          <form className={styles.newsletterForm} onSubmit={handleSubmit} aria-label="Newsletter Subscription">
-            {isSubmitted ? (
+          <div className={styles.newsletterForm}>
+            {state.status === 'success' ? (
               <span style={{ color: 'var(--color-primary)', fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-semibold)' }}>
-                ✓ Subscribed to Vice City Today!
+                {state.message}
               </span>
             ) : (
-              <>
-                <input
-                  type="email"
-                  placeholder="Get the daily newsletter..."
-                  className={styles.newsletterInput}
-                  aria-label="Email address for newsletter"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <Button variant="secondary" size="md" type="submit">
-                  Sign Up
-                </Button>
-              </>
+              <form action={formAction} aria-label="Newsletter Subscription">
+                <div className={styles.newsletterInputs}>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter email for daily morning briefing..."
+                    className={styles.newsletterInput}
+                    aria-label="Email address for newsletter"
+                    required
+                    disabled={isPending}
+                  />
+                  <Button variant="secondary" size="md" type="submit" disabled={isPending}>
+                    {isPending ? 'Subscribing...' : 'Sign Up'}
+                  </Button>
+                </div>
+                {state.status === 'error' && (
+                  <p style={{ color: 'var(--color-breaking)', fontSize: 'var(--font-size-xs)', marginTop: '4px' }}>
+                    {state.message}
+                  </p>
+                )}
+                <p className={styles.newsletterConsent}>
+                  By subscribing, you agree to our <Link href="/terms">Terms of Service</Link> and <Link href="/privacy">Privacy Policy</Link>. Unsubscribe at any time.
+                </p>
+              </form>
             )}
-          </form>
+          </div>
         </div>
 
         {/* Multi-column editorial taxonomy covering every news sector */}
         <div className={styles.footerGrid}>
           <div>
-            <h4 className={styles.footerColumnTitle}>Tech &amp; Innovation</h4>
+            <h3 className={styles.footerColumnTitle}>Tech &amp; Innovation</h3>
             <div className={styles.footerLinks}>
               <Link href="/tech" className={styles.footerLink}>Technology Hub</Link>
               <Link href="/science" className={styles.footerLink}>Science &amp; Biotech</Link>
               <Link href="/energy" className={styles.footerLink}>Energy &amp; CleanTech</Link>
-              <Link href="/topic/ai-boom" className={styles.footerLink}>Artificial Intelligence</Link>
-              <Link href="/topic/silicon-valley" className={styles.footerLink}>Silicon Valley</Link>
+              <Link href="/tech" className={styles.footerLink}>Artificial Intelligence</Link>
+              <Link href="/tech" className={styles.footerLink}>Silicon Valley &amp; Startups</Link>
             </div>
           </div>
 
           <div>
-            <h4 className={styles.footerColumnTitle}>Markets &amp; Finance</h4>
+            <h3 className={styles.footerColumnTitle}>Markets &amp; Finance</h3>
             <div className={styles.footerLinks}>
               <Link href="/markets" className={styles.footerLink}>Financial Markets</Link>
               <Link href="/finance" className={styles.footerLink}>Banking &amp; Wall St</Link>
@@ -81,7 +88,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className={styles.footerColumnTitle}>Global &amp; Society</h4>
+            <h3 className={styles.footerColumnTitle}>Global &amp; Society</h3>
             <div className={styles.footerLinks}>
               <Link href="/politics" className={styles.footerLink}>Politics &amp; Policy</Link>
               <Link href="/world" className={styles.footerLink}>World News</Link>
@@ -92,12 +99,11 @@ export const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className={styles.footerColumnTitle}>Company &amp; Studio</h4>
+            <h3 className={styles.footerColumnTitle}>Company &amp; Trust</h3>
             <div className={styles.footerLinks}>
-              <Link href="/about" className={styles.footerLink}>About Us</Link>
-              <Link href="/studio" className={styles.footerLink}>Editorial Studio (CMS)</Link>
-              <Link href="/careers" className={styles.footerLink}>Work For Us</Link>
-              <Link href="/contact" className={styles.footerLink}>Contact &amp; Tips</Link>
+              <Link href="/about" className={styles.footerLink}>About Us &amp; Masthead</Link>
+              <Link href="/editorial-standards" className={styles.footerLink}>Editorial Standards &amp; Ethics</Link>
+              <Link href="/contact" className={styles.footerLink}>Contact &amp; News Tips</Link>
               <Link href="/terms" className={styles.footerLink}>Terms of Service</Link>
               <Link href="/privacy" className={styles.footerLink}>Privacy Policy</Link>
             </div>
@@ -107,7 +113,7 @@ export const Footer: React.FC = () => {
         {/* Disclaimer & Copyright */}
         <div className={styles.footerBottom}>
           <p className={styles.disclaimer}>
-            * Copyright &copy; {new Date().getFullYear()} Vice City News Media Inc. All rights reserved. Registration on or use of this site constitutes acceptance of our Terms of Service and Privacy Policy.
+            * Copyright &copy; {new Date().getFullYear()} Vice City News Media Inc. All rights reserved. Registration on or use of this site constitutes acceptance of our <Link href="/terms" style={{ textDecoration: 'underline' }}>Terms of Service</Link> and <Link href="/privacy" style={{ textDecoration: 'underline' }}>Privacy Policy</Link>. Indicative market data is delayed by 15 minutes.
           </p>
           <div>
             <span>Editions: <strong>Vice City</strong> / <strong>US</strong> / <strong>International</strong></span>
