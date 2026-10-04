@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import styles from './ArticleImage.module.css';
 
 export interface ArticleImageProps {
@@ -11,6 +12,8 @@ export interface ArticleImageProps {
   className?: string;
   imageClassName?: string;
   loading?: 'lazy' | 'eager';
+  priority?: boolean;
+  sizes?: string;
 }
 
 export const ArticleImage: React.FC<ArticleImageProps> = ({
@@ -23,6 +26,8 @@ export const ArticleImage: React.FC<ArticleImageProps> = ({
   className = '',
   imageClassName = '',
   loading = 'lazy',
+  priority = false,
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
 }) => {
   const ratioClass = {
     '16/9': styles.ratio16x9,
@@ -36,17 +41,20 @@ export const ArticleImage: React.FC<ArticleImageProps> = ({
   if (height) containerStyle.height = typeof height === 'number' ? `${height}px` : height;
   if (width) containerStyle.width = typeof width === 'number' ? `${width}px` : width;
 
+  const isPriority = priority || loading === 'eager';
+
   return (
     <div
       className={`${styles.imageContainer} ${ratioClass} ${zoomOnHover ? styles.zoomOnHover : ''} ${className}`.trim()}
       style={containerStyle}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={src}
         alt={alt}
+        fill
+        sizes={sizes}
+        priority={isPriority}
         className={`${styles.image} ${imageClassName}`.trim()}
-        loading={loading}
       />
     </div>
   );

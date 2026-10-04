@@ -17,6 +17,7 @@ export interface ArticleCardProps {
   publishedAt?: string;
   ranking?: number | string;
   variant?: 'featured' | 'horizontal' | 'vertical' | 'minimal';
+  priority?: boolean;
   className?: string;
 }
 
@@ -31,6 +32,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   publishedAt,
   ranking,
   variant = 'vertical',
+  priority = false,
   className = '',
 }) => {
   const variantClass = {
@@ -49,7 +51,13 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         {image && (
           <div className={styles.horizontalImageWrapper}>
             <Link href={href} tabIndex={-1} aria-hidden="true">
-              <ArticleImage src={image.src} alt={image.alt || title} aspectRatio="1/1" />
+              <ArticleImage
+                src={image.src}
+                alt={image.alt || title}
+                aspectRatio="1/1"
+                sizes="88px"
+                priority={priority}
+              />
             </Link>
           </div>
         )}
@@ -107,6 +115,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             src={image.src}
             alt={image.alt || title}
             aspectRatio={variant === 'featured' ? '16/9' : '16/9'}
+            priority={priority || variant === 'featured'}
+            sizes={variant === 'featured' ? '(max-width: 1024px) 100vw, 60vw' : '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
           />
         </Link>
       )}

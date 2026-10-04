@@ -54,6 +54,7 @@ export const ARTICLE_BY_SLUG_QUERY = groq`*[_type == "article" && slug.current =
   body,
   publishedAt,
   _createdAt,
+  _updatedAt,
   mainImage
 }`;
 

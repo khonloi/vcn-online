@@ -7,8 +7,7 @@ import { urlFor } from '@/sanity/lib/image';
 
 import type { SanityImageSource } from '@sanity/image-url';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0; // Fresh data on every load
+export const revalidate = 60; // Revalidate at most once every 60s (ISR)
 
 interface SanityArticle {
   _id: string;
@@ -37,13 +36,13 @@ interface FormattedArticle {
 }
 
 export default async function Home() {
-  // Fetch dynamic articles from Sanity with no-store cache
+  // Fetch dynamic articles from Sanity with ISR cache
   let articles: SanityArticle[] = [];
   try {
     articles = await client.fetch(
       LATEST_ARTICLES_QUERY,
       {},
-      { cache: 'no-store', next: { revalidate: 0 } }
+      { next: { revalidate: 60 } }
     );
   } catch (error) {
     console.error('Error fetching articles from Sanity:', error);

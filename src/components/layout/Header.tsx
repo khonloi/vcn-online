@@ -58,12 +58,20 @@ export const Header: React.FC = () => {
 
   return (
     <>
+      <a href="#main" className={styles.skipLink}>
+        Skip to content
+      </a>
+
       {/* 1 & 2: Markets & Brand Header (scrolls naturally with page) */}
       <header className={styles.headerWrapper}>
         {/* 1. Markets & Editions Top Strip */}
         <div className={styles.topBar}>
           <div className={`container ${styles.topBarContent}`}>
-            <div className={styles.marketTicker} aria-label="Market Data">
+            <div
+              className={styles.marketTicker}
+              aria-label="Market Data (Indicative snapshot, 15-min delay)"
+              title="Indicative market snapshot • Delayed 15m"
+            >
               {MARKET_INDICES.map((item) => (
                 <div key={item.name} className={styles.marketItem}>
                   <span>{item.name}</span>

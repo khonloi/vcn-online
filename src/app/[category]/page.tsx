@@ -1,12 +1,30 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { SectionTitle, Grid, ArticleCard, Button } from '@/components/ui';
 import { client } from '@/sanity/lib/client';
 import { ARTICLES_BY_CATEGORY_QUERY } from '@/sanity/lib/queries';
 import { urlFor } from '@/sanity/lib/image';
 
 import type { SanityImageSource } from '@sanity/image-url';
+
+const KNOWN_CATEGORIES = new Set([
+  'news',
+  'tech',
+  'markets',
+  'finance',
+  'economy',
+  'business',
+  'politics',
+  'world',
+  'real-estate',
+  'energy',
+  'science',
+  'lifestyle',
+  'opinion',
+  'sports',
+]);
 
 interface SanityCategoryArticle {
   _id: string;
@@ -27,8 +45,7 @@ interface CategoryPageProps {
   }>;
 }
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 60; // Revalidate category pages every 60s (ISR)
 
 function formatCategoryTitle(slug: string): string {
   return slug
@@ -39,7 +56,16 @@ function formatCategoryTitle(slug: string): string {
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { category } = await params;
+  const isKnown = KNOWN_CATEGORIES.has(category.toLowerCase());
   const categoryTitle = formatCategoryTitle(category);
+
+  if (!isKnown) {
+    return {
+      title: 'Category Not Found | Vice City News',
+      description: 'The requested news sector could not be located.',
+    };
+  }
+
   const title = `${categoryTitle} News & Market Intelligence`;
   const description = `Read the latest ${categoryTitle} news, analysis, in-depth reports, and executive market intelligence on Vice City News.`;
   const url = `/${category}`;
@@ -78,12 +104,18 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params;
+  const isKnown = KNOWN_CATEGORIES.has(category.toLowerCase());
   const categoryTitle = formatCategoryTitle(category);
 
-  // Fetch articles from Sanity
+  // Fetch articles from Sanity with ISR cache
   const sanityArticles: SanityCategoryArticle[] = await client
-    .fetch(ARTICLES_BY_CATEGORY_QUERY, { category })
+    .fetch(ARTICLES_BY_CATEGORY_QUERY, { category }, { next: { revalidate: 60 } })
     .catch(() => []);
+
+  // Prevent soft-404: if unknown category and has no articles, trigger 404
+  if (!isKnown && sanityArticles.length === 0) {
+    notFound();
+  }
 
   const categoryArticles = sanityArticles.map((s) => ({
     id: s._id,

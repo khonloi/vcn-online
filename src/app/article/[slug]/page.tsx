@@ -17,14 +17,18 @@ interface ArticlePageProps {
   }>;
 }
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+export const revalidate = 120; // Revalidate article page every 2 minutes (ISR)
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = await client
-    .fetch(ARTICLE_BY_SLUG_QUERY, { slug })
-    .catch(() => null);
+  let article = null;
+  try {
+    article = await client.fetch(ARTICLE_BY_SLUG_QUERY, { slug }, { next: { revalidate: 120 } });
+  } catch {
+    article = null;
+  }
 
   if (!article) {
     return {
@@ -80,30 +84,41 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
 
-  // Fetch article from Sanity with fresh data
-  const article = await client.fetch(ARTICLE_BY_SLUG_QUERY, { slug });
+  // Fetch article from Sanity with ISR cache
+  const article = await client.fetch(
+    ARTICLE_BY_SLUG_QUERY,
+    { slug },
+    { next: { revalidate: 120 } }
+  );
 
   // If article does not exist in Sanity, trigger 404
   if (!article) {
     notFound();
   }
 
-  const imageUrl = article.mainImage
+  const rawImageUrl = article.mainImage
     ? urlFor(article.mainImage).url()
-    : `https://picsum.photos/seed/${article.slug || "article-hero"}/900/506`;
+    : `${siteUrl}/og-image.jpg`;
+  const absoluteImageUrl = rawImageUrl.startsWith("http")
+    ? rawImageUrl
+    : `${siteUrl}${rawImageUrl.startsWith("/") ? "" : "/"}${rawImageUrl}`;
+
+  const publishedDate = article.publishedAt || article._createdAt || new Date().toISOString();
+  const modifiedDate = article._updatedAt || article.publishedAt || article._createdAt || publishedDate;
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
     headline: article.title,
     description: article.summary || article.title,
-    image: [imageUrl],
-    datePublished: article.publishedAt || new Date().toISOString(),
-    dateModified: article._updatedAt || article.publishedAt || new Date().toISOString(),
+    image: [absoluteImageUrl],
+    datePublished: publishedDate,
+    dateModified: modifiedDate,
     author: [
       {
         "@type": "Person",
         name: article.author || "Vice City Staff",
+        url: siteUrl,
       },
     ],
     publisher: {
@@ -111,13 +126,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       name: "Vice City News",
       logo: {
         "@type": "ImageObject",
-        url: "/og-image.jpg",
+        url: `${siteUrl}/og-image.jpg`,
       },
     },
     articleSection: article.category || "News",
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `/article/${slug}`,
+      "@id": `${siteUrl}/article/${slug}`,
     },
   };
 
@@ -279,6 +294,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           }
           alt={article.title}
           aspectRatio="16/9"
+          priority={true}
+          sizes="(max-width: 820px) 100vw, 820px"
         />
       </div>
 
