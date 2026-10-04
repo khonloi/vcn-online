@@ -5,39 +5,10 @@ import { notFound } from 'next/navigation';
 import { SectionTitle, Grid, ArticleCard, Button } from '@/components/ui';
 import { client } from '@/sanity/lib/client';
 import { ARTICLES_BY_CATEGORY_QUERY } from '@/sanity/lib/queries';
-import { urlFor } from '@/sanity/lib/image';
-
-import type { SanityImageSource } from '@sanity/image-url';
-
-const KNOWN_CATEGORIES = new Set([
-  'news',
-  'tech',
-  'markets',
-  'finance',
-  'economy',
-  'business',
-  'politics',
-  'world',
-  'real-estate',
-  'energy',
-  'science',
-  'lifestyle',
-  'opinion',
-  'sports',
-]);
-
-interface SanityCategoryArticle {
-  _id: string;
-  title: string;
-  slug: string;
-  category?: string;
-  author?: string;
-  isBreaking?: boolean;
-  summary?: string;
-  publishedAt?: string;
-  _createdAt?: string;
-  mainImage?: SanityImageSource;
-}
+import { KNOWN_CATEGORY_SLUGS, CONTENT_CATEGORIES, SITE_CONFIG } from '@/lib/constants';
+import { mapSanityToCard } from '@/lib/formatters';
+import type { RawSanityArticle } from '@/lib/formatters';
+import styles from './category.module.css';
 
 interface CategoryPageProps {
   params: Promise<{
@@ -56,7 +27,7 @@ function formatCategoryTitle(slug: string): string {
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { category } = await params;
-  const isKnown = KNOWN_CATEGORIES.has(category.toLowerCase());
+  const isKnown = KNOWN_CATEGORY_SLUGS.has(category.toLowerCase());
   const categoryTitle = formatCategoryTitle(category);
 
   if (!isKnown) {
@@ -81,7 +52,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       url,
       title: `${title} | Vice City News`,
       description,
-      siteName: "Vice City News",
+      siteName: SITE_CONFIG.name,
       images: [
         {
           url: "/og-image.jpg",
@@ -93,8 +64,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     },
     twitter: {
       card: "summary_large_image",
-      site: "@VCNews",
-      creator: "@VCNews",
+      site: SITE_CONFIG.twitterHandle,
+      creator: SITE_CONFIG.twitterHandle,
       title: `${title} | Vice City News`,
       description,
       images: ["/og-image.jpg"],
@@ -104,11 +75,11 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params;
-  const isKnown = KNOWN_CATEGORIES.has(category.toLowerCase());
+  const isKnown = KNOWN_CATEGORY_SLUGS.has(category.toLowerCase());
   const categoryTitle = formatCategoryTitle(category);
 
   // Fetch articles from Sanity with ISR cache
-  const sanityArticles: SanityCategoryArticle[] = await client
+  const sanityArticles: RawSanityArticle[] = await client
     .fetch(ARTICLES_BY_CATEGORY_QUERY, { category }, { next: { revalidate: 60 } })
     .catch(() => []);
 
@@ -117,100 +88,94 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  const categoryArticles = sanityArticles.map((s) => ({
-    id: s._id,
-    title: s.title,
-    href: `/article/${s.slug}`,
-    image: {
-      src: s.mainImage ? urlFor(s.mainImage).url() : `https://picsum.photos/seed/${s.slug || 'category-hero'}/600/340`,
-      alt: s.title,
-    },
-    category: s.category || categoryTitle.toUpperCase(),
-    summary: s.summary,
-    isBreaking: s.isBreaking,
-    author: s.author,
-    publishedAt: s.publishedAt ? new Date(s.publishedAt).toLocaleDateString() : 'Just now',
-  }));
+  const categoryArticles = sanityArticles.map((s, idx) =>
+    mapSanityToCard(s, `${category}-${idx}`)
+  );
 
-  const quickSectors = [
-    { name: 'Tech', href: '/tech' },
-    { name: 'Markets', href: '/markets' },
-    { name: 'Finance', href: '/finance' },
-    { name: 'Economy', href: '/economy' },
-    { name: 'Business', href: '/business' },
-    { name: 'Politics', href: '/politics' },
-    { name: 'Energy', href: '/energy' },
-    { name: 'Science', href: '/science' },
-  ];
+  const quickSectors = CONTENT_CATEGORIES.slice(0, 8);
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: SITE_CONFIG.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: categoryTitle,
+        item: `${SITE_CONFIG.url}/${category}`,
+      },
+    ],
+  };
 
   return (
-    <div className="container" style={{ paddingTop: 'var(--space-6)', paddingBottom: 'var(--space-16)' }}>
-      {/* Breadcrumb */}
-      <div style={{ marginBottom: 'var(--space-4)', display: 'flex', gap: 'var(--space-2)', fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 'var(--font-weight-bold)' }}>
-        <Link href="/" style={{ color: 'var(--color-text-muted)' }}>
-          Home
-        </Link>
-        <span style={{ color: 'var(--color-border-strong)' }}>/</span>
-        <span style={{ color: 'var(--color-primary)' }}>
-          {categoryTitle}
-        </span>
-      </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+      <div className={`container ${styles.categoryPage}`}>
+        {/* Breadcrumb */}
+        <nav aria-label="Breadcrumb" className={styles.breadcrumb}>
+          <Link href="/" className={styles.breadcrumbLink}>
+            Home
+          </Link>
+          <span className={styles.breadcrumbSeparator}>/</span>
+          <span className={styles.breadcrumbActive}>
+            {categoryTitle}
+          </span>
+        </nav>
 
-      <SectionTitle size="lg" as="h1">
-        {categoryTitle} News &amp; Analysis
-      </SectionTitle>
+        <SectionTitle size="lg" as="h1">
+          {categoryTitle} News &amp; Analysis
+        </SectionTitle>
 
-      {categoryArticles.length > 0 ? (
-        <Grid cols={12} gap="lg">
-          {categoryArticles.map((article) => (
-            <Grid.Col key={article.id} span={12} spanMd={6}>
-              <ArticleCard
-                variant="vertical"
-                title={article.title}
-                href={article.href}
-                image={article.image}
-                category={article.category}
-                isBreaking={article.isBreaking}
-                summary={article.summary}
-                author={article.author}
-                publishedAt={article.publishedAt}
-              />
-            </Grid.Col>
-          ))}
-        </Grid>
-      ) : (
-        <div style={{ padding: 'var(--space-12) 0', textAlign: 'center', color: 'var(--color-text-muted)' }}>
-          <p style={{ fontSize: 'var(--font-size-lg)', marginBottom: 'var(--space-4)' }}>
-            No published articles found under <strong>{categoryTitle}</strong> yet.
-          </p>
-          <div style={{ display: 'flex', gap: 'var(--space-2)', justifyContent: 'center', flexWrap: 'wrap', marginBottom: 'var(--space-6)' }}>
-            {quickSectors.map((sec) => (
-              <Link
-                key={sec.href}
-                href={sec.href}
-                style={{
-                  padding: 'var(--space-1) var(--space-3)',
-                  backgroundColor: 'var(--color-surface-subtle)',
-                  border: '1px solid var(--color-border)',
-                  fontSize: 'var(--font-size-xs)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  textTransform: 'uppercase',
-                }}
-              >
-                {sec.name}
-              </Link>
+        {categoryArticles.length > 0 ? (
+          <Grid cols={12} gap="lg">
+            {categoryArticles.map((article) => (
+              <Grid.Col key={article.id} span={12} spanMd={6}>
+                <ArticleCard
+                  variant="vertical"
+                  title={article.title}
+                  href={article.href}
+                  image={article.image}
+                  category={article.category}
+                  isBreaking={article.isBreaking}
+                  summary={article.summary}
+                  author={article.author}
+                  publishedAt={article.publishedAt}
+                />
+              </Grid.Col>
             ))}
+          </Grid>
+        ) : (
+          <div className={styles.emptyState}>
+            <p className={styles.emptyStateMessage}>
+              No published dispatches found under <strong>{categoryTitle}</strong> currently.
+            </p>
+            <div className={styles.sectorsList}>
+              {quickSectors.map((sec) => (
+                <Link key={sec.href} href={sec.href} className={styles.sectorTag}>
+                  {sec.name}
+                </Link>
+              ))}
+            </div>
+            <div className={styles.emptyActions}>
+              <Button variant="outline" size="sm" href="/">
+                &larr; Return to Homepage
+              </Button>
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: 'var(--space-3)', justifyContent: 'center' }}>
-            <Button variant="outline" size="sm" href="/">
-              &larr; Return to Homepage
-            </Button>
-            <Button variant="primary" size="sm" href="/studio">
-              Publish Story in Studio &rarr;
-            </Button>
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }
+

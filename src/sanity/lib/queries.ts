@@ -70,3 +70,12 @@ export const ARTICLES_BY_CATEGORY_QUERY = groq`*[_type == "article" && (lower(ca
   _createdAt,
   mainImage
 }`;
+
+export const NEWS_SITEMAP_QUERY = groq`*[_type == "article" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc)[0...100] {
+  _id,
+  title,
+  "slug": slug.current,
+  publishedAt,
+  _createdAt
+}`;
+

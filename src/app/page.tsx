@@ -3,41 +3,14 @@ import { ArticleCard, SectionTitle, Grid, Button } from '@/components/ui';
 import styles from './page.module.css';
 import { client } from '@/sanity/lib/client';
 import { LATEST_ARTICLES_QUERY } from '@/sanity/lib/queries';
-import { urlFor } from '@/sanity/lib/image';
-
-import type { SanityImageSource } from '@sanity/image-url';
+import { mapSanityToCard } from '@/lib/formatters';
+import type { RawSanityArticle, FormattedArticleCardData } from '@/lib/formatters';
 
 export const revalidate = 60; // Revalidate at most once every 60s (ISR)
 
-interface SanityArticle {
-  _id: string;
-  title: string;
-  slug: string;
-  category?: string;
-  categorySlug?: string;
-  author?: string;
-  isBreaking?: boolean;
-  summary?: string;
-  publishedAt?: string;
-  _createdAt?: string;
-  mainImage?: SanityImageSource;
-}
-
-interface FormattedArticle {
-  id: string;
-  title: string;
-  href: string;
-  image: { src: string; alt: string };
-  category: string;
-  isBreaking?: boolean;
-  author: string;
-  publishedAt: string;
-  summary?: string;
-}
-
 export default async function Home() {
   // Fetch dynamic articles from Sanity with ISR cache
-  let articles: SanityArticle[] = [];
+  let articles: RawSanityArticle[] = [];
   try {
     articles = await client.fetch(
       LATEST_ARTICLES_QUERY,
@@ -47,27 +20,6 @@ export default async function Home() {
   } catch (error) {
     console.error('Error fetching articles from Sanity:', error);
   }
-
-  // Format helper
-  const formatArticle = (art: SanityArticle, fallbackImgSeed: string): FormattedArticle => {
-    const dateSource = art.publishedAt || art._createdAt;
-    return {
-      id: art._id,
-      title: art.title,
-      href: `/article/${art.slug}`,
-      image: {
-        src: art.mainImage ? urlFor(art.mainImage).url() : `https://picsum.photos/seed/${art.slug || fallbackImgSeed}/900/506`,
-        alt: art.title,
-      },
-      category: art.category || 'NEWS',
-      isBreaking: art.isBreaking || false,
-      author: art.author || 'Vice City Staff',
-      publishedAt: dateSource
-        ? new Date(dateSource).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-        : 'Just now',
-      summary: art.summary,
-    };
-  };
 
   if (articles.length === 0) {
     return (
@@ -90,21 +42,21 @@ export default async function Home() {
   // Pick the lead story (Breaking news takes priority, otherwise the latest article)
   const breakingIndex = articles.findIndex((a) => a.isBreaking);
   const leadIndex = breakingIndex !== -1 ? breakingIndex : 0;
-  const leadStory: FormattedArticle = formatArticle(articles[leadIndex], 'lead-story');
+  const leadStory: FormattedArticleCardData = mapSanityToCard(articles[leadIndex], 'lead-story');
 
   // Filter out the lead article from secondary feeds so it doesn't duplicate
   const remainingArticles = articles.filter((_, idx) => idx !== leadIndex);
 
-  const topFeed: FormattedArticle[] = (remainingArticles.length > 0 ? remainingArticles : articles)
+  const topFeed: FormattedArticleCardData[] = (remainingArticles.length > 0 ? remainingArticles : articles)
     .slice(0, 4)
-    .map((a, idx) => formatArticle(a, `top-${idx}`));
+    .map((a, idx) => mapSanityToCard(a, `top-${idx}`));
 
-  const spotlightFeed: FormattedArticle[] = (remainingArticles.length > 4 ? remainingArticles.slice(4, 8) : articles)
+  const spotlightFeed: FormattedArticleCardData[] = (remainingArticles.length > 4 ? remainingArticles.slice(4, 8) : remainingArticles)
     .slice(0, 4)
-    .map((a, idx) => formatArticle(a, `spotlight-${idx}`));
+    .map((a, idx) => mapSanityToCard(a, `spotlight-${idx}`));
 
-  const analysisFeed: FormattedArticle[] = (remainingArticles.length > 0 ? remainingArticles : articles)
-    .map((a, idx) => formatArticle(a, `analysis-${idx}`));
+  const analysisFeed: FormattedArticleCardData[] = (remainingArticles.length > 8 ? remainingArticles.slice(8) : remainingArticles)
+    .map((a, idx) => mapSanityToCard(a, `analysis-${idx}`));
 
   const trendingRankings = articles.slice(0, 5).map((a, idx) => ({
     id: a._id,

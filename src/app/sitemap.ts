@@ -1,25 +1,10 @@
 import type { MetadataRoute } from "next";
 import { client } from "@/sanity/lib/client";
 import { ALL_ARTICLES_QUERY } from "@/sanity/lib/queries";
-
-const CATEGORIES = [
-  "tech",
-  "markets",
-  "finance",
-  "economy",
-  "business",
-  "politics",
-  "world",
-  "real-estate",
-  "energy",
-  "science",
-  "lifestyle",
-  "opinion",
-  "sports",
-];
+import { CONTENT_CATEGORIES, SITE_CONFIG } from "@/lib/constants";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const baseUrl = SITE_CONFIG.url;
 
   // Static core routes
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -29,8 +14,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "always",
       priority: 1.0,
     },
-    ...CATEGORIES.map((category): MetadataRoute.Sitemap[number] => ({
-      url: `${baseUrl}/${category}`,
+    ...CONTENT_CATEGORIES.map((cat): MetadataRoute.Sitemap[number] => ({
+      url: `${baseUrl}${cat.href}`,
       lastModified: new Date(),
       changeFrequency: "hourly",
       priority: 0.8,

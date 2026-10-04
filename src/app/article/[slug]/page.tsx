@@ -6,10 +6,12 @@ import {
   ArticleImage,
   Button,
   CustomPortableText,
+  ArticleActions,
 } from "@/components/ui";
 import { client } from "@/sanity/lib/client";
 import { ARTICLE_BY_SLUG_QUERY } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
+import styles from "./article.module.css";
 
 interface ArticlePageProps {
   params: Promise<{
@@ -136,197 +138,133 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     },
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: article.category || "News",
+        item: `${siteUrl}/${(article.category || "news").toLowerCase().replace(/\s+/g, "-")}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: article.title,
+        item: `${siteUrl}/article/${slug}`,
+      },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: JSON.stringify([jsonLd, breadcrumbJsonLd]).replace(/</g, "\\u003c"),
         }}
       />
-      <article
-        className="container"
-        style={{
-          maxWidth: "820px",
-          paddingTop: "var(--space-6)",
-          paddingBottom: "var(--space-16)",
-        }}
-      >
-      {/* Breadcrumb */}
-      <div
-        style={{
-          marginBottom: "var(--space-4)",
-          display: "flex",
-          gap: "var(--space-2)",
-          fontSize: "var(--font-size-xs)",
-          textTransform: "uppercase",
-          fontWeight: "var(--font-weight-bold)",
-        }}
-      >
-        <Link href="/" style={{ color: "var(--color-text-muted)" }}>
-          Home
-        </Link>
-        <span style={{ color: "var(--color-border)" }}>/</span>
-        <span style={{ color: "var(--color-primary)" }}>
-          {article.category || "News"}
-        </span>
-      </div>
-
-      {/* Article Header */}
-      <header style={{ marginBottom: "var(--space-6)" }}>
-        {article.isBreaking && (
-          <span
-            style={{
-              color: "var(--color-breaking)",
-              fontWeight: "var(--font-weight-bold)",
-              fontSize: "var(--font-size-xs)",
-              textTransform: "uppercase",
-              letterSpacing: "var(--letter-spacing-wide)",
-            }}
+      <article className={`container ${styles.articleContainer}`}>
+        {/* Semantic Accessible Breadcrumb */}
+        <nav aria-label="Breadcrumb" className={styles.breadcrumb}>
+          <Link href="/" className={styles.breadcrumbLink}>
+            Home
+          </Link>
+          <span className={styles.breadcrumbSeparator}>/</span>
+          <Link
+            href={`/${(article.category || "news").toLowerCase().replace(/\s+/g, "-")}`}
+            className={styles.breadcrumbActive}
           >
-            BREAKING NEWS
-          </span>
-        )}
-        {!article.isBreaking && article.category && (
-          <span
-            style={{
-              color: "var(--color-primary)",
-              fontWeight: "var(--font-weight-bold)",
-              fontSize: "var(--font-size-xs)",
-              textTransform: "uppercase",
-              letterSpacing: "var(--letter-spacing-wide)",
-            }}
-          >
-            {article.category}
-          </span>
-        )}
-        <h1
-          style={{
-            fontSize: "var(--font-size-4xl)",
-            fontWeight: "var(--font-weight-black)",
-            lineHeight: "var(--line-height-tight)",
-            letterSpacing: "var(--letter-spacing-tighter)",
-            marginTop: "var(--space-2)",
-            marginBottom: "var(--space-4)",
-          }}
-        >
-          {article.title}
-        </h1>
+            {article.category || "News"}
+          </Link>
+        </nav>
 
-        {/* Byline & Timestamp */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: "var(--space-2)",
-            borderTop: "1px solid var(--color-border)",
-            borderBottom: "1px solid var(--color-border)",
-            padding: "var(--space-3) 0",
-            color: "var(--color-text-muted)",
-            fontSize: "var(--font-size-xs)",
-          }}
-        >
-          <div>
-            By{" "}
-            <strong style={{ color: "var(--color-text-primary)" }}>
-              {article.author || "Vice City Staff"}
-            </strong>
+        {/* Article Header */}
+        <header className={styles.articleHeader}>
+          {article.isBreaking && (
+            <span className={styles.kickerBreaking}>
+              BREAKING NEWS
+            </span>
+          )}
+          {!article.isBreaking && article.category && (
+            <span className={styles.kickerCategory}>
+              {article.category}
+            </span>
+          )}
+          <h1 className={styles.headline}>
+            {article.title}
+          </h1>
+
+          {/* Byline & Timestamp */}
+          <div className={styles.bylineRow}>
+            <div>
+              By{" "}
+              <strong className={styles.authorName}>
+                {article.author || "Vice City Staff"}
+              </strong>
+            </div>
+            <div>
+              <time dateTime={article.publishedAt}>
+                {new Date(publishedDate).toLocaleDateString("en-US", {
+                  weekday: "short",
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </time>
+            </div>
           </div>
-          <div>
-            <time dateTime={article.publishedAt}>
-              {new Date(article.publishedAt).toLocaleString()}
-            </time>
-          </div>
+        </header>
+
+        {/* Key Takeaways Box */}
+        {article.takeaways && article.takeaways.length > 0 && (
+          <aside className={styles.takeawaysBox} aria-label="Key Takeaways">
+            <h3 className={styles.takeawaysTitle}>
+              Key Takeaways
+            </h3>
+            <ul className={styles.takeawaysList}>
+              {article.takeaways.map((takeaway: string, idx: number) => (
+                <li key={idx}>{takeaway}</li>
+              ))}
+            </ul>
+          </aside>
+        )}
+
+        {/* Main Image */}
+        <div className={styles.imageWrapper}>
+          <ArticleImage
+            src={
+              article.mainImage
+                ? urlFor(article.mainImage).url()
+                : `https://picsum.photos/seed/${article.slug || "article-hero"}/900/506`
+            }
+            alt={article.title}
+            aspectRatio="16/9"
+            priority={true}
+            sizes="(max-width: 820px) 100vw, 820px"
+          />
         </div>
-      </header>
 
-      {/* Key Takeaways Box */}
-      {article.takeaways && article.takeaways.length > 0 && (
-        <div
-          style={{
-            backgroundColor: "var(--color-surface-subtle)",
-            borderLeft: "4px solid var(--color-primary)",
-            padding: "var(--space-5)",
-            marginBottom: "var(--space-6)",
-          }}
-        >
-          <h3
-            style={{
-              fontFamily: "var(--font-family-headline)",
-              fontSize: "var(--font-size-sm)",
-              fontWeight: "var(--font-weight-black)",
-              textTransform: "uppercase",
-              letterSpacing: "var(--letter-spacing-wide)",
-              marginBottom: "var(--space-3)",
-              color: "var(--color-text-primary)",
-            }}
-          >
-            Key Takeaways
-          </h3>
-          <ul
-            style={{
-              margin: 0,
-              paddingLeft: "var(--space-4)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "var(--space-2)",
-              fontSize: "var(--font-size-sm)",
-              color: "var(--color-text-secondary)",
-              listStyleType: "disc",
-            }}
-          >
-            {article.takeaways.map((takeaway: string, idx: number) => (
-              <li key={idx}>{takeaway}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+        {/* Article Body (Portable Text) */}
+        {article.body && <CustomPortableText value={article.body} />}
 
-      {/* Main Image */}
-      <div style={{ marginBottom: "var(--space-6)" }}>
-        <ArticleImage
-          src={
-            article.mainImage
-              ? urlFor(article.mainImage).url()
-              : `https://picsum.photos/seed/${article.slug || "article-hero"}/900/506`
-          }
-          alt={article.title}
-          aspectRatio="16/9"
-          priority={true}
-          sizes="(max-width: 820px) 100vw, 820px"
-        />
-      </div>
-
-      {/* Article Body (Portable Text) */}
-      {article.body && <CustomPortableText value={article.body} />}
-
-      {/* Footer / Share Actions */}
-      <div
-        style={{
-          marginTop: "var(--space-10)",
-          paddingTop: "var(--space-6)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "var(--space-4)",
-        }}
-      >
-        <Button variant="outline" size="sm" href="/">
-          &larr; Back to Top Stories
-        </Button>
-        <div style={{ display: "flex", gap: "var(--space-2)" }}>
-          <Button variant="ghost" size="sm">
-            Share
+        {/* Footer / Share Actions */}
+        <div className={styles.actionsBar}>
+          <Button variant="outline" size="sm" href="/">
+            &larr; Back to Top Stories
           </Button>
-          <Button variant="secondary" size="sm">
-            Save Article
-          </Button>
+          <ArticleActions title={article.title} url={`${siteUrl}/article/${slug}`} />
         </div>
-      </div>
-    </article>
-  </>
-);
+      </article>
+    </>
+  );
 }

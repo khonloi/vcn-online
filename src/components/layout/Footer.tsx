@@ -8,11 +8,21 @@ import styles from './Footer.module.css';
 
 export const Footer: React.FC = () => {
   const pathname = usePathname();
+  const [email, setEmail] = React.useState('');
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
 
   // Hide the footer completely when inside Sanity Studio
   if (pathname?.startsWith('/studio')) {
     return null;
   }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !email.includes('@')) return;
+    setIsSubmitted(true);
+    setEmail('');
+    setTimeout(() => setIsSubmitted(false), 5000);
+  };
 
   return (
     <footer className={styles.footerWrapper}>
@@ -22,17 +32,28 @@ export const Footer: React.FC = () => {
           <Link href="/" className={styles.footerLogo}>
             VICE CITY <span>NEWS</span>
           </Link>
-          <div className={styles.newsletterForm}>
-            <input
-              type="email"
-              placeholder="Get the daily newsletter..."
-              className={styles.newsletterInput}
-              aria-label="Email address for newsletter"
-            />
-            <Button variant="secondary" size="md">
-              Sign Up
-            </Button>
-          </div>
+          <form className={styles.newsletterForm} onSubmit={handleSubmit} aria-label="Newsletter Subscription">
+            {isSubmitted ? (
+              <span style={{ color: 'var(--color-primary)', fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-semibold)' }}>
+                ✓ Subscribed to Vice City Today!
+              </span>
+            ) : (
+              <>
+                <input
+                  type="email"
+                  placeholder="Get the daily newsletter..."
+                  className={styles.newsletterInput}
+                  aria-label="Email address for newsletter"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                <Button variant="secondary" size="md" type="submit">
+                  Sign Up
+                </Button>
+              </>
+            )}
+          </form>
         </div>
 
         {/* Multi-column editorial taxonomy covering every news sector */}

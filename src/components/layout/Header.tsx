@@ -2,49 +2,15 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button, SearchInput } from "@/components/ui";
 import { CurrentDateTime } from "./CurrentDateTime";
+import { CATEGORIES, MARKET_INDICES, TRENDING_TOPICS } from "@/lib/constants";
 import styles from "./Header.module.css";
-
-const CATEGORIES = [
-  { name: "Home", href: "/" },
-  { name: "Tech", href: "/tech" },
-  { name: "Markets", href: "/markets" },
-  { name: "Finance", href: "/finance" },
-  { name: "Economy", href: "/economy" },
-  { name: "Business", href: "/business" },
-  { name: "Politics", href: "/politics" },
-  { name: "World", href: "/world" },
-  { name: "Real Estate", href: "/real-estate" },
-  { name: "Energy", href: "/energy" },
-  { name: "Science", href: "/science" },
-  { name: "Lifestyle", href: "/lifestyle" },
-  { name: "Opinion", href: "/opinion" },
-  { name: "Sports", href: "/sports" },
-];
-
-const MARKET_INDICES = [
-  { name: "S&P 500", value: "5,983.25", change: "+0.42%", positive: true },
-  { name: "NASDAQ", value: "18,972.40", change: "+0.88%", positive: true },
-  { name: "DOW", value: "43,870.10", change: "-0.15%", positive: false },
-  { name: "BTC", value: "$96,450", change: "+2.30%", positive: true },
-  { name: "OIL", value: "$72.15", change: "-1.05%", positive: false },
-];
-
-const TRENDING_TOPICS = [
-  "AI Boom",
-  "Tech Stocks",
-  "Federal Reserve",
-  "Silicon Valley",
-  "Electric Vehicles",
-  "Real Estate Trends",
-  "Energy Transition",
-  "Global Trade",
-];
 
 export const Header: React.FC = () => {
   const pathname = usePathname();
+  const router = useRouter();
 
   // Hide the header completely when inside Sanity Studio
   if (pathname?.startsWith("/studio")) {
@@ -110,7 +76,15 @@ export const Header: React.FC = () => {
             </Link>
 
             <div className={styles.headerRight}>
-              <SearchInput placeholder="Search stocks, topics, people..." />
+              <SearchInput
+                placeholder="Search stocks, topics, people..."
+                onSearch={(q) => {
+                  const term = q.trim();
+                  if (term) {
+                    router.push(`/${encodeURIComponent(term.toLowerCase().replace(/\s+/g, "-"))}`);
+                  }
+                }}
+              />
               <Button variant="primary" size="md" href="/subscribe">
                 Subscribe
               </Button>

@@ -5,3 +5,4 @@ export * from './ArticleImage';
 export * from './ArticleCard';
 export * from './Grid';
 export * from './CustomPortableText';
+export * from './ArticleActions';
