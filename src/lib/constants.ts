@@ -1,8 +1,6 @@
-export interface CategoryConfig {
-  name: string;
-  slug: string;
-  href: string;
-}
+import type { CategoryConfig, MarketIndex, StaticPageConfig, TrendingTopicConfig } from '@/types';
+
+export type { CategoryConfig, MarketIndex, StaticPageConfig, TrendingTopicConfig };
 
 export const CATEGORIES: CategoryConfig[] = [
   { name: 'Home', slug: '', href: '/' },
@@ -24,12 +22,6 @@ export const CATEGORIES: CategoryConfig[] = [
 export const CONTENT_CATEGORIES = CATEGORIES.filter((c) => c.slug !== '');
 export const KNOWN_CATEGORY_SLUGS = new Set(CONTENT_CATEGORIES.map((c) => c.slug));
 
-export interface StaticPageConfig {
-  name: string;
-  slug: string;
-  href: string;
-}
-
 export const STATIC_PAGES: StaticPageConfig[] = [
   { name: 'About', slug: 'about', href: '/about' },
   { name: 'Editorial Standards', slug: 'editorial-standards', href: '/editorial-standards' },
@@ -40,18 +32,13 @@ export const STATIC_PAGES: StaticPageConfig[] = [
 
 export const STATIC_PAGE_SLUGS = new Set(STATIC_PAGES.map((p) => p.slug));
 
-export const MARKET_INDICES = [
+export const MARKET_INDICES: MarketIndex[] = [
   { name: 'S&P 500', value: '5,983.25', change: '+0.42%', positive: true },
   { name: 'NASDAQ', value: '18,972.40', change: '+0.88%', positive: true },
   { name: 'DOW', value: '43,870.10', change: '-0.15%', positive: false },
   { name: 'BTC', value: '$96,450', change: '+2.30%', positive: true },
   { name: 'OIL', value: '$72.15', change: '-1.05%', positive: false },
 ];
-
-export interface TrendingTopicConfig {
-  name: string;
-  href: string;
-}
 
 export const TRENDING_TOPICS: TrendingTopicConfig[] = [
   { name: 'AI Boom', href: '/tech' },

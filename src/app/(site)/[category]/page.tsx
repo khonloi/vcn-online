@@ -7,7 +7,7 @@ import { client } from '@/sanity/lib/client';
 import { ARTICLES_BY_CATEGORY_QUERY } from '@/sanity/lib/queries';
 import { KNOWN_CATEGORY_SLUGS, CONTENT_CATEGORIES, SITE_CONFIG } from '@/lib/constants';
 import { mapSanityToCard } from '@/lib/formatters';
-import type { RawSanityArticle } from '@/lib/formatters';
+import type { RawSanityArticle } from '@/types';
 import styles from './category.module.css';
 
 interface CategoryPageProps {

@@ -1,45 +1,7 @@
 import { urlFor } from '@/sanity/lib/image';
-import type { SanityImageSource } from '@sanity/image-url';
+import type { SanityImageWithMeta, RawSanityArticle, FormattedArticleCardData } from '@/types';
 
-export interface SanityImageWithMeta {
-  alt?: string;
-  caption?: string;
-  asset?: {
-    _ref?: string;
-    _type?: string;
-  };
-}
-
-export interface RawSanityArticle {
-  _id: string;
-  title: string;
-  slug: string;
-  category?: string;
-  categorySlug?: string;
-  author?: string;
-  isBreaking?: boolean;
-  breakingUntil?: string;
-  summary?: string;
-  publishedAt?: string;
-  _createdAt?: string;
-  _updatedAt?: string;
-  mainImage?: SanityImageSource & SanityImageWithMeta;
-}
-
-export interface FormattedArticleCardData {
-  id: string;
-  title: string;
-  href: string;
-  image: {
-    src: string;
-    alt: string;
-  };
-  category: string;
-  isBreaking?: boolean;
-  author: string;
-  publishedAt: string;
-  summary?: string;
-}
+export type { SanityImageWithMeta, RawSanityArticle, FormattedArticleCardData };
 
 /**
  * Formats an ISO date string cleanly with standard locale and options.

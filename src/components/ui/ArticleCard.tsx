@@ -3,23 +3,9 @@ import Link from 'next/link';
 import ArticleImage from './ArticleImage';
 import styles from './ArticleCard.module.css';
 
-export interface ArticleCardProps {
-  title: string;
-  href: string;
-  image?: {
-    src: string;
-    alt?: string;
-  };
-  summary?: string;
-  category?: string;
-  isBreaking?: boolean;
-  author?: string;
-  publishedAt?: string;
-  ranking?: number | string;
-  variant?: 'featured' | 'horizontal' | 'vertical' | 'minimal';
-  priority?: boolean;
-  className?: string;
-}
+import type { ArticleCardProps } from '@/types';
+
+export type { ArticleCardProps };
 
 export const ArticleCard: React.FC<ArticleCardProps> = ({
   title,

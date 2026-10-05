@@ -1,12 +1,6 @@
-export interface RssArticleItem {
-  title: string;
-  slug: string;
-  summary?: string;
-  category?: string;
-  author?: string;
-  publishedAt?: string;
-  _createdAt?: string;
-}
+import type { RssArticleItem } from '@/types';
+
+export type { RssArticleItem };
 
 export function generateRssFeed(
   articles: RssArticleItem[],

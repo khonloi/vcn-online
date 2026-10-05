@@ -3,7 +3,8 @@
 import React, { useActionState } from 'react';
 import Link from 'next/link';
 import { Button, Input, Text } from '@/components/ui';
-import { subscribeToNewsletter, NewsletterState } from '@/app/actions/newsletter';
+import { subscribeToNewsletter } from '@/app/actions/newsletter';
+import type { NewsletterState } from '@/types';
 import styles from './Footer.module.css';
 
 const initialNewsletterState: NewsletterState = {

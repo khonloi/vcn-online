@@ -4,7 +4,7 @@ import styles from './page.module.css';
 import { client } from '@/sanity/lib/client';
 import { LATEST_ARTICLES_QUERY } from '@/sanity/lib/queries';
 import { mapSanityToCard } from '@/lib/formatters';
-import type { RawSanityArticle, FormattedArticleCardData } from '@/lib/formatters';
+import type { RawSanityArticle, FormattedArticleCardData } from '@/types';
 
 export const revalidate = 60; // Revalidate at most once every 60s (ISR)
 

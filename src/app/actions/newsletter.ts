@@ -1,9 +1,8 @@
 'use server';
 
-export interface NewsletterState {
-  status: 'idle' | 'success' | 'error';
-  message: string;
-}
+import type { NewsletterState } from '@/types';
+
+export type { NewsletterState };
 
 /**
  * Server action for newsletter subscription with strict email validation
