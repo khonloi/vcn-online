@@ -57,7 +57,7 @@ export const Header: React.FC = () => {
           <div className={`container ${styles.mainHeaderContent}`}>
             <div className={styles.logoSection}>
               <Link href="/" className={styles.logoLink} aria-label="Vice City News Homepage">
-                <span className={styles.logoVCN}>VICE CITY</span>
+                <span className={styles.logoVCN}>VICE CITY</span>{' '}
                 <span className={styles.logoNews}>NEWS</span>
               </Link>
               <p className={styles.tagline}>Breaking Business, Tech, &amp; Market Intelligence</p>

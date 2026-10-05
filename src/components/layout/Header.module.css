@@ -59,8 +59,23 @@
   display: none;
 }
 
+.tickerDelayBadge {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 1px 4px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.tickerItem,
 .marketItem {
   display: inline-flex;
+  align-items: center;
   gap: var(--space-1);
   font-weight: var(--font-weight-medium);
   font-size: 11px;
@@ -68,29 +83,50 @@
   white-space: nowrap;
 }
 
-.marketPositive {
-  color: #0b875b;
+.tickerName {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+  margin-right: 2px;
+}
+
+.tickerValue {
+  color: var(--color-text-secondary);
+  margin-right: 2px;
+}
+
+.tickerChange {
   font-weight: var(--font-weight-bold);
 }
 
+.tickerPositive,
+.marketPositive {
+  color: #08744c;
+  font-weight: var(--font-weight-bold);
+}
+
+.tickerNegative,
 .marketNegative {
   color: var(--color-breaking);
   font-weight: var(--font-weight-bold);
 }
 
+.topBarRight,
 .topBarActions {
   display: none;
   gap: var(--space-4);
   align-items: center;
   font-size: var(--font-size-xs);
+  flex-shrink: 0;
 }
 
 @media (min-width: 768px) {
+  .topBarRight,
   .topBarActions {
     display: flex;
   }
 }
 
+.dateTime,
 .dateTimeText {
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
@@ -101,11 +137,21 @@
 
 .editionSelector {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--space-1);
   color: var(--color-text-muted);
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   font-size: 11px;
+  white-space: nowrap;
+}
+
+.editionLabel {
+  color: var(--color-text-muted);
+}
+
+.editionCurrent {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
 }
 
 /* Main Brand Header */
@@ -127,50 +173,59 @@
   gap: var(--space-4);
 }
 
-.logo {
+.logoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logoLink {
   font-family: var(--font-family-headline);
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-black);
-  color: var(--color-text-primary);
   letter-spacing: -0.04em;
   line-height: 1;
   text-transform: uppercase;
+  text-decoration: none;
   display: inline-flex;
-  align-items: center;
-  gap: 4px;
+  align-items: baseline;
+  gap: 0.35em;
 }
 
 @media (min-width: 768px) {
-  .logo {
-    font-size: var(--font-size-2xl);
+  .logoLink {
+    font-size: var(--font-size-3xl);
   }
 }
 
-.logoBadge {
-  background-color: var(--color-primary);
-  color: var(--color-text-inverse);
-  font-size: 9px;
-  font-weight: var(--font-weight-black);
-  padding: 2px 4px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  vertical-align: middle;
+.logoVCN {
+  color: var(--color-text-primary);
 }
 
-@media (min-width: 768px) {
-  .logoBadge {
-    font-size: 10px;
-    padding: 2px 5px;
-  }
+.logoNews {
+  color: var(--color-primary);
 }
 
+.tagline {
+  font-family: var(--font-family-sans);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  letter-spacing: var(--letter-spacing-wide);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.headerActions,
 .headerRight {
   display: none;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
+  flex-shrink: 0;
 }
 
 @media (min-width: 768px) {
+  .headerActions,
   .headerRight {
     display: flex;
   }
