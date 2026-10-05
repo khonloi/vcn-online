@@ -12,12 +12,21 @@ const initialNewsletterState: NewsletterState = {
 };
 
 export function NewsletterForm() {
-  const [state, formAction, isPending] = useActionState(subscribeToNewsletter, initialNewsletterState);
+  const [state, formAction, isPending] = useActionState(
+    subscribeToNewsletter,
+    initialNewsletterState
+  );
 
   return (
     <div className={styles.newsletterForm}>
       {state.status === 'success' ? (
-        <span style={{ color: 'var(--color-primary)', fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-semibold)' }}>
+        <span
+          style={{
+            color: 'var(--color-primary)',
+            fontSize: 'var(--font-size-sm)',
+            fontWeight: 'var(--font-weight-semibold)',
+          }}
+        >
           {state.message}
         </span>
       ) : (
@@ -37,12 +46,19 @@ export function NewsletterForm() {
             </Button>
           </div>
           {state.status === 'error' && (
-            <p style={{ color: 'var(--color-breaking)', fontSize: 'var(--font-size-xs)', marginTop: '4px' }}>
+            <p
+              style={{
+                color: 'var(--color-breaking)',
+                fontSize: 'var(--font-size-xs)',
+                marginTop: '4px',
+              }}
+            >
               {state.message}
             </p>
           )}
           <p className={styles.newsletterConsent}>
-            By subscribing, you agree to our <Link href="/terms">Terms of Service</Link> and <Link href="/privacy">Privacy Policy</Link>. Unsubscribe at any time.
+            By subscribing, you agree to our <Link href="/terms">Terms of Service</Link> and{' '}
+            <Link href="/privacy">Privacy Policy</Link>. Unsubscribe at any time.
           </p>
         </form>
       )}

@@ -1,11 +1,11 @@
-import React from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui";
-import { CurrentDateTime } from "./CurrentDateTime";
-import { NavLinks } from "./NavLinks";
-import { HeaderSearch } from "./HeaderSearch";
-import { MARKET_INDICES, TRENDING_TOPICS } from "@/lib/constants";
-import styles from "./Header.module.css";
+import React from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/ui';
+import { CurrentDateTime } from './CurrentDateTime';
+import { NavLinks } from './NavLinks';
+import { HeaderSearch } from './HeaderSearch';
+import { MARKET_INDICES, TRENDING_TOPICS } from '@/lib/constants';
+import styles from './Header.module.css';
 
 export const Header: React.FC = () => {
   return (
@@ -60,9 +60,7 @@ export const Header: React.FC = () => {
                 <span className={styles.logoVCN}>VICE CITY</span>
                 <span className={styles.logoNews}>NEWS</span>
               </Link>
-              <p className={styles.tagline}>
-                Breaking Business, Tech, &amp; Market Intelligence
-              </p>
+              <p className={styles.tagline}>Breaking Business, Tech, &amp; Market Intelligence</p>
             </div>
 
             <div className={styles.headerActions}>
@@ -89,10 +87,7 @@ export const Header: React.FC = () => {
             <div className={styles.trendingItems}>
               {TRENDING_TOPICS.map((topic, index) => (
                 <React.Fragment key={topic.name}>
-                  <Link
-                    href={topic.href}
-                    className={styles.trendingItem}
-                  >
+                  <Link href={topic.href} className={styles.trendingItem}>
                     {topic.name}
                   </Link>
                   {index < TRENDING_TOPICS.length - 1 && (

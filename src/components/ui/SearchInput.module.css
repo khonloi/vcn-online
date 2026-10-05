@@ -8,7 +8,9 @@
   width: 100%;
   max-width: 280px;
   height: 38px;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .searchWrapper:focus-within {

@@ -26,7 +26,8 @@ export const article = defineType({
       title: 'Author / Byline',
       type: 'reference',
       to: { type: 'author' },
-      validation: (Rule) => Rule.required().error('An author must be assigned for editorial attribution.'),
+      validation: (Rule) =>
+        Rule.required().error('An author must be assigned for editorial attribution.'),
     }),
     defineField({
       name: 'category',
@@ -47,7 +48,8 @@ export const article = defineType({
           name: 'alt',
           title: 'Alternative Text',
           type: 'string',
-          description: 'Required for accessibility and Google News compliance. Describe the image objectively.',
+          description:
+            'Required for accessibility and Google News compliance. Describe the image objectively.',
         }),
         defineField({
           name: 'caption',
@@ -56,7 +58,8 @@ export const article = defineType({
           description: 'e.g. "Photo: Spencer Platt / Getty Images"',
         }),
       ],
-      validation: (Rule) => Rule.required().error('A primary lead image is required for card feeds and SEO.'),
+      validation: (Rule) =>
+        Rule.required().error('A primary lead image is required for card feeds and SEO.'),
     }),
     defineField({
       name: 'isBreaking',
@@ -68,7 +71,8 @@ export const article = defineType({
       name: 'breakingUntil',
       title: 'Breaking Status Expiration',
       type: 'datetime',
-      description: 'When breaking news banner should automatically decay back into standard chronological order.',
+      description:
+        'When breaking news banner should automatically decay back into standard chronological order.',
       hidden: ({ parent }) => !parent?.isBreaking,
     }),
     defineField({
@@ -76,9 +80,12 @@ export const article = defineType({
       title: 'Summary',
       type: 'text',
       rows: 3,
-      description: 'A short summary used in card feeds and Google News snippets (max 250 characters).',
+      description:
+        'A short summary used in card feeds and Google News snippets (max 250 characters).',
       validation: (Rule) =>
-        Rule.max(250).warning('Summaries longer than 250 characters will be truncated in card feeds.'),
+        Rule.max(250).warning(
+          'Summaries longer than 250 characters will be truncated in card feeds.'
+        ),
     }),
     defineField({
       name: 'takeaways',

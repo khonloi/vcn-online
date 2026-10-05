@@ -38,6 +38,7 @@ export async function subscribeToNewsletter(
 
   return {
     status: 'success',
-    message: '✓ You are subscribed to Vice City Today! Your first morning briefing arrives tomorrow at 6:00 AM EST.',
+    message:
+      '✓ You are subscribed to Vice City Today! Your first morning briefing arrives tomorrow at 6:00 AM EST.',
   };
 }

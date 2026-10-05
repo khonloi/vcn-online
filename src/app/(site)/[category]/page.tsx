@@ -48,14 +48,14 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       canonical: url,
     },
     openGraph: {
-      type: "website",
+      type: 'website',
       url,
       title: `${title} | Vice City News`,
       description,
       siteName: SITE_CONFIG.name,
       images: [
         {
-          url: "/og-image.jpg",
+          url: '/og-image.jpg',
           width: 1200,
           height: 675,
           alt: `${categoryTitle} News - Vice City News`,
@@ -63,12 +63,12 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       ],
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       site: SITE_CONFIG.twitterHandle,
       creator: SITE_CONFIG.twitterHandle,
       title: `${title} | Vice City News`,
       description,
-      images: ["/og-image.jpg"],
+      images: ['/og-image.jpg'],
     },
   };
 }
@@ -79,8 +79,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const categoryTitle = formatCategoryTitle(category);
 
   // Fetch articles from Sanity with ISR cache (errors handled by error.tsx)
-  const sanityArticles: RawSanityArticle[] = await client
-    .fetch(ARTICLES_BY_CATEGORY_QUERY, { category }, { next: { revalidate: 60 } });
+  const sanityArticles: RawSanityArticle[] = await client.fetch(
+    ARTICLES_BY_CATEGORY_QUERY,
+    { category },
+    { next: { revalidate: 60 } }
+  );
 
   // Prevent soft-404: if unknown category and has no articles, trigger 404
   if (!isKnown && sanityArticles.length === 0) {
@@ -92,17 +95,17 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const quickSectors = CONTENT_CATEGORIES.slice(0, 8);
 
   const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
     itemListElement: [
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 1,
-        name: "Home",
+        name: 'Home',
         item: SITE_CONFIG.url,
       },
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 2,
         name: categoryTitle,
         item: `${SITE_CONFIG.url}/${category}`,
@@ -115,7 +118,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c"),
+          __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c'),
         }}
       />
       <div className={`container ${styles.categoryPage}`}>
@@ -125,9 +128,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             Home
           </Link>
           <span className={styles.breadcrumbSeparator}>/</span>
-          <span className={styles.breadcrumbActive}>
-            {categoryTitle}
-          </span>
+          <span className={styles.breadcrumbActive}>{categoryTitle}</span>
         </nav>
 
         <SectionTitle size="lg" as="h1">
@@ -175,4 +176,3 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     </>
   );
 }
-

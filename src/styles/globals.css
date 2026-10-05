@@ -1,4 +1,4 @@
-@import "./tokens.css";
+@import './tokens.css';
 
 /* Legacy variable fallbacks for backward compatibility */
 :root {
@@ -43,7 +43,8 @@ a:hover {
   color: var(--color-primary);
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 

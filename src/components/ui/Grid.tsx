@@ -28,9 +28,7 @@ export const Col: React.FC<ColProps> = ({
   const spanMdClass = spanMd ? styles[`colSpanMd${spanMd}`] : '';
   const spanLgClass = spanLg ? styles[`colSpanLg${spanLg}`] : '';
 
-  const classes = [spanClass, spanMdClass, spanLgClass, className]
-    .filter(Boolean)
-    .join(' ');
+  const classes = [spanClass, spanMdClass, spanLgClass, className].filter(Boolean).join(' ');
 
   return (
     <div className={classes} {...props}>
@@ -55,9 +53,7 @@ export const GridComponent: React.FC<GridProps> = ({
     xl: styles.gapXl,
   }[gap];
 
-  const classes = [styles.grid, gridClass, gapClass, className]
-    .filter(Boolean)
-    .join(' ');
+  const classes = [styles.grid, gridClass, gapClass, className].filter(Boolean).join(' ');
 
   return (
     <div className={classes} {...props}>

@@ -59,7 +59,8 @@ export default function ErrorBoundary({
           marginBottom: 'var(--space-6)',
         }}
       >
-        An unexpected network or rendering issue occurred while retrieving this news dispatch. Our engineering desk has been notified.
+        An unexpected network or rendering issue occurred while retrieving this news dispatch. Our
+        engineering desk has been notified.
       </p>
 
       {error.digest && (

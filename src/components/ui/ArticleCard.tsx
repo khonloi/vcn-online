@@ -116,7 +116,11 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             alt={image.alt || title}
             aspectRatio={variant === 'featured' ? '16/9' : '16/9'}
             priority={priority || variant === 'featured'}
-            sizes={variant === 'featured' ? '(max-width: 1024px) 100vw, 60vw' : '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
+            sizes={
+              variant === 'featured'
+                ? '(max-width: 1024px) 100vw, 60vw'
+                : '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+            }
           />
         </Link>
       )}

@@ -17,7 +17,9 @@ export default function ContactPage() {
     <div className={styles.pageWrapper}>
       <div className={`container ${styles.inner}`}>
         <nav aria-label="Breadcrumb" className={styles.breadcrumbs}>
-          <Link href="/" className={styles.breadcrumbLink}>Home</Link>
+          <Link href="/" className={styles.breadcrumbLink}>
+            Home
+          </Link>
           <span className={styles.breadcrumbDivider}>/</span>
           <span className={styles.breadcrumbCurrent}>Contact</span>
         </nav>
@@ -26,7 +28,8 @@ export default function ContactPage() {
           <span className={styles.kicker}>Newsroom Inquiries</span>
           <h1 className={styles.title}>Contact Vice City News</h1>
           <p className={styles.subtitle}>
-            Connect with our reporting desks, send secure news tips, submit corrections requests, or reach executive leadership.
+            Connect with our reporting desks, send secure news tips, submit corrections requests, or
+            reach executive leadership.
           </p>
         </header>
 
@@ -34,7 +37,16 @@ export default function ContactPage() {
           <div className={styles.callout}>
             <div className={styles.calloutTitle}>Have a Confidential News Tip?</div>
             <p style={{ margin: 0, fontSize: 'var(--font-size-sm)' }}>
-              If you have non-public documents, whistleblower disclosures, or sensitive industry information regarding corporate malfeasance or technological breakthroughs, contact our investigations desk securely via encrypted correspondence at <a href="mailto:tips@vcn-online.com" style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>tips@vcn-online.com</a>.
+              If you have non-public documents, whistleblower disclosures, or sensitive industry
+              information regarding corporate malfeasance or technological breakthroughs, contact
+              our investigations desk securely via encrypted correspondence at{' '}
+              <a
+                href="mailto:tips@vcn-online.com"
+                style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}
+              >
+                tips@vcn-online.com
+              </a>
+              .
             </p>
           </div>
 
@@ -42,13 +54,17 @@ export default function ContactPage() {
           <div className={styles.contactGrid}>
             <div className={styles.contactCard}>
               <h3>Technology &amp; AI Desk</h3>
-              <p>Frontier models, Silicon Valley startups, enterprise software, and semiconductors.</p>
+              <p>
+                Frontier models, Silicon Valley startups, enterprise software, and semiconductors.
+              </p>
               <a href="mailto:tech@vcn-online.com">tech@vcn-online.com</a>
             </div>
 
             <div className={styles.contactCard}>
               <h3>Financial Markets Desk</h3>
-              <p>Equities, bond markets, foreign exchange, private equity, and banking regulation.</p>
+              <p>
+                Equities, bond markets, foreign exchange, private equity, and banking regulation.
+              </p>
               <a href="mailto:markets@vcn-online.com">markets@vcn-online.com</a>
             </div>
 
@@ -67,13 +83,17 @@ export default function ContactPage() {
 
           <h2>Newsroom Headquarters</h2>
           <p>
-            <strong>Vice City News Media Inc.</strong><br />
-            Ocean Drive Financial Tower, Suite 4400<br />
-            Vice City, FL 33139<br />
+            <strong>Vice City News Media Inc.</strong>
+            <br />
+            Ocean Drive Financial Tower, Suite 4400
+            <br />
+            Vice City, FL 33139
+            <br />
             United States
           </p>
           <p>
-            Phone (General Editorial): +1 (305) 555-0199<br />
+            Phone (General Editorial): +1 (305) 555-0199
+            <br />
             Press &amp; Media Relations: +1 (305) 555-0182
           </p>
         </div>

@@ -56,7 +56,8 @@ export default function NotFound() {
           marginBottom: 'var(--space-8)',
         }}
       >
-        The article may have been archived, moved, or the link may contain a typo. Explore our core news desks or return to the front page.
+        The article may have been archived, moved, or the link may contain a typo. Explore our core
+        news desks or return to the front page.
       </p>
 
       <div

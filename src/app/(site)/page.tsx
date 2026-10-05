@@ -12,11 +12,7 @@ export default async function Home() {
   // Fetch dynamic articles from Sanity with ISR cache
   let articles: RawSanityArticle[] = [];
   try {
-    articles = await client.fetch(
-      LATEST_ARTICLES_QUERY,
-      {},
-      { next: { revalidate: 60 } }
-    );
+    articles = await client.fetch(LATEST_ARTICLES_QUERY, {}, { next: { revalidate: 60 } });
   } catch (error) {
     console.error('Error fetching articles from Sanity:', error);
   }
@@ -24,12 +20,25 @@ export default async function Home() {
   if (articles.length === 0) {
     return (
       <div className={`container ${styles.page}`}>
-        <div style={{ textAlign: 'center', padding: 'var(--space-16) 0', color: 'var(--color-text-muted)' }}>
+        <div
+          style={{
+            textAlign: 'center',
+            padding: 'var(--space-16) 0',
+            color: 'var(--color-text-muted)',
+          }}
+        >
           <SectionTitle size="lg" as="h1">
             Vice City News
           </SectionTitle>
-          <p style={{ fontSize: 'var(--font-size-lg)', marginTop: 'var(--space-4)', marginBottom: 'var(--space-6)' }}>
-            No published dispatches are currently available. Check back shortly for breaking market dispatches and investigative reports.
+          <p
+            style={{
+              fontSize: 'var(--font-size-lg)',
+              marginTop: 'var(--space-4)',
+              marginBottom: 'var(--space-6)',
+            }}
+          >
+            No published dispatches are currently available. Check back shortly for breaking market
+            dispatches and investigative reports.
           </p>
           <Button variant="outline" size="md" href="/markets">
             Explore Market Dispatches &rarr;
@@ -47,16 +56,21 @@ export default async function Home() {
   // Filter out the lead article from secondary feeds so it doesn't duplicate
   const remainingArticles = articles.filter((_, idx) => idx !== leadIndex);
 
-  const topFeed: FormattedArticleCardData[] = (remainingArticles.length > 0 ? remainingArticles : articles)
+  const topFeed: FormattedArticleCardData[] = (
+    remainingArticles.length > 0 ? remainingArticles : articles
+  )
     .slice(0, 4)
     .map((a) => mapSanityToCard(a));
 
-  const spotlightFeed: FormattedArticleCardData[] = (remainingArticles.length > 4 ? remainingArticles.slice(4, 8) : remainingArticles)
+  const spotlightFeed: FormattedArticleCardData[] = (
+    remainingArticles.length > 4 ? remainingArticles.slice(4, 8) : remainingArticles
+  )
     .slice(0, 4)
     .map((a) => mapSanityToCard(a));
 
-  const analysisFeed: FormattedArticleCardData[] = (remainingArticles.length > 8 ? remainingArticles.slice(8) : remainingArticles)
-    .map((a) => mapSanityToCard(a));
+  const analysisFeed: FormattedArticleCardData[] = (
+    remainingArticles.length > 8 ? remainingArticles.slice(8) : remainingArticles
+  ).map((a) => mapSanityToCard(a));
 
   const trendingRankings = articles.slice(0, 5).map((a, idx) => ({
     id: a._id,
@@ -190,7 +204,8 @@ export default async function Home() {
           <div className={styles.newsletterWidget}>
             <h3 className={styles.newsletterTitle}>Vice City Today</h3>
             <p className={styles.newsletterText}>
-              Get the biggest business stories, market movements, and tech analysis delivered to your inbox every morning.
+              Get the biggest business stories, market movements, and tech analysis delivered to
+              your inbox every morning.
             </p>
             <Button variant="primary" size="md" href="#newsletter" style={{ width: '100%' }}>
               Get Free Newsletter

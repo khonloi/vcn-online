@@ -37,9 +37,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
 
   return (
     <div className={`${styles.container} ${className}`.trim()}>
-      <Component className={`${styles.heading} ${sizeClass}`}>
-        {content}
-      </Component>
+      <Component className={`${styles.heading} ${sizeClass}`}>{content}</Component>
       {actionText && actionHref && (
         <Link href={actionHref} className={styles.action}>
           {actionText} &rarr;

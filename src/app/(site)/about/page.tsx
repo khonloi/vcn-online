@@ -17,7 +17,9 @@ export default function AboutPage() {
     <div className={styles.pageWrapper}>
       <div className={`container ${styles.inner}`}>
         <nav aria-label="Breadcrumb" className={styles.breadcrumbs}>
-          <Link href="/" className={styles.breadcrumbLink}>Home</Link>
+          <Link href="/" className={styles.breadcrumbLink}>
+            Home
+          </Link>
           <span className={styles.breadcrumbDivider}>/</span>
           <span className={styles.breadcrumbCurrent}>About</span>
         </nav>
@@ -26,7 +28,8 @@ export default function AboutPage() {
           <span className={styles.kicker}>Company &amp; Newsroom</span>
           <h1 className={styles.title}>About Vice City News</h1>
           <p className={styles.subtitle}>
-            Independent journalism delivering actionable intelligence on corporate power, financial markets, emerging technology, and global economic shifts.
+            Independent journalism delivering actionable intelligence on corporate power, financial
+            markets, emerging technology, and global economic shifts.
           </p>
           <div className={styles.meta}>
             <span>Established 2024</span>
@@ -38,25 +41,51 @@ export default function AboutPage() {
         <div className={styles.content}>
           <h2>Our Mission</h2>
           <p>
-            Vice City News (VCN) is a non-partisan financial and technology news organization founded on the principle that accurate, uncompromising reporting is the bedrock of transparent capital markets and democratic accountability.
+            Vice City News (VCN) is a non-partisan financial and technology news organization
+            founded on the principle that accurate, uncompromising reporting is the bedrock of
+            transparent capital markets and democratic accountability.
           </p>
           <p>
-            From the bustling venture hubs of Silicon Valley and the trading desks of Wall Street to global regulatory capitols, our correspondents break stories that inform executives, institutional investors, founders, and discerning readers worldwide.
+            From the bustling venture hubs of Silicon Valley and the trading desks of Wall Street to
+            global regulatory capitols, our correspondents break stories that inform executives,
+            institutional investors, founders, and discerning readers worldwide.
           </p>
 
           <div className={styles.callout}>
             <div className={styles.calloutTitle}>The VCN Editorial Charter</div>
             <p style={{ margin: 0, fontSize: 'var(--font-size-sm)' }}>
-              We do not accept paid sponsored articles, editorial placement fees, or outside interference in our reporting. Our journalists operate under strict independence policies outlined in our <Link href="/editorial-standards" style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>Editorial Standards &amp; Ethics Charter</Link>.
+              We do not accept paid sponsored articles, editorial placement fees, or outside
+              interference in our reporting. Our journalists operate under strict independence
+              policies outlined in our{' '}
+              <Link
+                href="/editorial-standards"
+                style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}
+              >
+                Editorial Standards &amp; Ethics Charter
+              </Link>
+              .
             </p>
           </div>
 
           <h2>Key Coverage Pillars</h2>
           <ul>
-            <li><strong>Financial Markets &amp; Banking:</strong> Real-time macro analysis, central bank decisions, fixed income, equity markets, and fintech disruption.</li>
-            <li><strong>Technology &amp; Artificial Intelligence:</strong> Silicon Valley reporting on frontier AI models, cloud infrastructure, chip manufacturing, and startup venture capital.</li>
-            <li><strong>Global Economy &amp; Trade:</strong> Supply chain resilience, trade corridors, commodities, and industrial policy across North America, Europe, and Asia.</li>
-            <li><strong>Corporate Governance &amp; Power:</strong> Executive leadership scrutiny, merger &amp; acquisition mechanics, and shareholder activism.</li>
+            <li>
+              <strong>Financial Markets &amp; Banking:</strong> Real-time macro analysis, central
+              bank decisions, fixed income, equity markets, and fintech disruption.
+            </li>
+            <li>
+              <strong>Technology &amp; Artificial Intelligence:</strong> Silicon Valley reporting on
+              frontier AI models, cloud infrastructure, chip manufacturing, and startup venture
+              capital.
+            </li>
+            <li>
+              <strong>Global Economy &amp; Trade:</strong> Supply chain resilience, trade corridors,
+              commodities, and industrial policy across North America, Europe, and Asia.
+            </li>
+            <li>
+              <strong>Corporate Governance &amp; Power:</strong> Executive leadership scrutiny,
+              merger &amp; acquisition mechanics, and shareholder activism.
+            </li>
           </ul>
 
           <h2>Editorial Masthead</h2>

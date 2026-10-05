@@ -1,5 +1,5 @@
-import { urlFor } from "@/sanity/lib/image";
-import type { SanityImageSource } from "@sanity/image-url";
+import { urlFor } from '@/sanity/lib/image';
+import type { SanityImageSource } from '@sanity/image-url';
 
 export interface SanityImageWithMeta {
   alt?: string;
@@ -47,18 +47,18 @@ export interface FormattedArticleCardData {
 export function formatArticleDate(
   dateString?: string,
   options: Intl.DateTimeFormatOptions = {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
   }
 ): string {
-  if (!dateString) return "Just now";
+  if (!dateString) return 'Just now';
   try {
     const d = new Date(dateString);
-    if (isNaN(d.getTime())) return "Recently";
-    return d.toLocaleDateString("en-US", options);
+    if (isNaN(d.getTime())) return 'Recently';
+    return d.toLocaleDateString('en-US', options);
   } catch {
-    return "Recently";
+    return 'Recently';
   }
 }
 
@@ -79,21 +79,19 @@ export function isBreakingActive(isBreaking?: boolean, breakingUntil?: string): 
 /**
  * Formats a raw Sanity article document into clean props for ArticleCard.
  */
-export function mapSanityToCard(
-  art: RawSanityArticle
-): FormattedArticleCardData {
+export function mapSanityToCard(art: RawSanityArticle): FormattedArticleCardData {
   const dateSource = art.publishedAt || art._createdAt;
-  let imageSource = "/images/fallback-article.webp";
+  let imageSource = '/images/fallback-article.webp';
   if (art.mainImage) {
     try {
       imageSource = urlFor(art.mainImage).url();
     } catch {
-      imageSource = "/images/fallback-article.webp";
+      imageSource = '/images/fallback-article.webp';
     }
   }
 
   const imageAlt =
-    typeof art.mainImage?.alt === "string" && art.mainImage.alt.trim()
+    typeof art.mainImage?.alt === 'string' && art.mainImage.alt.trim()
       ? art.mainImage.alt.trim()
       : art.title;
 
@@ -105,14 +103,14 @@ export function mapSanityToCard(
       src: imageSource,
       alt: imageAlt,
     },
-    category: art.category || "NEWS",
+    category: art.category || 'NEWS',
     isBreaking: isBreakingActive(art.isBreaking, art.breakingUntil),
-    author: art.author || "Vice City Staff",
+    author: art.author || 'Vice City Staff',
     publishedAt: formatArticleDate(dateSource, {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     }),
     summary: art.summary,
   };

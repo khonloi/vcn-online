@@ -8,7 +8,13 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --env-file-if-exists=.env.local --test src/**/*.test.ts"
+    "test": "tsx --env-file-if-exists=.env.local --test src/**/*.test.ts",
+    "test:e2e": "playwright test",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\""
+  },
+  "engines": {
+    "node": ">=20.9.0"
   },
   "dependencies": {
     "@portabletext/react": "^8.0.1",
@@ -22,11 +28,14 @@
     "styled-components": "^6.5.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "^16.3.8",
+    "prettier": "^3.5.0",
     "tsx": "^4.23.15",
     "typescript": "^5"
   }
