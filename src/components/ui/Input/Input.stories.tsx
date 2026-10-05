@@ -1,11 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { Input } from '@/components/ui/Input';
-import { Label } from '@/components/ui/Label';
-import { Checkbox } from '@/components/ui/Checkbox';
+import { Input } from './Input';
+import { Label } from '../Label';
 import { Search } from 'lucide-react';
 
 const meta = {
-  title: 'UI/Forms',
+  title: 'UI/Input',
   component: Input,
   parameters: {
     layout: 'centered',
@@ -16,7 +15,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const StandardInput: Story = {
+export const Default: Story = {
   render: () => (
     <div style={{ width: '320px' }}>
       <Label htmlFor="email" required>
@@ -27,7 +26,7 @@ export const StandardInput: Story = {
   ),
 };
 
-export const InputWithIcon: Story = {
+export const WithIcon: Story = {
   render: () => (
     <div style={{ width: '320px' }}>
       <Label htmlFor="search">Search Dispatches</Label>
@@ -40,7 +39,7 @@ export const InputWithIcon: Story = {
   ),
 };
 
-export const InputWithError: Story = {
+export const WithError: Story = {
   render: () => (
     <div style={{ width: '320px' }}>
       <Label htmlFor="error-input" required>
@@ -51,20 +50,6 @@ export const InputWithError: Story = {
         defaultValue="INVALID-123"
         error
         errorMessage="Subscriber credential not found in active circulation registry."
-      />
-    </div>
-  ),
-};
-
-export const Checkboxes: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      <Checkbox id="breaking" defaultChecked label="Receive Breaking News push dispatches" />
-      <Checkbox id="markets" label="Daily Morning Market Intelligence report" />
-      <Checkbox
-        id="disabled-opt"
-        disabled
-        label="VIP Exclusive Editorial Desk access (Enterprise tier only)"
       />
     </div>
   ),

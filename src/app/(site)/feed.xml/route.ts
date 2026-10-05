@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { client } from '@/sanity/lib/client';
-import { LATEST_ARTICLES_QUERY } from '@/sanity/lib/queries';
+import { getLatestArticles } from '@/services/articles';
 import { generateRssFeed } from '@/lib/rss';
 
 export const revalidate = 900; // 15-minute ISR cache
@@ -9,8 +8,8 @@ export async function GET() {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://vcn-online.vercel.app';
 
   try {
-    const articles = await client.fetch(LATEST_ARTICLES_QUERY);
-    const xml = generateRssFeed(articles || [], siteUrl);
+    const articles = await getLatestArticles({ revalidate: 900 });
+    const xml = generateRssFeed(articles, siteUrl);
 
     return new NextResponse(xml, {
       status: 200,

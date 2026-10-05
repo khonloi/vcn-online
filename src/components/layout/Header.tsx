@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui';
 import { CurrentDateTime } from './CurrentDateTime';
 import { NavLinks } from './NavLinks';
-import { HeaderSearch } from './HeaderSearch';
+import { HeaderSearch } from '@/components/features/search';
 import { MARKET_INDICES, TRENDING_TOPICS } from '@/lib/constants';
 import styles from './Header.module.css';
 

@@ -58,9 +58,9 @@
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
+  gap: var(--space-1);
 }
 
 .action:hover {
-  color: var(--color-primary-hover);
   text-decoration: underline;
 }

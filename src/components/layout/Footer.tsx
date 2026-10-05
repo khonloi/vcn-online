@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { NewsletterForm } from './NewsletterForm';
+import { NewsletterForm } from '@/components/features/newsletter';
 import styles from './Footer.module.css';
 
 export const Footer: React.FC = () => {

@@ -2,12 +2,16 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { SectionTitle, Grid, ArticleCard, Button } from '@/components/ui';
-import { client } from '@/sanity/lib/client';
-import { ARTICLES_BY_CATEGORY_QUERY } from '@/sanity/lib/queries';
-import { KNOWN_CATEGORY_SLUGS, CONTENT_CATEGORIES, SITE_CONFIG } from '@/lib/constants';
+import { Button, Grid } from '@/components/ui';
+import { SectionTitle, ArticleCard } from '@/components/features';
+import { getArticlesByCategory } from '@/services/articles';
+import {
+  isKnownCategorySlug,
+  formatCategoryTitle,
+  getContentCategories,
+} from '@/services/categories';
+import { SITE_CONFIG } from '@/lib/constants';
 import { mapSanityToCard } from '@/lib/formatters';
-import type { RawSanityArticle } from '@/types';
 import styles from './category.module.css';
 
 interface CategoryPageProps {
@@ -18,16 +22,9 @@ interface CategoryPageProps {
 
 export const revalidate = 60; // Revalidate category pages every 60s (ISR)
 
-function formatCategoryTitle(slug: string): string {
-  return slug
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-}
-
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { category } = await params;
-  const isKnown = KNOWN_CATEGORY_SLUGS.has(category.toLowerCase());
+  const isKnown = isKnownCategorySlug(category.toLowerCase());
   const categoryTitle = formatCategoryTitle(category);
 
   if (!isKnown) {
@@ -72,7 +69,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params;
-  const isKnown = KNOWN_CATEGORY_SLUGS.has(category.toLowerCase());
+  const isKnown = isKnownCategorySlug(category.toLowerCase());
   const categoryTitle = formatCategoryTitle(category);
 
   // If not a recognized news category slug, trigger 404 immediately
@@ -80,16 +77,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  // Fetch articles from Sanity with ISR cache (errors handled by error.tsx)
-  const sanityArticles: RawSanityArticle[] = await client.fetch(
-    ARTICLES_BY_CATEGORY_QUERY,
-    { category },
-    { next: { revalidate: 60 } }
-  );
-
+  // Fetch articles from Data Access Layer with ISR cache
+  const sanityArticles = await getArticlesByCategory(category);
   const categoryArticles = sanityArticles.map((s) => mapSanityToCard(s));
 
-  const quickSectors = CONTENT_CATEGORIES.slice(0, 8);
+  const quickSectors = getContentCategories().slice(0, 8);
 
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',

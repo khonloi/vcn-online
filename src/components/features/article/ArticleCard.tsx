@@ -1,8 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import ArticleImage from './ArticleImage';
+import { ArticleImage } from './ArticleImage';
 import styles from './ArticleCard.module.css';
-
 import type { ArticleCardProps } from '@/types';
 
 export type { ArticleCardProps };
@@ -64,20 +63,16 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
     );
   }
 
-  // Render Minimal / Ranking variant (Trending list)
+  // Render Minimal variant (Numbered trending rankings)
   if (variant === 'minimal') {
     return (
       <article className={`${styles.card} ${variantClass} ${className}`.trim()}>
-        {ranking !== undefined && (
-          <span className={styles.rankingNumber}>
-            {typeof ranking === 'number' ? String(ranking).padStart(2, '0') : ranking}
-          </span>
-        )}
+        {ranking && <span className={styles.rankingNumber}>{ranking}</span>}
         <div className={styles.minimalContent}>
           {category && <span className={kickerClass}>{category}</span>}
-          <h4 className={styles.title}>
+          <h3 className={styles.title}>
             <Link href={href}>{title}</Link>
-          </h4>
+          </h3>
           {(author || publishedAt) && (
             <div className={styles.meta}>
               {author && <span className={styles.author}>{author}</span>}
@@ -90,9 +85,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
     );
   }
 
-  // Render Featured or Vertical variant
-  const HeadingTag = variant === 'featured' ? 'h1' : 'h3';
-
+  // Render Featured or Vertical Grid Card
   return (
     <article className={`${styles.card} ${variantClass} ${className}`.trim()}>
       {image && (
@@ -100,21 +93,21 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           <ArticleImage
             src={image.src}
             alt={image.alt || title}
-            aspectRatio={variant === 'featured' ? '16/9' : '16/9'}
-            priority={priority || variant === 'featured'}
+            aspectRatio="16/9"
+            priority={priority}
             sizes={
               variant === 'featured'
-                ? '(max-width: 1024px) 100vw, 60vw'
-                : '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+                ? '(max-width: 1024px) 100vw, 66vw'
+                : '(max-width: 768px) 100vw, 33vw'
             }
           />
         </Link>
       )}
-      <div className={variant === 'vertical' ? styles.verticalContent : styles.featuredContent}>
+      <div className={variant === 'featured' ? styles.featuredContent : styles.verticalContent}>
         {category && <span className={kickerClass}>{category}</span>}
-        <HeadingTag className={styles.title}>
+        <h3 className={styles.title}>
           <Link href={href}>{title}</Link>
-        </HeadingTag>
+        </h3>
         {summary && <p className={styles.summary}>{summary}</p>}
         {(author || publishedAt) && (
           <div className={styles.meta}>

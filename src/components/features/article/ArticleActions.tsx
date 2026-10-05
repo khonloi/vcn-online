@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Button, Flex } from '@/components/ui';
 import { Share2, Bookmark, Check } from 'lucide-react';
 
-interface ArticleActionsProps {
+export interface ArticleActionsProps {
   title: string;
   url?: string;
 }
@@ -58,15 +58,7 @@ export const ArticleActions: React.FC<ArticleActionsProps> = ({ title, url }) =>
         onClick={handleSave}
         aria-label={saved ? 'Remove from saved articles' : 'Save article'}
       >
-        {saved ? (
-          <>
-            <Check size={14} style={{ marginRight: 4 }} /> Saved
-          </>
-        ) : (
-          <>
-            <Bookmark size={14} style={{ marginRight: 4 }} /> Save Article
-          </>
-        )}
+        <Bookmark size={14} style={{ marginRight: 4 }} /> {saved ? 'Saved' : 'Save'}
       </Button>
     </Flex>
   );

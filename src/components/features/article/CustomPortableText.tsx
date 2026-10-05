@@ -1,9 +1,9 @@
 import { PortableText, PortableTextComponents } from '@portabletext/react';
 import React from 'react';
-import { ArticleImage } from '@/components/ui';
+import { ArticleImage } from './ArticleImage';
 import { urlFor } from '@/sanity/lib/image';
 
-interface CustomPortableTextProps {
+export interface CustomPortableTextProps {
   value: React.ComponentProps<typeof PortableText>['value'];
 }
 
@@ -61,6 +61,19 @@ const components: PortableTextComponents = {
         {children}
       </h3>
     ),
+    h4: ({ children }) => (
+      <h4
+        style={{
+          fontFamily: 'var(--font-family-headline)',
+          fontSize: 'var(--font-size-lg)',
+          marginTop: 'var(--space-5)',
+          marginBottom: 'var(--space-2)',
+          fontWeight: 'var(--font-weight-bold)',
+        }}
+      >
+        {children}
+      </h4>
+    ),
     blockquote: ({ children }) => (
       <blockquote
         style={{
@@ -69,6 +82,7 @@ const components: PortableTextComponents = {
           fontStyle: 'italic',
           color: 'var(--color-text-secondary)',
           margin: 'var(--space-6) 0',
+          fontSize: 'var(--font-size-lg)',
         }}
       >
         {children}
@@ -77,47 +91,46 @@ const components: PortableTextComponents = {
   },
   list: {
     bullet: ({ children }) => (
-      <ul
-        style={{
-          marginBottom: 'var(--space-5)',
-          paddingLeft: 'var(--space-6)',
-          listStyleType: 'disc',
-        }}
-      >
-        {children}
-      </ul>
+      <ul style={{ paddingLeft: 'var(--space-6)', marginBottom: 'var(--space-5)' }}>{children}</ul>
     ),
     number: ({ children }) => (
-      <ol
+      <ol style={{ paddingLeft: 'var(--space-6)', marginBottom: 'var(--space-5)' }}>{children}</ol>
+    ),
+  },
+  listItem: {
+    bullet: ({ children }) => <li style={{ marginBottom: 'var(--space-2)' }}>{children}</li>,
+    number: ({ children }) => <li style={{ marginBottom: 'var(--space-2)' }}>{children}</li>,
+  },
+  marks: {
+    strong: ({ children }) => (
+      <strong style={{ fontWeight: 'var(--font-weight-bold)' }}>{children}</strong>
+    ),
+    em: ({ children }) => <em>{children}</em>,
+    code: ({ children }) => (
+      <code
         style={{
-          marginBottom: 'var(--space-5)',
-          paddingLeft: 'var(--space-6)',
-          listStyleType: 'decimal',
+          backgroundColor: 'var(--color-surface-subtle)',
+          padding: '2px 4px',
+          borderRadius: '2px',
+          fontFamily: 'var(--font-family-mono)',
+          fontSize: '0.9em',
         }}
       >
         {children}
-      </ol>
+      </code>
     ),
-  },
-  marks: {
-    link: ({ children, value }) => {
-      const rawHref = typeof value?.href === 'string' ? value.href.trim() : '';
-      const isInternal = rawHref.startsWith('/');
-      const isExternal = rawHref.startsWith('https://') || rawHref.startsWith('http://');
-      const isContact = rawHref.startsWith('mailto:') || rawHref.startsWith('tel:');
-
-      if (!rawHref || (!isInternal && !isExternal && !isContact)) {
-        return <span>{children}</span>;
-      }
-
-      const rel = isExternal ? 'noreferrer noopener' : undefined;
-      const target = isExternal ? '_blank' : undefined;
+    link: ({ value, children }) => {
+      const target = (value?.href || '').startsWith('http') ? '_blank' : undefined;
+      const rel = target === '_blank' ? 'noindex nofollow noopener noreferrer' : undefined;
       return (
         <a
-          href={rawHref}
-          rel={rel}
+          href={value?.href}
           target={target}
-          style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}
+          rel={rel}
+          style={{
+            color: 'var(--color-primary)',
+            textDecoration: 'underline',
+          }}
         >
           {children}
         </a>
@@ -126,17 +139,8 @@ const components: PortableTextComponents = {
   },
 };
 
-export const CustomPortableText: React.FC<CustomPortableTextProps> = ({ value }) => {
-  return (
-    <div
-      style={{
-        fontFamily: 'var(--font-family-serif)',
-        fontSize: '1.125rem',
-        lineHeight: '1.75',
-        color: 'var(--color-text-primary)',
-      }}
-    >
-      <PortableText value={value} components={components} />
-    </div>
-  );
-};
+export function CustomPortableText({ value }: CustomPortableTextProps) {
+  return <PortableText value={value} components={components} />;
+}
+
+export default CustomPortableText;

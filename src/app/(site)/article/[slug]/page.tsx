@@ -2,13 +2,11 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArticleImage, Button, CustomPortableText, ArticleActions } from '@/components/ui';
-import { client } from '@/sanity/lib/client';
-import { ARTICLE_BY_SLUG_QUERY } from '@/sanity/lib/queries';
+import { Button } from '@/components/ui';
+import { ArticleImage, CustomPortableText, ArticleActions } from '@/components/features';
+import { getArticleBySlug } from '@/services/articles';
 import { urlFor } from '@/sanity/lib/image';
 import styles from './article.module.css';
-
-import { cache } from 'react';
 
 interface ArticlePageProps {
   params: Promise<{
@@ -20,18 +18,9 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
 export const revalidate = 120; // Revalidate article page every 2 minutes (ISR)
 
-const getArticle = cache(async (slug: string) => {
-  return await client.fetch(ARTICLE_BY_SLUG_QUERY, { slug }, { next: { revalidate: 120 } });
-});
-
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  let article = null;
-  try {
-    article = await getArticle(slug);
-  } catch {
-    article = null;
-  }
+  const article = await getArticleBySlug(slug);
 
   if (!article) {
     return {
@@ -87,8 +76,8 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
 
-  // Fetch article from Sanity (memoized via React cache())
-  const article = await getArticle(slug);
+  // Fetch article from Data Access Layer (memoized via React cache())
+  const article = await getArticleBySlug(slug);
 
   // If article does not exist in Sanity, trigger 404
   if (!article) {

@@ -130,9 +130,15 @@ vcn-online/
 ├── public/                         # Static public assets
 │   ├── images/
 │   │   └── fallback-article.webp   # Optimized local branded fallback asset (12 KB)
+│   �├── public/                         # Static public assets
+│   ├── images/
+│   │   └── fallback-article.webp   # Optimized local branded fallback asset (12 KB)
 │   └── og-image.jpg                # Compressed social card image (112 KB)
 ├── src/
-│   ├── app/                        # Next.js App Router root
+│   ├── actions/                    # Pure Next.js Server Actions (decoupled from routing)
+│   │   ├── newsletter.ts           # Newsletter subscription server action with email validation
+│   │   └── index.ts                # Actions barrel export
+│   ├── app/                        # Next.js App Router (PAGES & ROUTES ONLY)
 │   │   ├── (site)/                 # Public reader-facing route group
 │   │   │   ├── [category]/         # Dynamic category article feeds
 │   │   │   │   ├── category.module.css # Scoped category layout styling
@@ -158,8 +164,6 @@ vcn-online/
 │   │   │   ├── not-found.tsx       # Public 404 page with search redirection
 │   │   │   ├── page.module.css     # Homepage editorial grid styling
 │   │   │   └── page.tsx            # Main publication homepage
-│   │   ├── actions/                # Next.js Server Actions
-│   │   │   └── newsletter.ts       # Newsletter subscription action with legal disclaimer
 │   │   ├── news-sitemap.xml/       # Google News XML sitemap endpoint
 │   │   │   └── route.ts
 │   │   ├── studio/[[...tool]]/     # Isolated Sanity Studio workspace
@@ -171,27 +175,52 @@ vcn-online/
 │   ├── components/
 │   │   ├── analytics/              # Telemetry & performance observers
 │   │   │   └── WebVitals.tsx       # Core Web Vitals beacon reporter island
+│   │   ├── features/               # High-cohesion domain feature modules
+│   │   │   ├── article/            # Newsroom article rendering & interaction
+│   │   │   │   ├── ArticleActions.tsx     # Web Share API & clipboard trigger
+│   │   │   │   ├── ArticleCard.tsx        # Multi-variant editorial article card
+│   │   │   │   ├── ArticleCard.module.css # Card variant styles
+│   │   │   │   ├── ArticleImage.tsx       # Next/Image aspect-ratio wrapper
+│   │   │   │   ├── ArticleImage.module.css# Image container styles
+│   │   │   │   ├── CustomPortableText.tsx # Rich text serializer with <figure>
+│   │   │   │   └── index.ts
+│   │   │   ├── editorial/          # Newsroom editorial branding
+│   │   │   │   ├── SectionTitle.tsx       # Section headline with kicker & action link
+│   │   │   │   ├── SectionTitle.module.css# Heading styles
+│   │   │   │   └── index.ts
+│   │   │   ├── newsletter/         # Circulation & subscriber acquisition
+│   │   │   │   ├── NewsletterForm.tsx     # Action-driven subscription island
+│   │   │   │   ├── NewsletterForm.module.css# Scoped newsletter styles
+│   │   │   │   └── index.ts
+│   │   │   ├── search/             # Editorial search & topic discovery
+│   │   │   │   ├── HeaderSearch.tsx       # Search client island for masthead
+│   │   │   │   ├── SearchInput.tsx        # Accessible search input field
+│   │   │   │   ├── SearchInput.module.css # Search field styles
+│   │   │   │   └── index.ts
+│   │   │   └── index.ts            # Features barrel export
 │   │   ├── layout/                 # Layout structural components
 │   │   │   ├── CurrentDateTime.tsx # Hydration-safe live date island
 │   │   │   ├── Footer.tsx          # Server Component publication footer
 │   │   │   ├── Footer.module.css   # Footer styling
 │   │   │   ├── Header.tsx          # Server Component masthead & navigation
 │   │   │   ├── Header.module.css   # Masthead styling
-│   │   │   ├── HeaderSearch.tsx    # Interactive search bar client island
-│   │   │   ├── NavLinks.tsx        # Active category indicator client island
-│   │   │   └── NewsletterForm.tsx  # Server-action driven newsletter client island
-│   │   └── ui/                     # Modular reusable UI components
-│   │       ├── ArticleActions.tsx  # Share & print action triggers
-│   │       ├── ArticleCard.tsx     # Standardized editorial card with image fallback
-│   │       ├── ArticleImage.tsx    # Next/Image wrapper with aspect-ratio management
-│   │       ├── Button.tsx          # Accessible styled button component
-│   │       ├── CustomPortableText.tsx # Accessible Portable Text serializer (<figure>)
-│   │       ├── Grid.tsx            # Fluid CSS Grid container
-│   │       ├── SearchInput.tsx     # Controlled search input field
-│   │       ├── SectionTitle.tsx    # Editorial section divider heading
-│   │       └── index.ts            # Central UI export barrel
+│   │   │   └── NavLinks.tsx        # Active category indicator client island
+│   │   └── ui/                     # Pure Design System Primitives (Domain-agnostic)
+│   │       ├── Button/             # Co-located: Button.tsx, Button.module.css, Button.stories.tsx, index.ts
+│   │       ├── Checkbox/           # Co-located: Checkbox.tsx, Checkbox.module.css, Checkbox.stories.tsx, index.ts
+│   │       ├── Container/          # Co-located: Container.tsx, Container.module.css, Container.stories.tsx, index.ts
+│   │       ├── Dialog/             # Co-located: Dialog.tsx, Dialog.module.css, Dialog.stories.tsx, index.ts
+│   │       ├── DropdownMenu/       # Co-located: DropdownMenu.tsx, DropdownMenu.module.css, DropdownMenu.stories.tsx, index.ts
+│   │       ├── Flex/               # Co-located: Flex.tsx, Flex.module.css, Flex.stories.tsx, index.ts
+│   │       ├── Grid/               # Co-located: Grid.tsx, Grid.module.css, Grid.stories.tsx, index.ts
+│   │       ├── Heading/            # Co-located: Heading.tsx, Heading.module.css, Heading.stories.tsx, index.ts
+│   │       ├── Input/              # Co-located: Input.tsx, Input.module.css, Input.stories.tsx, index.ts
+│   │       ├── Label/              # Co-located: Label.tsx, Label.module.css, Label.stories.tsx, index.ts
+│   │       ├── Tabs/               # Co-located: Tabs.tsx, Tabs.module.css, Tabs.stories.tsx, index.ts
+│   │       ├── Text/               # Co-located: Text.tsx, Text.module.css, Text.stories.tsx, index.ts
+│   │       └── index.ts            # Design System primitives barrel export
 │   ├── instrumentation.ts          # Server error logging hook (onRequestError)
-│   ├── lib/                        # Shared libraries and utilities
+│   ├── lib/                        # Shared utilities and pure helpers
 │   │   ├── __tests__/              # High-speed unit tests (Node.js test runner)
 │   │   │   ├── formatters.test.ts  # Date, breaking decay, and image alt tests
 │   │   │   ├── links.test.ts       # Link integrity and newsletter action tests
@@ -204,6 +233,41 @@ vcn-online/
 │   │   │   ├── client.ts           # Sanity CDN client configuration
 │   │   │   ├── image.ts            # Dynamic image asset builder
 │   │   │   └── queries.ts          # High-performance GROQ query definitions
+│   │   ├── schemaTypes/            # Sanity Studio document schemas
+│   │   │   ├── article.ts          # Article schema with strict field validation
+│   │   │   ├── author.ts           # Author / journalist biography schema
+│   │   │   ├── category.ts         # Content taxonomy category schema
+│   │   │   └── index.ts            # Combined schema array
+│   │   ├── env.ts                  # Fail-fast Sanity environment configuration
+│   │   └── structure.ts            # Custom Studio desk structure
+│   ├── services/                   # Data Access Layer (DAL) / Domain Services
+│   │   ├── __tests__/              # Service unit tests
+│   │   │   └── categories.test.ts  # Category service validation tests
+│   │   ├── articles.ts             # Cached article queries (React cache() + ISR)
+│   │   ├── categories.ts           # Category taxonomy and title helpers
+│   │   └── index.ts                # Services barrel export
+│   ├── stories/                    # Storybook 10 visual component stories
+│   │   ├── ArticleCard.stories.tsx # Storybook story for article cards
+│   │   ├── Button.stories.tsx      # Button variants and states
+│   │   ├── Dialog.stories.tsx      # Modal dialog interactions
+│   │   ├── DropdownMenu.stories.tsx# Menu keyboard navigation
+│   │   ├── Forms.stories.tsx       # Inputs, labels, and checkboxes
+│   │   ├── Heading.stories.tsx     # Typography scales
+│   │   ├── Layout.stories.tsx      # Flex, Grid, and Container utilities
+│   │   ├── SearchInput.stories.tsx # Search input states
+│   │   ├── SectionTitle.stories.tsx# Editorial section dividers
+│   │   ├── Tabs.stories.tsx        # Radix tabs interaction
+│   │   └── Text.stories.tsx        # Body text styling
+│   ├── styles/                     # Design tokens and global CSS
+│   │   ├── globals.css             # Base resets, typography, and utility classes
+│   │   ├── static-page.module.css  # Shared styling for institutional E-E-A-T pages
+│   │   └── tokens.css              # Centralized CSS Custom Properties design system
+│   └── types/                      # Centralized TypeScript domain contracts
+│       ├── article.ts              # RawSanityArticle, ArticleDetail, Card & Sitemap types
+│       ├── category.ts             # CategoryConfig, MarketIndex
+│       ├── navigation.ts           # StaticPageConfig, TrendingTopicConfig, BreadcrumbItem
+│       ├── newsletter.ts           # NewsletterState
+│       └── index.ts                # Types barrel export��── queries.ts          # High-performance GROQ query definitions
 │   │   ├── schemaTypes/            # Sanity Studio document schemas
 │   │   │   ├── article.ts          # Article schema with strict field validation
 │   │   │   ├── author.ts           # Author / journalist biography schema

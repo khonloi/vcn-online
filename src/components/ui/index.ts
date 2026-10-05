@@ -1,18 +1,16 @@
+// Core Design System Primitives (Domain-agnostic)
 export * from './Button';
 export * from './Heading';
 export * from './Text';
 export * from './Container';
 export * from './Flex';
+export * from './Grid';
 export * from './Label';
 export * from './Input';
 export * from './Checkbox';
 export * from './Dialog';
 export * from './DropdownMenu';
 export * from './Tabs';
-export * from './SearchInput';
-export * from './SectionTitle';
-export * from './ArticleImage';
-export * from './ArticleCard';
-export * from './Grid';
-export * from './CustomPortableText';
-export * from './ArticleActions';
+
+// Domain feature re-exports (for backward compatibility)
+export * from '@/components/features';

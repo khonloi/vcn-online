@@ -1,17 +1,8 @@
 import { NextResponse } from 'next/server';
-import { client } from '@/sanity/lib/client';
-import { NEWS_SITEMAP_QUERY } from '@/sanity/lib/queries';
+import { getNewsSitemapArticles } from '@/services/articles';
 import { SITE_CONFIG } from '@/lib/constants';
 
 export const revalidate = 900; // Revalidate news sitemap every 15 minutes
-
-interface NewsArticleItem {
-  _id: string;
-  title: string;
-  slug: string;
-  publishedAt?: string;
-  _createdAt?: string;
-}
 
 function escapeXml(unsafe: string): string {
   return unsafe.replace(/[<>&'"]/g, (c) => {
@@ -35,12 +26,7 @@ function escapeXml(unsafe: string): string {
 export async function GET() {
   const baseUrl = SITE_CONFIG.url;
 
-  let articles: NewsArticleItem[] = [];
-  try {
-    articles = await client.fetch(NEWS_SITEMAP_QUERY, {}, { next: { revalidate: 900 } });
-  } catch {
-    articles = [];
-  }
+  const articles = await getNewsSitemapArticles({ revalidate: 900 });
 
   // Google News guidelines recommend inclusion of stories from past 48 hours
   const now = new Date().getTime();

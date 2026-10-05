@@ -1,7 +1,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { CATEGORIES, STATIC_PAGES, TRENDING_TOPICS } from '../constants';
-import { subscribeToNewsletter } from '../../app/actions/newsletter';
+import { subscribeToNewsletter } from '../../actions/newsletter';
 
 describe('Navigation & Link Integrity', () => {
   test('all category links start with / and have valid names', () => {

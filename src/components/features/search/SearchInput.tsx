@@ -43,8 +43,8 @@ export const SearchInput: React.FC<SearchInputProps> = ({
       </span>
       <input
         type="search"
-        placeholder={placeholder}
         className={styles.searchInput}
+        placeholder={placeholder}
         onKeyDown={handleKeyDown}
         {...props}
       />

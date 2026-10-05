@@ -1,3 +1,4 @@
+import type { PortableTextBlock } from '@portabletext/react';
 import type { SanityImageSource } from '@sanity/image-url';
 
 export interface SanityImageWithMeta {
@@ -23,7 +24,7 @@ export interface RawSanityArticle {
   _createdAt?: string;
   _updatedAt?: string;
   mainImage?: SanityImageSource & SanityImageWithMeta;
-  body?: unknown;
+  body?: PortableTextBlock[];
 }
 
 export interface FormattedArticleCardData {
@@ -67,4 +68,22 @@ export interface ArticleCardProps {
   variant?: 'featured' | 'horizontal' | 'vertical' | 'minimal';
   priority?: boolean;
   className?: string;
+}
+
+export interface ArticleDetail extends RawSanityArticle {
+  takeaways?: string[];
+}
+
+export interface NewsSitemapArticleItem {
+  _id: string;
+  title: string;
+  slug: string;
+  publishedAt?: string;
+  _createdAt?: string;
+}
+
+export interface SitemapArticleItem {
+  slug?: string;
+  publishedAt?: string;
+  _updatedAt?: string;
 }

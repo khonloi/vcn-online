@@ -1,21 +1,16 @@
 import React from 'react';
-import { ArticleCard, SectionTitle, Grid, Button } from '@/components/ui';
+import { Button, Grid } from '@/components/ui';
+import { ArticleCard, SectionTitle } from '@/components/features';
 import styles from './page.module.css';
-import { client } from '@/sanity/lib/client';
-import { LATEST_ARTICLES_QUERY } from '@/sanity/lib/queries';
+import { getLatestArticles } from '@/services/articles';
 import { mapSanityToCard } from '@/lib/formatters';
-import type { RawSanityArticle, FormattedArticleCardData } from '@/types';
+import type { FormattedArticleCardData } from '@/types';
 
 export const revalidate = 60; // Revalidate at most once every 60s (ISR)
 
 export default async function Home() {
-  // Fetch dynamic articles from Sanity with ISR cache
-  let articles: RawSanityArticle[] = [];
-  try {
-    articles = await client.fetch(LATEST_ARTICLES_QUERY, {}, { next: { revalidate: 60 } });
-  } catch (error) {
-    console.error('Error fetching articles from Sanity:', error);
-  }
+  // Fetch dynamic articles via cached Data Access Layer
+  const articles = await getLatestArticles();
 
   if (articles.length === 0) {
     return (

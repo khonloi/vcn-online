@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
-import { client } from '@/sanity/lib/client';
-import { ALL_ARTICLES_QUERY } from '@/sanity/lib/queries';
+import { getAllArticlesForSitemap } from '@/services/articles';
 import { CONTENT_CATEGORIES, SITE_CONFIG, STATIC_PAGES } from '@/lib/constants';
+import type { SitemapArticleItem } from '@/types';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_CONFIG.url;
@@ -28,18 +28,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ];
 
-  // Dynamic article routes from Sanity
-  interface SitemapArticle {
-    slug?: string;
-    publishedAt?: string;
-    _updatedAt?: string;
-  }
-
+  // Dynamic article routes from Data Access Layer
   let articleRoutes: MetadataRoute.Sitemap = [];
   try {
-    const articles: SitemapArticle[] = await client.fetch(ALL_ARTICLES_QUERY);
+    const articles = await getAllArticlesForSitemap();
     articleRoutes = articles
-      .filter((a): a is SitemapArticle & { slug: string } => Boolean(a.slug))
+      .filter((a): a is SitemapArticleItem & { slug: string } => Boolean(a.slug))
       .map((article): MetadataRoute.Sitemap[number] => ({
         url: `${baseUrl}/article/${article.slug}`,
         lastModified: article._updatedAt || article.publishedAt || new Date(),
