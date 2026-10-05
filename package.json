@@ -44,7 +44,7 @@
     "@storybook/addon-mcp": "^10.6.1",
     "@storybook/addon-vitest": "^10.6.1",
     "@storybook/nextjs-vite": "^10.6.1",
-    "@types/node": "^20",
+    "@types/node": "^26",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitest/browser-playwright": "^4",
