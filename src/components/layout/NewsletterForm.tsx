@@ -2,7 +2,7 @@
 
 import React, { useActionState } from 'react';
 import Link from 'next/link';
-import { Button } from '@/components/ui';
+import { Button, Input, Text } from '@/components/ui';
 import { subscribeToNewsletter, NewsletterState } from '@/app/actions/newsletter';
 import styles from './Footer.module.css';
 
@@ -20,41 +20,30 @@ export function NewsletterForm() {
   return (
     <div className={styles.newsletterForm}>
       {state.status === 'success' ? (
-        <span
-          style={{
-            color: 'var(--color-primary)',
-            fontSize: 'var(--font-size-sm)',
-            fontWeight: 'var(--font-weight-semibold)',
-          }}
-        >
+        <Text color="accent" weight="semibold" size="sm">
           {state.message}
-        </span>
+        </Text>
       ) : (
         <form action={formAction} aria-label="Newsletter Subscription">
           <div className={styles.newsletterInputs}>
-            <input
+            <Input
               type="email"
               name="email"
               placeholder="Enter email for daily morning briefing..."
-              className={styles.newsletterInput}
               aria-label="Email address for newsletter"
               required
               disabled={isPending}
+              size="md"
+              wrapperClassName={styles.newsletterInputWrapper}
             />
             <Button variant="secondary" size="md" type="submit" disabled={isPending}>
               {isPending ? 'Subscribing...' : 'Sign Up'}
             </Button>
           </div>
           {state.status === 'error' && (
-            <p
-              style={{
-                color: 'var(--color-breaking)',
-                fontSize: 'var(--font-size-xs)',
-                marginTop: '4px',
-              }}
-            >
+            <Text color="error" size="xs" style={{ marginTop: '4px' }}>
               {state.message}
-            </p>
+            </Text>
           )}
           <p className={styles.newsletterConsent}>
             By subscribing, you agree to our <Link href="/terms">Terms of Service</Link> and{' '}

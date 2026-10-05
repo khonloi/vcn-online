@@ -59,6 +59,16 @@
   }
 }
 
+.newsletterInputWrapper {
+  width: 100%;
+}
+
+@media (min-width: 600px) {
+  .newsletterInputWrapper {
+    width: 280px;
+  }
+}
+
 .newsletterConsent {
   font-size: 11px;
   color: var(--color-text-muted);

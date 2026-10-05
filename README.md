@@ -49,6 +49,10 @@ An enterprise-grade, high-performance, production-ready digital news and market 
   - [RSS 2.0 Syndication Feed (`/feed.xml`)](#rss-20-syndication-feed-feedxml)
   - [Structured Data & JSON-LD (NewsArticle, BreadcrumbList)](#structured-data--json-ld-newsarticle-breadcrumblist)
   - [WCAG 2.2 AA Accessibility Compliance](#wcag-22-aa-accessibility-compliance)
+- [Enterprise UI Framework & Storybook Design System](#enterprise-ui-framework--storybook-design-system)
+  - [Design Token Architecture](#design-token-architecture-srcstylestokenscss)
+  - [Component Taxonomy](#component-taxonomy-srccomponentsui)
+  - [Storybook Component Workshop](#storybook-component-workshop)
 - [Testing & Quality Assurance](#testing--quality-assurance)
   - [Test Suite Highlights](#test-suite-highlights)
   - [Running Unit & E2E Tests](#running-unit--e2e-tests)
@@ -101,7 +105,10 @@ An enterprise-grade, high-performance, production-ready digital news and market 
 | **Language** | [TypeScript](https://www.typescriptlang.org/) (5.x) | Strict type safety, IntelliSense, and contract enforcement |
 | **CMS Platform** | [Sanity v5](https://www.sanity.io/) (`next-sanity`) | Headless CMS, content lake, and embedded visual studio |
 | **Rich Text Engine** | [@portabletext/react](https://github.com/portabletext/react-portabletext) | Accessible, structured Portable Text block rendering |
-| **Styling** | Vanilla CSS & Scoped CSS Modules | Zero-runtime CSS isolation with centralized design tokens |
+| **Styling & Tokens** | Vanilla CSS & Scoped CSS Modules | Zero-runtime CSS isolation with centralized design tokens (`tokens.css`) |
+| **UI Primitives** | [Radix UI](https://www.radix-ui.com/) (`@radix-ui/react-*`) | Unstyled, WCAG-compliant accessible headless primitives (`Dialog`, `DropdownMenu`, `Tabs`, `Slot`) |
+| **Component Workshop** | [Storybook 10](https://storybook.js.org/) (`@storybook/nextjs-vite`) | Isolated component design system, documentation, and a11y testing |
+| **Icons** | [Lucide Icons](https://lucide.dev/) (`lucide-react`) | Accessible, scalable SVG icon system |
 | **Typography** | Inter & Merriweather (`next/font`) | Optimized zero-layout-shift local font rendering |
 | **Unit Testing** | Node.js Native Test Runner via `tsx` | Ultra-fast TypeScript unit and link integrity test execution |
 | **E2E Testing** | [Playwright](https://playwright.dev/) (1.63+) | Browser smoke tests across home, category, RSS, and 404 routes |
@@ -607,6 +614,42 @@ Every article page (`/article/[slug]`) injects valid schema.org JSON-LD:
 - **Landmarks & Skip Link**: `#main` target container with visible keyboard skip-to-content focus action.
 - **Accessible Figures**: Portable text images output semantic `<figure>` elements with descriptive `<figcaption>` captions and non-empty `alt` text.
 - **Automated CI Enforcement**: Verified against `@axe-core/playwright` across home, category, institutional, and 404 routes.
+
+---
+
+## Enterprise UI Framework & Storybook Design System
+
+The VCN UI Framework implements a **Headless + Scoped CSS Modules** architecture designed for maximum runtime speed, strict WCAG 2.2 AA accessibility, and developer productivity.
+
+### Design Token Architecture (`src/styles/tokens.css`)
+
+All colors, typography, elevations, and layout constraints are driven by centralized CSS custom properties:
+- **Calibrated Contrast**: `--color-primary` (`#d60060`) and `--color-text-muted` (`#555e66`) calibrated to exceed the 4.5:1 WCAG AA contrast ratio threshold across both light and dark themes.
+- **Semantic Feedback System**: Full status token sets for success, warning, error, and info states.
+- **Z-Index Hierarchy**: Predictable layering tokens (`--z-dropdown: 1000`, `--z-modal-backdrop: 1300`, `--z-modal: 1400`, etc.).
+- **Accessible Focus Tokens**: Standardized `--color-focus-ring`, `--focus-ring-offset`, and `--focus-ring-width`.
+
+### Component Taxonomy (`src/components/ui/`)
+
+| Classification | Components | Capabilities |
+| :--- | :--- | :--- |
+| **Actions** | `Button` | Polymorphic `asChild` (Radix `Slot`), variants (`primary`, `secondary`, `outline`, `ghost`, `destructive`), sizes (`sm`, `md`, `lg`), `href` fallback |
+| **Typography** | `Heading`, `Text` | Polymorphic elements (`h1`-`h6`, `p`, `span`, `time`), modular scale sizes, weights, semantic color mapping |
+| **Layout** | `Container`, `Flex`, `Stack`, `Grid` | Responsive max-widths (`sm`, `md`, `lg`, `fluid`), directional alignment, gap scales (`gap={1}` through `gap={16}`) |
+| **Form Controls** | `Input`, `Label`, `Checkbox` | Accessible keyboard navigation, error states (`aria-invalid`), adornments, custom check indicators |
+| **Interactive Overlays** | `Dialog`, `DropdownMenu`, `Tabs` | Built on unstyled Radix UI primitives (`@radix-ui/react-*`) with full WAI-ARIA compliance, focus trapping, and animations |
+
+### Storybook Component Workshop
+
+Storybook 10 provides isolated component development and automated visual verification:
+
+```bash
+# Launch interactive Storybook workshop on http://localhost:6006
+npm run storybook
+
+# Build static Storybook production bundle (storybook-static)
+npm run build-storybook
+```
 
 ---
 

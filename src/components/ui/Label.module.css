@@ -1,0 +1,22 @@
+.label {
+  display: inline-block;
+  font-family: var(--font-family-headline);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.required::after {
+  content: ' *';
+  color: var(--color-error);
+}
+
+.disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}

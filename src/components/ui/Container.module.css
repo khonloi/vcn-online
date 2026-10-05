@@ -1,0 +1,23 @@
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+}
+
+.sizeSm {
+  max-width: 768px;
+}
+
+.sizeMd {
+  max-width: 1024px;
+}
+
+.sizeLg {
+  max-width: var(--container-max-width);
+}
+
+.sizeFluid {
+  max-width: 100%;
+}

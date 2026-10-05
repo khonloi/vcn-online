@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/Button';
+import { Container, Heading, Text, Button, Flex } from '@/components/ui';
 
 export default function NotFound() {
   const quickLinks = [
@@ -13,62 +13,46 @@ export default function NotFound() {
   ];
 
   return (
-    <div
-      className="container"
+    <Container
+      size="sm"
       style={{
         paddingTop: 'var(--space-16)',
         paddingBottom: 'var(--space-20)',
         textAlign: 'center',
-        maxWidth: '720px',
       }}
     >
-      <span
+      <Text
+        as="span"
+        size="xs"
+        weight="bold"
+        color="accent"
         style={{
           display: 'inline-block',
-          color: 'var(--color-primary)',
-          fontSize: 'var(--font-size-xs)',
-          fontWeight: 'var(--font-weight-bold)',
           letterSpacing: 'var(--letter-spacing-widest)',
           textTransform: 'uppercase',
           marginBottom: 'var(--space-2)',
         }}
       >
         404 &bull; Page Not Found
-      </span>
+      </Text>
 
-      <h1
-        style={{
-          fontFamily: 'var(--font-family-headline)',
-          fontSize: 'var(--font-size-4xl)',
-          fontWeight: 'var(--font-weight-black)',
-          lineHeight: 'var(--line-height-tight)',
-          marginBottom: 'var(--space-4)',
-        }}
-      >
+      <Heading as="h1" size="4xl" weight="black" style={{ marginBottom: 'var(--space-4)' }}>
         The story you are looking for is unavailable.
-      </h1>
+      </Heading>
 
-      <p
+      <Text
+        size="lg"
+        color="secondary"
         style={{
-          fontSize: 'var(--font-size-lg)',
-          color: 'var(--color-text-secondary)',
           lineHeight: 'var(--line-height-relaxed)',
           marginBottom: 'var(--space-8)',
         }}
       >
         The article may have been archived, moved, or the link may contain a typo. Explore our core
         news desks or return to the front page.
-      </p>
+      </Text>
 
-      <div
-        style={{
-          display: 'flex',
-          gap: 'var(--space-2)',
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-          marginBottom: 'var(--space-8)',
-        }}
-      >
+      <Flex gap={2} justify="center" wrap="wrap" style={{ marginBottom: 'var(--space-8)' }}>
         {quickLinks.map((item) => (
           <Link
             key={item.href}
@@ -86,13 +70,13 @@ export default function NotFound() {
             {item.name}
           </Link>
         ))}
-      </div>
+      </Flex>
 
-      <div style={{ display: 'flex', gap: 'var(--space-3)', justifyContent: 'center' }}>
+      <Flex gap={3} justify="center">
         <Button variant="primary" size="md" href="/">
           &larr; Front Page
         </Button>
-      </div>
-    </div>
+      </Flex>
+    </Container>
   );
 }

@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from '@/components/ui';
+import { Button, Flex } from '@/components/ui';
+import { Share2, Bookmark, Check } from 'lucide-react';
 
 interface ArticleActionsProps {
   title: string;
@@ -39,9 +40,17 @@ export const ArticleActions: React.FC<ArticleActionsProps> = ({ title, url }) =>
   };
 
   return (
-    <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
+    <Flex align="center" gap={2}>
       <Button variant="ghost" size="sm" onClick={handleShare} aria-label="Share this article">
-        {copied ? '✓ Link Copied!' : 'Share'}
+        {copied ? (
+          <>
+            <Check size={14} style={{ marginRight: 4 }} /> Link Copied
+          </>
+        ) : (
+          <>
+            <Share2 size={14} style={{ marginRight: 4 }} /> Share
+          </>
+        )}
       </Button>
       <Button
         variant={saved ? 'primary' : 'secondary'}
@@ -49,9 +58,17 @@ export const ArticleActions: React.FC<ArticleActionsProps> = ({ title, url }) =>
         onClick={handleSave}
         aria-label={saved ? 'Remove from saved articles' : 'Save article'}
       >
-        {saved ? '✓ Saved' : 'Save Article'}
+        {saved ? (
+          <>
+            <Check size={14} style={{ marginRight: 4 }} /> Saved
+          </>
+        ) : (
+          <>
+            <Bookmark size={14} style={{ marginRight: 4 }} /> Save Article
+          </>
+        )}
       </Button>
-    </div>
+    </Flex>
   );
 };
 
