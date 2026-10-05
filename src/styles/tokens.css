@@ -1,7 +1,7 @@
 :root {
   /* Color Palette - Vice City News Brand */
-  --color-primary: #e60067; /* Vice City Pink */
-  --color-primary-hover: #c40056;
+  --color-primary: #d60060; /* Vice City Pink (WCAG 2.2 AA calibrated) */
+  --color-primary-hover: #b80050;
   --color-primary-light: #fff0f6;
   --color-secondary: #111111; /* Stark Black */
   --color-secondary-hover: #333333;
@@ -9,22 +9,51 @@
   --color-accent: #e60067;
   --color-breaking: #d91a1a; /* Breaking News Red */
 
+  /* Semantic Feedback & Status (WCAG 2.2 AA compliant) */
+  --color-success: #0d8a43;
+  --color-success-bg: #eafaf1;
+  --color-success-border: #a3e6be;
+  --color-success-text: #064e26;
+
+  --color-warning: #b25e00;
+  --color-warning-bg: #fff8eb;
+  --color-warning-border: #ffd599;
+  --color-warning-text: #663600;
+
+  --color-error: #cf1322;
+  --color-error-bg: #fff1f0;
+  --color-error-border: #ffa39e;
+  --color-error-text: #820014;
+
+  --color-info: #096dd9;
+  --color-info-bg: #e6f7ff;
+  --color-info-border: #91d5ff;
+  --color-info-text: #003a8c;
+
   /* Color Palette - Surface & Backgrounds */
   --color-background: #ffffff;
   --color-surface: #ffffff;
   --color-surface-subtle: #f8f9fa;
   --color-surface-muted: #eeeeee;
+  --color-surface-hover: #f1f3f5;
+  --color-surface-active: #e9ecef;
 
   /* Color Palette - Text */
   --color-text-primary: #111111;
   --color-text-secondary: #3b3b3b;
-  --color-text-muted: #6c757d;
+  --color-text-muted: #555e66;
   --color-text-inverse: #ffffff;
 
   /* Color Palette - Borders */
   --color-border: #e2e4e7;
   --color-border-subtle: #f0f1f3;
   --color-border-strong: #111111;
+
+  /* Focus & Accessibility */
+  --color-focus-ring: #e60067;
+  --focus-ring-offset: 2px;
+  --focus-ring-width: 2px;
+  --opacity-disabled: 0.55;
 
   /* Typography - Families */
   --font-family-sans:
@@ -97,6 +126,17 @@
   --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* Z-Index Hierarchy */
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-fixed: 1200;
+  --z-modal-backdrop: 1300;
+  --z-modal: 1400;
+  --z-popover: 1500;
+  --z-toast: 1600;
+  --z-tooltip: 1700;
+
   /* Layout */
   --container-max-width: 1240px;
   --container-padding: var(--space-4);
@@ -134,10 +174,33 @@
     --color-accent: #ff2a85;
     --color-breaking: #ff4d4d;
 
+    /* Semantic Feedback & Status (Dark mode adjusted) */
+    --color-success: #49aa19;
+    --color-success-bg: #162312;
+    --color-success-border: #274916;
+    --color-success-text: #b7eb8f;
+
+    --color-warning: #d48806;
+    --color-warning-bg: #2b2111;
+    --color-warning-border: #594214;
+    --color-warning-text: #ffe58f;
+
+    --color-error: #e84749;
+    --color-error-bg: #2a1215;
+    --color-error-border: #58181c;
+    --color-error-text: #ffa39e;
+
+    --color-info: #177ddc;
+    --color-info-bg: #111d2c;
+    --color-info-border: #153450;
+    --color-info-text: #91d5ff;
+
     --color-background: #0e1114;
     --color-surface: #151a1f;
     --color-surface-subtle: #1c2229;
     --color-surface-muted: #28303a;
+    --color-surface-hover: #222933;
+    --color-surface-active: #2b3441;
 
     --color-text-primary: #f0f2f5;
     --color-text-secondary: #c2c8d0;
@@ -147,5 +210,7 @@
     --color-border: #28303a;
     --color-border-subtle: #1c2229;
     --color-border-strong: #404b5a;
+
+    --color-focus-ring: #ff2a85;
   }
 }

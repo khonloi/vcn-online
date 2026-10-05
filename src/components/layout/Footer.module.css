@@ -145,7 +145,7 @@
   justify-content: space-between;
   align-items: center;
   color: var(--color-text-muted);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   flex-wrap: wrap;
   gap: var(--space-4);
 }

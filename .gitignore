@@ -12,6 +12,8 @@
 
 # Testing
 /coverage
+/test-results
+/playwright-report
 
 # Next.js & Turbopack
 /.next/
@@ -68,3 +70,6 @@ desktop.ini
 *.njsproj
 *.sln
 *.sw?
+
+*storybook.log
+storybook-static

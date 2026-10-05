@@ -31,10 +31,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const categoryTitle = formatCategoryTitle(category);
 
   if (!isKnown) {
-    return {
-      title: 'Category Not Found | Vice City News',
-      description: 'The requested news sector could not be located.',
-    };
+    notFound();
   }
 
   const title = `${categoryTitle} News & Market Intelligence`;
@@ -78,17 +75,17 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const isKnown = KNOWN_CATEGORY_SLUGS.has(category.toLowerCase());
   const categoryTitle = formatCategoryTitle(category);
 
+  // If not a recognized news category slug, trigger 404 immediately
+  if (!isKnown) {
+    notFound();
+  }
+
   // Fetch articles from Sanity with ISR cache (errors handled by error.tsx)
   const sanityArticles: RawSanityArticle[] = await client.fetch(
     ARTICLES_BY_CATEGORY_QUERY,
     { category },
     { next: { revalidate: 60 } }
   );
-
-  // Prevent soft-404: if unknown category and has no articles, trigger 404
-  if (!isKnown && sanityArticles.length === 0) {
-    notFound();
-  }
 
   const categoryArticles = sanityArticles.map((s) => mapSanityToCard(s));
 

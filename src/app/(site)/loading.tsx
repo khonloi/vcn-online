@@ -9,6 +9,7 @@ export default function Loading() {
         paddingBottom: 'var(--space-16)',
         maxWidth: '1200px',
       }}
+      role="status"
       aria-busy="true"
       aria-label="Loading dispatch..."
     >
