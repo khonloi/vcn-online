@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { formatArticleDate } from '../formatters';
+import { formatArticleDate, isBreakingActive, mapSanityToCard } from '../formatters';
 import { KNOWN_CATEGORY_SLUGS, CONTENT_CATEGORIES } from '../constants';
 
 describe('formatArticleDate', () => {
@@ -16,6 +16,59 @@ describe('formatArticleDate', () => {
 
   it('handles invalid date strings gracefully', () => {
     assert.equal(formatArticleDate('not-a-valid-date'), 'Recently');
+  });
+});
+
+describe('isBreakingActive & Decay', () => {
+  it('returns false when isBreaking is falsy', () => {
+    assert.equal(isBreakingActive(false), false);
+    assert.equal(isBreakingActive(undefined), false);
+  });
+
+  it('returns true when isBreaking is true and breakingUntil is not set', () => {
+    assert.equal(isBreakingActive(true), true);
+  });
+
+  it('returns true when breakingUntil is in the future', () => {
+    const futureDate = new Date(Date.now() + 3600 * 1000).toISOString();
+    assert.equal(isBreakingActive(true, futureDate), true);
+  });
+
+  it('returns false when breakingUntil is in the past (decayed)', () => {
+    const pastDate = new Date(Date.now() - 3600 * 1000).toISOString();
+    assert.equal(isBreakingActive(true, pastDate), false);
+  });
+});
+
+describe('mapSanityToCard', () => {
+  it('maps raw article data and prefers explicit image alt over headline', () => {
+    const card = mapSanityToCard({
+      _id: 'test-123',
+      title: 'Global Markets Rally',
+      slug: 'global-markets-rally',
+      mainImage: {
+        asset: {
+          _ref: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000-jpg',
+        },
+        alt: 'Traders on the floor of the NYSE',
+      },
+    });
+
+    assert.equal(card.id, 'test-123');
+    assert.equal(card.title, 'Global Markets Rally');
+    assert.equal(card.href, '/article/global-markets-rally');
+    assert.equal(card.image.alt, 'Traders on the floor of the NYSE');
+  });
+
+  it('falls back to local branded image when mainImage is missing', () => {
+    const card = mapSanityToCard({
+      _id: 'test-456',
+      title: 'Tech Earnings Beat',
+      slug: 'tech-earnings-beat',
+    });
+
+    assert.equal(card.image.src, '/images/fallback-article.webp');
+    assert.equal(card.image.alt, 'Tech Earnings Beat');
   });
 });
 

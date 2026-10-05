@@ -188,11 +188,11 @@ export default async function Home() {
 
           {/* Exclusive Newsletter Box */}
           <div className={styles.newsletterWidget}>
-            <h4 className={styles.newsletterTitle}>Vice City Today</h4>
+            <h3 className={styles.newsletterTitle}>Vice City Today</h3>
             <p className={styles.newsletterText}>
               Get the biggest business stories, market movements, and tech analysis delivered to your inbox every morning.
             </p>
-            <Button variant="primary" size="md" style={{ width: '100%' }}>
+            <Button variant="primary" size="md" href="#newsletter" style={{ width: '100%' }}>
               Get Free Newsletter
             </Button>
           </div>

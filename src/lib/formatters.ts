@@ -1,6 +1,15 @@
 import { urlFor } from "@/sanity/lib/image";
 import type { SanityImageSource } from "@sanity/image-url";
 
+export interface SanityImageWithMeta {
+  alt?: string;
+  caption?: string;
+  asset?: {
+    _ref?: string;
+    _type?: string;
+  };
+}
+
 export interface RawSanityArticle {
   _id: string;
   title: string;
@@ -9,11 +18,12 @@ export interface RawSanityArticle {
   categorySlug?: string;
   author?: string;
   isBreaking?: boolean;
+  breakingUntil?: string;
   summary?: string;
   publishedAt?: string;
   _createdAt?: string;
   _updatedAt?: string;
-  mainImage?: SanityImageSource;
+  mainImage?: SanityImageSource & SanityImageWithMeta;
 }
 
 export interface FormattedArticleCardData {
@@ -53,15 +63,39 @@ export function formatArticleDate(
 }
 
 /**
+ * Checks whether breaking status is currently active (respecting breakingUntil decay).
+ */
+export function isBreakingActive(isBreaking?: boolean, breakingUntil?: string): boolean {
+  if (!isBreaking) return false;
+  if (!breakingUntil) return true;
+  try {
+    const expiry = new Date(breakingUntil).getTime();
+    return !isNaN(expiry) && expiry > Date.now();
+  } catch {
+    return true;
+  }
+}
+
+/**
  * Formats a raw Sanity article document into clean props for ArticleCard.
  */
 export function mapSanityToCard(
   art: RawSanityArticle
 ): FormattedArticleCardData {
   const dateSource = art.publishedAt || art._createdAt;
-  const imageSource = art.mainImage
-    ? urlFor(art.mainImage).url()
-    : "/images/fallback-article.webp";
+  let imageSource = "/images/fallback-article.webp";
+  if (art.mainImage) {
+    try {
+      imageSource = urlFor(art.mainImage).url();
+    } catch {
+      imageSource = "/images/fallback-article.webp";
+    }
+  }
+
+  const imageAlt =
+    typeof art.mainImage?.alt === "string" && art.mainImage.alt.trim()
+      ? art.mainImage.alt.trim()
+      : art.title;
 
   return {
     id: art._id,
@@ -69,10 +103,10 @@ export function mapSanityToCard(
     href: `/article/${art.slug}`,
     image: {
       src: imageSource,
-      alt: art.title,
+      alt: imageAlt,
     },
     category: art.category || "NEWS",
-    isBreaking: Boolean(art.isBreaking),
+    isBreaking: isBreakingActive(art.isBreaking, art.breakingUntil),
     author: art.author || "Vice City Staff",
     publishedAt: formatArticleDate(dateSource, {
       month: "short",

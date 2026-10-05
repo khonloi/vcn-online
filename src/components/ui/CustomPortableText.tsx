@@ -13,14 +13,27 @@ const components: PortableTextComponents = {
       if (!value?.asset?._ref) {
         return null;
       }
+      const altText = typeof value.alt === 'string' ? value.alt.trim() : '';
       return (
-        <div style={{ margin: 'var(--space-6) 0' }}>
+        <figure style={{ margin: 'var(--space-6) 0' }}>
           <ArticleImage
             src={urlFor(value).url()}
-            alt={value.alt || ' '}
+            alt={altText}
             aspectRatio="16/9"
           />
-        </div>
+          {value.caption && (
+            <figcaption
+              style={{
+                fontSize: 'var(--font-size-xs)',
+                color: 'var(--color-text-muted)',
+                marginTop: 'var(--space-2)',
+                fontStyle: 'italic',
+              }}
+            >
+              {value.caption}
+            </figcaption>
+          )}
+        </figure>
       );
     },
   },
