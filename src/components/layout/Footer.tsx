@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
         {/* Top bar with Logo & Newsletter Client Island */}
         <div className={styles.footerTop} id="newsletter">
           <Link href="/" className={styles.footerLogo}>
-            VICE CITY <span>NEWS</span>
+            VICE CITY<span>NEWS</span>
           </Link>
           <NewsletterForm />
         </div>

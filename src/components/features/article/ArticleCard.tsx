@@ -84,7 +84,7 @@ export const ArticleCardHorizontal: React.FC<ArticleCardSubProps> = ({
       )}
       <Card.Body>
         <ArticleKicker category={category} isBreaking={isBreaking} />
-        <Heading as="h3" size="sm" font="headline" weight="bold" className={styles.cardHeading}>
+        <Heading as="h3" size="md" font="headline" weight="bold" className={styles.cardHeading}>
           <Link href={href}>{title}</Link>
         </Heading>
         <ArticleMeta author={author} publishedAt={publishedAt} />
@@ -115,7 +115,7 @@ export const ArticleCardMinimal: React.FC<ArticleCardSubProps> = ({
       {ranking && <span className={styles.rankingNumber}>{ranking}</span>}
       <Card.Body>
         <ArticleKicker category={category} isBreaking={isBreaking} />
-        <Heading as="h3" size="sm" font="headline" weight="bold" className={styles.cardHeading}>
+        <Heading as="h3" size="md" font="headline" weight="bold" className={styles.cardHeading}>
           <Link href={href}>{title}</Link>
         </Heading>
         <ArticleMeta author={author} publishedAt={publishedAt} />
@@ -156,7 +156,7 @@ export const ArticleCardFeatured: React.FC<ArticleCardSubProps> = ({
       )}
       <Card.Body>
         <ArticleKicker category={category} isBreaking={isBreaking} />
-        <Heading as="h3" size="3xl" font="headline" weight="black" className={styles.cardHeading}>
+        <Heading as="h3" size="4xl" font="headline" weight="black" className={styles.cardHeading}>
           <Link href={href}>{title}</Link>
         </Heading>
         {summary && (
@@ -202,7 +202,7 @@ export const ArticleCardVertical: React.FC<ArticleCardSubProps> = ({
       )}
       <Card.Body>
         <ArticleKicker category={category} isBreaking={isBreaking} />
-        <Heading as="h3" size="lg" font="headline" weight="bold" className={styles.cardHeading}>
+        <Heading as="h3" size="xl" font="headline" weight="bold" className={styles.cardHeading}>
           <Link href={href}>{title}</Link>
         </Heading>
         {summary && (

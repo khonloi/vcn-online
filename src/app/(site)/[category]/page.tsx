@@ -113,7 +113,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <div className={`container ${styles.categoryPage}`}>
         <Breadcrumb items={[{ name: 'Home', href: '/' }, { name: categoryTitle }]} />
 
-        <SectionTitle size="lg" as="h1">
+        <SectionTitle size="lg" as="h1" className={styles.categoryTitle}>
           {categoryTitle} News &amp; Analysis
         </SectionTitle>
 

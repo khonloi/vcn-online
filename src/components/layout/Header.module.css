@@ -67,7 +67,7 @@
 .dateTimeText {
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   letter-spacing: var(--letter-spacing-wide);
   white-space: nowrap;
 }
@@ -78,7 +78,7 @@
   color: var(--color-text-muted);
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   white-space: nowrap;
 }
 
@@ -126,7 +126,7 @@
   text-decoration: none;
   display: inline-flex;
   align-items: baseline;
-  gap: 0.35em;
+  gap: 0.22em;
 }
 
 @media (min-width: 768px) {
@@ -145,7 +145,7 @@
 
 .tagline {
   font-family: var(--font-family-sans);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
   letter-spacing: var(--letter-spacing-wide);
@@ -234,7 +234,7 @@
   color: var(--color-primary);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wider);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   flex-shrink: 0;
 }
 

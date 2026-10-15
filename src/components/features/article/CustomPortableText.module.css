@@ -10,32 +10,42 @@
 }
 
 .paragraph {
-  margin-bottom: var(--space-5);
-  line-height: var(--line-height-relaxed);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-article);
+  color: var(--color-text-secondary);
+  margin-bottom: 22px;
 }
 
 .h2 {
   font-family: var(--font-family-headline);
   font-size: var(--font-size-2xl);
-  margin-top: var(--space-8);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  margin-top: var(--space-10);
   margin-bottom: var(--space-4);
   font-weight: var(--font-weight-black);
+  color: var(--color-text-primary);
 }
 
 .h3 {
   font-family: var(--font-family-headline);
   font-size: var(--font-size-xl);
-  margin-top: var(--space-6);
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-tight);
+  margin-top: var(--space-8);
   margin-bottom: var(--space-3);
   font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
 }
 
 .h4 {
   font-family: var(--font-family-headline);
   font-size: var(--font-size-lg);
-  margin-top: var(--space-5);
+  line-height: var(--line-height-snug);
+  margin-top: var(--space-6);
   margin-bottom: var(--space-2);
   font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
 }
 
 .blockquote {
@@ -43,13 +53,14 @@
   padding-left: var(--space-4);
   font-style: italic;
   color: var(--color-text-secondary);
-  margin: var(--space-6) 0;
+  margin: var(--space-8) 0;
   font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
 }
 
 .list {
   padding-left: var(--space-6);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-6);
 }
 
 .bulletList {
@@ -61,6 +72,9 @@
 }
 
 .listItem {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-secondary);
   margin-bottom: var(--space-2);
 }
 

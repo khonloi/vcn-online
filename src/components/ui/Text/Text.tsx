@@ -4,7 +4,7 @@ import { clsx } from 'clsx';
 import styles from './Text.module.css';
 
 export type TextElement = 'p' | 'span' | 'div' | 'label' | 'small' | 'time' | 'strong' | 'em';
-export type TextSize = 'xs' | 'sm' | 'base' | 'lg' | 'xl';
+export type TextSize = '2xs' | 'xs' | 'sm' | 'base' | 'md' | 'lg' | 'xl';
 export type TextWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 export type TextFont = 'sans' | 'serif';
 export type TextColor =
@@ -41,9 +41,11 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
     const Component = (asChild ? Slot : as) as React.ElementType;
 
     const sizeClass = {
+      '2xs': styles.size2xs,
       xs: styles.sizeXs,
       sm: styles.sizeSm,
       base: styles.sizeBase,
+      md: styles.sizeMd,
       lg: styles.sizeLg,
       xl: styles.sizeXl,
     }[size];

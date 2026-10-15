@@ -3,6 +3,10 @@
   padding-bottom: var(--space-16);
 }
 
+.categoryTitle {
+  margin-bottom: var(--space-6);
+}
+
 .emptyState {
   padding: var(--space-12) 0;
   text-align: center;

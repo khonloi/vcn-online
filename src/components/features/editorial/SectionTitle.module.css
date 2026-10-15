@@ -24,16 +24,19 @@
 .sizeSm {
   font-size: var(--font-size-xs);
   letter-spacing: var(--letter-spacing-wider);
+  line-height: var(--line-height-tight);
 }
 
 .sizeMd {
   font-size: var(--font-size-base);
-  letter-spacing: var(--letter-spacing-wide);
+  letter-spacing: 0.06em;
+  line-height: var(--line-height-tight);
 }
 
 .sizeLg {
   font-size: var(--font-size-xl);
-  letter-spacing: var(--letter-spacing-tight);
+  letter-spacing: 0.04em;
+  line-height: var(--line-height-tight);
 }
 
 .link {

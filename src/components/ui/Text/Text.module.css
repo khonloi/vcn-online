@@ -13,24 +13,39 @@
 }
 
 /* Sizes */
+.size2xs {
+  font-size: var(--font-size-2xs);
+  line-height: var(--line-height-tight);
+}
+
 .sizeXs {
   font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
 }
 
 .sizeSm {
   font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
 }
 
 .sizeBase {
   font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+.sizeMd {
+  font-size: var(--font-size-md, 1.0625rem);
+  line-height: var(--line-height-article, 1.72);
 }
 
 .sizeLg {
   font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
 }
 
 .sizeXl {
   font-size: var(--font-size-xl);
+  line-height: var(--line-height-snug);
 }
 
 /* Weights */

@@ -16,9 +16,9 @@
 }
 
 .delayBadge {
-  font-size: 0.625rem;
+  font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-bold);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--letter-spacing-wider);
   padding: 2px 6px;
   background-color: var(--color-surface-muted);
   color: var(--color-text-muted);

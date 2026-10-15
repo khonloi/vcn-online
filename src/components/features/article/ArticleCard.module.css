@@ -1,4 +1,7 @@
-/* ArticleCard Layout Compositions */
+.cardHeading {
+  width: 100%;
+}
+
 .cardHeading a {
   color: inherit;
   text-decoration: none;

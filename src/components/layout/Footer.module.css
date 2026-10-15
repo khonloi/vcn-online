@@ -34,7 +34,7 @@
   text-transform: uppercase;
   display: inline-flex;
   align-items: baseline;
-  gap: 0.35em;
+  gap: 0.22em;
   white-space: nowrap;
   flex-shrink: 0;
   text-decoration: none;
@@ -75,7 +75,7 @@
 }
 
 .newsletterConsent {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   line-height: var(--line-height-normal);
   margin-top: 4px;
