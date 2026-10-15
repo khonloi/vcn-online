@@ -1,18 +1,23 @@
 'use client';
 
 import React from 'react';
+import { Search } from 'lucide-react';
+import { Input, type InputProps } from '@/components/ui';
+import { clsx } from 'clsx';
 import styles from './SearchInput.module.css';
 
-export interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface SearchInputProps extends Omit<InputProps, 'leftElement'> {
   onSearch?: (query: string) => void;
-  className?: string;
 }
 
 export const SearchInput: React.FC<SearchInputProps> = ({
   placeholder = 'Search articles...',
-  className = '',
+  className,
+  wrapperClassName,
   onSearch,
   onKeyDown,
+  size = 'md',
+  type = 'search',
   ...props
 }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -25,30 +30,20 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   };
 
   return (
-    <div className={`${styles.searchWrapper} ${className}`.trim()}>
-      <span className={styles.searchIcon} aria-hidden="true">
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-      </span>
-      <input
-        type="search"
-        className={styles.searchInput}
-        placeholder={placeholder}
-        onKeyDown={handleKeyDown}
-        {...props}
-      />
-    </div>
+    <Input
+      type={type}
+      placeholder={placeholder}
+      size={size}
+      wrapperClassName={clsx(styles.searchWrapper, wrapperClassName)}
+      className={className}
+      leftElement={
+        <span className={styles.searchIcon} aria-hidden="true">
+          <Search size={15} />
+        </span>
+      }
+      onKeyDown={handleKeyDown}
+      {...props}
+    />
   );
 };
 

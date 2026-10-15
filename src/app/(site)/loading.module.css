@@ -1,0 +1,48 @@
+.loadingWrapper {
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-16);
+  max-width: var(--container-max-width);
+}
+
+.indicator {
+  margin-bottom: var(--space-6);
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-8);
+}
+
+.leadColumn {
+  flex: 1;
+}
+
+.leadImage {
+  margin-bottom: var(--space-4);
+}
+
+.leadTitle {
+  margin-bottom: var(--space-2);
+}
+
+.sideColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sideItem {
+  display: flex;
+  gap: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sideItemContent {
+  flex: 1;
+}
+
+.sideItemTitle {
+  margin-bottom: var(--space-2);
+}

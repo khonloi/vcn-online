@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getLatestArticles } from '@/services/articles';
 import { generateRssFeed } from '@/lib/rss';
+import { SITE_CONFIG } from '@/lib/constants';
 
 export const revalidate = 900; // 15-minute ISR cache
 
 export async function GET() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://vcn-online.vercel.app';
+  const siteUrl = SITE_CONFIG.url;
 
   try {
     const articles = await getLatestArticles({ revalidate: 900 });

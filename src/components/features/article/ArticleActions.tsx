@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Button, Flex } from '@/components/ui';
 import { Share2, Bookmark, Check } from 'lucide-react';
+import styles from './ArticleActions.module.css';
 
 export interface ArticleActionsProps {
   title: string;
@@ -44,11 +45,11 @@ export const ArticleActions: React.FC<ArticleActionsProps> = ({ title, url }) =>
       <Button variant="ghost" size="sm" onClick={handleShare} aria-label="Share this article">
         {copied ? (
           <>
-            <Check size={14} style={{ marginRight: 4 }} /> Link Copied
+            <Check size={14} className={styles.buttonIcon} /> Link Copied
           </>
         ) : (
           <>
-            <Share2 size={14} style={{ marginRight: 4 }} /> Share
+            <Share2 size={14} className={styles.buttonIcon} /> Share
           </>
         )}
       </Button>
@@ -58,7 +59,7 @@ export const ArticleActions: React.FC<ArticleActionsProps> = ({ title, url }) =>
         onClick={handleSave}
         aria-label={saved ? 'Remove from saved articles' : 'Save article'}
       >
-        <Bookmark size={14} style={{ marginRight: 4 }} /> {saved ? 'Saved' : 'Save'}
+        <Bookmark size={14} className={styles.buttonIcon} /> {saved ? 'Saved' : 'Save'}
       </Button>
     </Flex>
   );

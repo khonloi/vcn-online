@@ -1,20 +1,20 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Button } from '@/components/ui';
+import { Breadcrumb, Button } from '@/components/ui';
 import { ArticleImage, CustomPortableText, ArticleActions } from '@/components/features';
 import { getArticleBySlug } from '@/services/articles';
 import { urlFor } from '@/sanity/lib/image';
 import styles from './article.module.css';
+
+import { SITE_CONFIG } from '@/lib/constants';
+import { formatArticleDate } from '@/lib/formatters';
 
 interface ArticlePageProps {
   params: Promise<{
     slug: string;
   }>;
 }
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
 export const revalidate = 120; // Revalidate article page every 2 minutes (ISR)
 
@@ -31,11 +31,11 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
   const imageUrl = article.mainImage
     ? urlFor(article.mainImage).width(1200).height(675).url()
-    : '/og-image.jpg';
+    : SITE_CONFIG.defaultOgImage;
   const url = `/article/${slug}`;
   const description =
     article.summary ||
-    `Read full reporting and market intelligence on "${article.title}" on Vice City News.`;
+    `Read full reporting and market intelligence on "${article.title}" on ${SITE_CONFIG.name}.`;
 
   return {
     title: article.title,
@@ -46,13 +46,13 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     openGraph: {
       type: 'article',
       url,
-      title: `${article.title} | Vice City News`,
+      title: `${article.title} | ${SITE_CONFIG.name}`,
       description,
       publishedTime: article.publishedAt,
       modifiedTime: article._updatedAt || article.publishedAt,
-      authors: [article.author || 'Vice City Staff'],
+      authors: [article.author || SITE_CONFIG.editor],
       section: article.category || 'News',
-      siteName: 'Vice City News',
+      siteName: SITE_CONFIG.name,
       images: [
         {
           url: imageUrl,
@@ -64,9 +64,9 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     },
     twitter: {
       card: 'summary_large_image',
-      site: '@VCNews',
-      creator: '@VCNews',
-      title: `${article.title} | Vice City News`,
+      site: SITE_CONFIG.twitterHandle,
+      creator: SITE_CONFIG.twitterHandle,
+      title: `${article.title} | ${SITE_CONFIG.name}`,
       description,
       images: [imageUrl],
     },
@@ -86,10 +86,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   const rawImageUrl = article.mainImage
     ? urlFor(article.mainImage).url()
-    : `${siteUrl}/og-image.jpg`;
+    : `${SITE_CONFIG.url}${SITE_CONFIG.defaultOgImage}`;
   const absoluteImageUrl = rawImageUrl.startsWith('http')
     ? rawImageUrl
-    : `${siteUrl}${rawImageUrl.startsWith('/') ? '' : '/'}${rawImageUrl}`;
+    : `${SITE_CONFIG.url}${rawImageUrl.startsWith('/') ? '' : '/'}${rawImageUrl}`;
 
   const publishedDate = article.publishedAt || article._createdAt || new Date().toISOString();
   const modifiedDate =
@@ -106,22 +106,22 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     author: [
       {
         '@type': 'Person',
-        name: article.author || 'Vice City Staff',
-        url: siteUrl,
+        name: article.author || SITE_CONFIG.editor,
+        url: SITE_CONFIG.url,
       },
     ],
     publisher: {
       '@type': 'Organization',
-      name: 'Vice City News',
+      name: SITE_CONFIG.name,
       logo: {
         '@type': 'ImageObject',
-        url: `${siteUrl}/og-image.jpg`,
+        url: `${SITE_CONFIG.url}${SITE_CONFIG.defaultOgImage}`,
       },
     },
     articleSection: article.category || 'News',
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${siteUrl}/article/${slug}`,
+      '@id': `${SITE_CONFIG.url}/article/${slug}`,
     },
   };
 
@@ -133,19 +133,19 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: siteUrl,
+        item: SITE_CONFIG.url,
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: article.category || 'News',
-        item: `${siteUrl}/${(article.category || 'news').toLowerCase().replace(/\s+/g, '-')}`,
+        item: `${SITE_CONFIG.url}/${(article.category || 'news').toLowerCase().replace(/\s+/g, '-')}`,
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: article.title,
-        item: `${siteUrl}/article/${slug}`,
+        item: `${SITE_CONFIG.url}/article/${slug}`,
       },
     ],
   };
@@ -160,18 +160,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       />
       <article className={`container ${styles.articleContainer}`}>
         {/* Semantic Accessible Breadcrumb */}
-        <nav aria-label="Breadcrumb" className={styles.breadcrumb}>
-          <Link href="/" className={styles.breadcrumbLink}>
-            Home
-          </Link>
-          <span className={styles.breadcrumbSeparator}>/</span>
-          <Link
-            href={`/${(article.category || 'news').toLowerCase().replace(/\s+/g, '-')}`}
-            className={styles.breadcrumbActive}
-          >
-            {article.category || 'News'}
-          </Link>
-        </nav>
+        <Breadcrumb
+          items={[
+            { name: 'Home', href: '/' },
+            {
+              name: article.category || 'News',
+              href: `/${(article.category || 'news').toLowerCase().replace(/\s+/g, '-')}`,
+            },
+            { name: article.title },
+          ]}
+        />
 
         {/* Article Header */}
         <header className={styles.articleHeader}>
@@ -185,19 +183,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <div className={styles.bylineRow}>
             <div>
               By{' '}
-              <strong className={styles.authorName}>{article.author || 'Vice City Staff'}</strong>
+              <strong className={styles.authorName}>{article.author || SITE_CONFIG.editor}</strong>
             </div>
             <div>
-              <time dateTime={article.publishedAt}>
-                {new Date(publishedDate).toLocaleDateString('en-US', {
-                  weekday: 'short',
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </time>
+              <time dateTime={article.publishedAt}>{formatArticleDate(publishedDate, 'full')}</time>
             </div>
           </div>
         </header>
@@ -218,9 +207,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <div className={styles.imageWrapper}>
           <ArticleImage
             src={
-              article.mainImage
-                ? urlFor(article.mainImage).url()
-                : `https://picsum.photos/seed/${article.slug || 'article-hero'}/900/506`
+              article.mainImage ? urlFor(article.mainImage).url() : SITE_CONFIG.fallbackArticleImage
             }
             alt={article.title}
             aspectRatio="16/9"
@@ -237,7 +224,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <Button variant="outline" size="sm" href="/">
             &larr; Back to Top Stories
           </Button>
-          <ArticleActions title={article.title} url={`${siteUrl}/article/${slug}`} />
+          <ArticleActions title={article.title} url={`${SITE_CONFIG.url}/article/${slug}`} />
         </div>
       </article>
     </>

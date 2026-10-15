@@ -16,18 +16,19 @@ const merriweather = Merriweather({
   display: 'swap',
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+import { SITE_CONFIG } from '@/lib/constants';
+
+const siteTitle = `${SITE_CONFIG.name} | ${SITE_CONFIG.tagline}`;
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_CONFIG.url),
   title: {
-    default: 'Vice City News | Breaking Business, Tech, & Market Intelligence',
-    template: '%s | Vice City News',
+    default: siteTitle,
+    template: `%s | ${SITE_CONFIG.name}`,
   },
-  description:
-    'Vice City News delivers breaking business news, financial analysis, executive strategy, and technology intelligence.',
+  description: SITE_CONFIG.description,
   keywords: [
-    'Vice City News',
+    SITE_CONFIG.name,
     'business news',
     'market intelligence',
     'technology news',
@@ -38,9 +39,9 @@ export const metadata: Metadata = {
     'artificial intelligence',
     'executive strategy',
   ],
-  authors: [{ name: 'Vice City News Editorial Board', url: '/' }],
-  creator: 'Vice City News Media Inc.',
-  publisher: 'Vice City News Media Inc.',
+  authors: [{ name: SITE_CONFIG.editor, url: '/' }],
+  creator: SITE_CONFIG.publisher,
+  publisher: SITE_CONFIG.publisher,
   alternates: {
     canonical: '/',
     types: {
@@ -56,27 +57,25 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: '/',
-    siteName: 'Vice City News',
-    title: 'Vice City News | Breaking Business, Tech, & Market Intelligence',
-    description:
-      'Vice City News delivers breaking business news, financial analysis, executive strategy, and technology intelligence.',
+    siteName: SITE_CONFIG.name,
+    title: siteTitle,
+    description: SITE_CONFIG.description,
     images: [
       {
-        url: '/og-image.jpg',
+        url: SITE_CONFIG.defaultOgImage,
         width: 1200,
         height: 675,
-        alt: 'Vice City News | Breaking Business & Tech Intelligence',
+        alt: `${SITE_CONFIG.name} | ${SITE_CONFIG.tagline}`,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@VCNews',
-    creator: '@VCNews',
-    title: 'Vice City News | Breaking Business, Tech, & Market Intelligence',
-    description:
-      'Vice City News delivers breaking business news, financial analysis, executive strategy, and technology intelligence.',
-    images: ['/og-image.jpg'],
+    site: SITE_CONFIG.twitterHandle,
+    creator: SITE_CONFIG.twitterHandle,
+    title: siteTitle,
+    description: SITE_CONFIG.description,
+    images: [SITE_CONFIG.defaultOgImage],
   },
   robots: {
     index: true,

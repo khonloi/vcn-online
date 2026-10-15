@@ -1,105 +1,33 @@
 import React from 'react';
+import { Skeleton } from '@/components/ui';
+import styles from './loading.module.css';
 
 export default function Loading() {
   return (
     <div
-      className="container"
-      style={{
-        paddingTop: 'var(--space-8)',
-        paddingBottom: 'var(--space-16)',
-        maxWidth: '1200px',
-      }}
+      className={`container ${styles.loadingWrapper}`}
       role="status"
       aria-busy="true"
       aria-label="Loading dispatch..."
     >
       {/* Top skeleton indicator */}
-      <div
-        style={{
-          width: '180px',
-          height: '24px',
-          backgroundColor: 'var(--color-surface-muted)',
-          borderRadius: '4px',
-          marginBottom: 'var(--space-6)',
-          animation: 'pulse 1.5s ease-in-out infinite',
-        }}
-      />
+      <Skeleton width={180} height={24} className={styles.indicator} />
 
       {/* Main hero grid skeleton */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: 'var(--space-8)',
-        }}
-      >
-        <div style={{ flex: '1' }}>
-          <div
-            style={{
-              width: '100%',
-              aspectRatio: '16/9',
-              backgroundColor: 'var(--color-surface-muted)',
-              borderRadius: '4px',
-              marginBottom: 'var(--space-4)',
-            }}
-          />
-          <div
-            style={{
-              width: '75%',
-              height: '32px',
-              backgroundColor: 'var(--color-surface-muted)',
-              borderRadius: '4px',
-              marginBottom: 'var(--space-2)',
-            }}
-          />
-          <div
-            style={{
-              width: '90%',
-              height: '20px',
-              backgroundColor: 'var(--color-surface-muted)',
-              borderRadius: '4px',
-            }}
-          />
+      <div className={styles.heroGrid}>
+        <div className={styles.leadColumn}>
+          <Skeleton aspectRatio="16/9" width="100%" className={styles.leadImage} />
+          <Skeleton width="75%" height={32} className={styles.leadTitle} />
+          <Skeleton width="90%" height={20} />
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+        <div className={styles.sideColumn}>
           {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              style={{
-                display: 'flex',
-                gap: 'var(--space-4)',
-                paddingBottom: 'var(--space-4)',
-                borderBottom: '1px solid var(--color-border)',
-              }}
-            >
-              <div
-                style={{
-                  width: '80px',
-                  height: '80px',
-                  backgroundColor: 'var(--color-surface-muted)',
-                  borderRadius: '4px',
-                  flexShrink: 0,
-                }}
-              />
-              <div style={{ flex: 1 }}>
-                <div
-                  style={{
-                    width: '90%',
-                    height: '20px',
-                    backgroundColor: 'var(--color-surface-muted)',
-                    borderRadius: '4px',
-                    marginBottom: 'var(--space-2)',
-                  }}
-                />
-                <div
-                  style={{
-                    width: '50%',
-                    height: '14px',
-                    backgroundColor: 'var(--color-surface-muted)',
-                    borderRadius: '4px',
-                  }}
-                />
+            <div key={i} className={styles.sideItem}>
+              <Skeleton width={80} height={80} />
+              <div className={styles.sideItemContent}>
+                <Skeleton width="90%" height={20} className={styles.sideItemTitle} />
+                <Skeleton width="50%" height={14} />
               </div>
             </div>
           ))}

@@ -11,5 +11,5 @@ export interface TrendingTopicConfig {
 
 export interface BreadcrumbItem {
   name: string;
-  href: string;
+  href?: string;
 }

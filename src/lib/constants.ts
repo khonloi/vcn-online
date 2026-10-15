@@ -51,14 +51,20 @@ export const TRENDING_TOPICS: TrendingTopicConfig[] = [
   { name: 'Global Trade', href: '/world' },
 ];
 
+export const FALLBACK_ARTICLE_IMAGE = '/images/fallback-article.webp';
+export const DEFAULT_OG_IMAGE = '/og-image.jpg';
+
 export const SITE_CONFIG = {
   name: 'Vice City News',
   shortName: 'VCN',
   edition: 'Online',
+  tagline: 'Breaking Business, Tech, & Market Intelligence',
   description:
     'Vice City News delivers breaking business news, financial analysis, executive strategy, and technology intelligence.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
   twitterHandle: '@VCNews',
   publisher: 'Vice City News Media Inc.',
   editor: 'Vice City News Editorial Board',
+  defaultOgImage: DEFAULT_OG_IMAGE,
+  fallbackArticleImage: FALLBACK_ARTICLE_IMAGE,
 };

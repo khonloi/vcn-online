@@ -2,7 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Button, Grid } from '@/components/ui';
+import { Breadcrumb, Button, Grid } from '@/components/ui';
 import { SectionTitle, ArticleCard } from '@/components/features';
 import { getArticlesByCategory } from '@/services/articles';
 import {
@@ -44,15 +44,15 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     openGraph: {
       type: 'website',
       url,
-      title: `${title} | Vice City News`,
+      title: `${title} | ${SITE_CONFIG.name}`,
       description,
       siteName: SITE_CONFIG.name,
       images: [
         {
-          url: '/og-image.jpg',
+          url: SITE_CONFIG.defaultOgImage,
           width: 1200,
           height: 675,
-          alt: `${categoryTitle} News - Vice City News`,
+          alt: `${categoryTitle} News - ${SITE_CONFIG.name}`,
         },
       ],
     },
@@ -60,9 +60,9 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       card: 'summary_large_image',
       site: SITE_CONFIG.twitterHandle,
       creator: SITE_CONFIG.twitterHandle,
-      title: `${title} | Vice City News`,
+      title: `${title} | ${SITE_CONFIG.name}`,
       description,
-      images: ['/og-image.jpg'],
+      images: [SITE_CONFIG.defaultOgImage],
     },
   };
 }
@@ -111,14 +111,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         }}
       />
       <div className={`container ${styles.categoryPage}`}>
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className={styles.breadcrumb}>
-          <Link href="/" className={styles.breadcrumbLink}>
-            Home
-          </Link>
-          <span className={styles.breadcrumbSeparator}>/</span>
-          <span className={styles.breadcrumbActive}>{categoryTitle}</span>
-        </nav>
+        <Breadcrumb items={[{ name: 'Home', href: '/' }, { name: categoryTitle }]} />
 
         <SectionTitle size="lg" as="h1">
           {categoryTitle} News &amp; Analysis

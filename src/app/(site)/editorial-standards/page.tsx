@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { Breadcrumb } from '@/components/ui';
 import { SITE_CONFIG } from '@/lib/constants';
 import styles from '@/styles/static-page.module.css';
 
@@ -16,17 +16,13 @@ export default function EditorialStandardsPage() {
   return (
     <div className={styles.pageWrapper}>
       <div className={`container ${styles.inner}`}>
-        <nav aria-label="Breadcrumb" className={styles.breadcrumbs}>
-          <Link href="/" className={styles.breadcrumbLink}>
-            Home
-          </Link>
-          <span className={styles.breadcrumbDivider}>/</span>
-          <Link href="/about" className={styles.breadcrumbLink}>
-            About
-          </Link>
-          <span className={styles.breadcrumbDivider}>/</span>
-          <span className={styles.breadcrumbCurrent}>Editorial Standards</span>
-        </nav>
+        <Breadcrumb
+          items={[
+            { name: 'Home', href: '/' },
+            { name: 'About', href: '/about' },
+            { name: 'Editorial Standards' },
+          ]}
+        />
 
         <header className={styles.header}>
           <span className={styles.kicker}>Journalistic Ethics &amp; Integrity</span>

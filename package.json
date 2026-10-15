@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --env-file-if-exists=.env.local --test src/**/*.test.ts",
+    "test": "tsx --env-file-if-exists=.env.local --test \"src/**/*.test.ts\" \"src/**/*.test.tsx\"",
     "test:e2e": "playwright test",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\"",

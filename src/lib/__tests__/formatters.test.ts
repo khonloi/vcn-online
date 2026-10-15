@@ -1,7 +1,13 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { formatArticleDate, isBreakingActive, mapSanityToCard } from '../formatters';
+import {
+  formatArticleDate,
+  isBreakingActive,
+  mapSanityToCard,
+  partitionHomeFeeds,
+} from '../formatters';
 import { KNOWN_CATEGORY_SLUGS, CONTENT_CATEGORIES } from '../constants';
+import type { RawSanityArticle } from '@/types';
 
 describe('formatArticleDate', () => {
   it('returns "Just now" when date is undefined or empty', () => {
@@ -113,5 +119,81 @@ describe('Security Link Protocol Validation', () => {
     assert.equal(isSafeHref('vbscript:msgbox'), false);
     assert.equal(isSafeHref(''), false);
     assert.equal(isSafeHref('   '), false);
+  });
+});
+
+describe('partitionHomeFeeds', () => {
+  it('returns empty feed state when passed an empty list', () => {
+    const result = partitionHomeFeeds([]);
+    assert.equal(result.leadStory, null);
+    assert.deepEqual(result.topFeed, []);
+    assert.deepEqual(result.spotlightFeed, []);
+    assert.deepEqual(result.analysisFeed, []);
+    assert.deepEqual(result.trendingRankings, []);
+  });
+
+  it('selects active breaking news story as lead story even if not first in list', () => {
+    const articles: RawSanityArticle[] = [
+      {
+        _id: 'art-1',
+        title: 'Standard Report',
+        slug: 'standard-report',
+        publishedAt: '2026-03-15T12:00:00Z',
+      },
+      {
+        _id: 'art-2',
+        title: 'Breaking Market Meltdown',
+        slug: 'breaking-market-meltdown',
+        isBreaking: true,
+        publishedAt: '2026-03-15T10:00:00Z',
+      },
+    ];
+
+    const feeds = partitionHomeFeeds(articles);
+    assert.ok(feeds.leadStory);
+    assert.equal(feeds.leadStory?.id, 'art-2');
+    assert.equal(feeds.leadStory?.title, 'Breaking Market Meltdown');
+
+    // Remaining article should be in topFeed without duplicating lead story
+    assert.equal(feeds.topFeed.length, 1);
+    assert.equal(feeds.topFeed[0].id, 'art-1');
+  });
+
+  it('partitions large article collections cleanly across feeds without duplication', () => {
+    const articles: RawSanityArticle[] = Array.from({ length: 15 }, (_, i) => ({
+      _id: `article-${i + 1}`,
+      title: `Article Headline ${i + 1}`,
+      slug: `article-headline-${i + 1}`,
+      category: 'Markets',
+      publishedAt: new Date(Date.now() - i * 3600000).toISOString(),
+    }));
+
+    const feeds = partitionHomeFeeds(articles);
+
+    assert.ok(feeds.leadStory);
+    assert.equal(feeds.leadStory?.id, 'article-1');
+
+    // Top feed takes next 4
+    assert.equal(feeds.topFeed.length, 4);
+    assert.deepEqual(
+      feeds.topFeed.map((a) => a.id),
+      ['article-2', 'article-3', 'article-4', 'article-5']
+    );
+
+    // Spotlight feed takes next 4
+    assert.equal(feeds.spotlightFeed.length, 4);
+    assert.deepEqual(
+      feeds.spotlightFeed.map((a) => a.id),
+      ['article-6', 'article-7', 'article-8', 'article-9']
+    );
+
+    // Analysis feed takes remaining
+    assert.equal(feeds.analysisFeed.length, 6);
+    assert.equal(feeds.analysisFeed[0].id, 'article-10');
+
+    // Trending rankings takes top 5 articles with ranking index
+    assert.equal(feeds.trendingRankings.length, 5);
+    assert.equal(feeds.trendingRankings[0].ranking, 1);
+    assert.equal(feeds.trendingRankings[4].ranking, 5);
   });
 });

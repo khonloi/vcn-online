@@ -1,27 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getNewsSitemapArticles } from '@/services/articles';
 import { SITE_CONFIG } from '@/lib/constants';
+import { escapeXml } from '@/lib/xml';
 
 export const revalidate = 900; // Revalidate news sitemap every 15 minutes
-
-function escapeXml(unsafe: string): string {
-  return unsafe.replace(/[<>&'"]/g, (c) => {
-    switch (c) {
-      case '<':
-        return '&lt;';
-      case '>':
-        return '&gt;';
-      case '&':
-        return '&amp;';
-      case "'":
-        return '&apos;';
-      case '"':
-        return '&quot;';
-      default:
-        return c;
-    }
-  });
-}
 
 export async function GET() {
   const baseUrl = SITE_CONFIG.url;

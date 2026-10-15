@@ -4,9 +4,5 @@ export interface CategoryConfig {
   href: string;
 }
 
-export interface MarketIndex {
-  name: string;
-  value: string;
-  change: string;
-  positive: boolean;
-}
+// Re-export for backward compatibility
+export type { MarketIndex } from './market';

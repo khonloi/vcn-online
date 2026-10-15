@@ -1,0 +1,29 @@
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.skeleton {
+  background-color: var(--color-surface-muted);
+  animation: pulse 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  display: block;
+}
+
+.text {
+  height: 1em;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-2);
+}
+
+.rectangular {
+  border-radius: var(--radius-sm);
+}
+
+.circular {
+  border-radius: var(--radius-full);
+}

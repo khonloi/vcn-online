@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { Container, Heading, Text, Button, Flex } from '@/components/ui';
+import styles from './error.module.css';
 
 export default function ErrorBoundary({
   error,
@@ -16,54 +17,22 @@ export default function ErrorBoundary({
   }, [error]);
 
   return (
-    <Container
-      size="sm"
-      style={{
-        paddingTop: 'var(--space-16)',
-        paddingBottom: 'var(--space-20)',
-        textAlign: 'center',
-      }}
-    >
-      <Text
-        as="span"
-        size="xs"
-        weight="bold"
-        color="error"
-        style={{
-          display: 'inline-block',
-          letterSpacing: 'var(--letter-spacing-widest)',
-          textTransform: 'uppercase',
-          marginBottom: 'var(--space-2)',
-        }}
-      >
+    <Container size="sm" className={styles.errorContainer}>
+      <Text as="span" size="xs" weight="bold" color="error" className={styles.serviceNotice}>
         Service Notice
       </Text>
 
-      <Heading as="h1" size="3xl" weight="black" style={{ marginBottom: 'var(--space-4)' }}>
+      <Heading as="h1" size="3xl" weight="black" className={styles.heading}>
         Unable to load report
       </Heading>
 
-      <Text
-        size="base"
-        color="secondary"
-        style={{
-          lineHeight: 'var(--line-height-relaxed)',
-          marginBottom: 'var(--space-6)',
-        }}
-      >
+      <Text size="base" color="secondary" className={styles.description}>
         An unexpected network or rendering issue occurred while retrieving this news dispatch. Our
         engineering desk has been notified.
       </Text>
 
       {error.digest && (
-        <Text
-          size="xs"
-          color="muted"
-          style={{
-            fontFamily: 'monospace',
-            marginBottom: 'var(--space-6)',
-          }}
-        >
+        <Text size="xs" color="muted" className={styles.referenceId}>
           Reference ID: {error.digest}
         </Text>
       )}

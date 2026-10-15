@@ -3,8 +3,7 @@ import { Button, Grid } from '@/components/ui';
 import { ArticleCard, SectionTitle } from '@/components/features';
 import styles from './page.module.css';
 import { getLatestArticles } from '@/services/articles';
-import { mapSanityToCard } from '@/lib/formatters';
-import type { FormattedArticleCardData } from '@/types';
+import { partitionHomeFeeds } from '@/lib/formatters';
 
 export const revalidate = 60; // Revalidate at most once every 60s (ISR)
 
@@ -15,23 +14,11 @@ export default async function Home() {
   if (articles.length === 0) {
     return (
       <div className={`container ${styles.page}`}>
-        <div
-          style={{
-            textAlign: 'center',
-            padding: 'var(--space-16) 0',
-            color: 'var(--color-text-muted)',
-          }}
-        >
+        <div className={styles.emptyState}>
           <SectionTitle size="lg" as="h1">
             Vice City News
           </SectionTitle>
-          <p
-            style={{
-              fontSize: 'var(--font-size-lg)',
-              marginTop: 'var(--space-4)',
-              marginBottom: 'var(--space-6)',
-            }}
-          >
+          <p className={styles.emptyStateText}>
             No published dispatches are currently available. Check back shortly for breaking market
             dispatches and investigative reports.
           </p>
@@ -43,107 +30,79 @@ export default async function Home() {
     );
   }
 
-  // Pick the lead story (Breaking news takes priority, otherwise the latest article)
-  const breakingIndex = articles.findIndex((a) => a.isBreaking);
-  const leadIndex = breakingIndex !== -1 ? breakingIndex : 0;
-  const leadStory: FormattedArticleCardData = mapSanityToCard(articles[leadIndex]);
-
-  // Filter out the lead article from secondary feeds so it doesn't duplicate
-  const remainingArticles = articles.filter((_, idx) => idx !== leadIndex);
-
-  const topFeed: FormattedArticleCardData[] = (
-    remainingArticles.length > 0 ? remainingArticles : articles
-  )
-    .slice(0, 4)
-    .map((a) => mapSanityToCard(a));
-
-  const spotlightFeed: FormattedArticleCardData[] = (
-    remainingArticles.length > 4 ? remainingArticles.slice(4, 8) : remainingArticles
-  )
-    .slice(0, 4)
-    .map((a) => mapSanityToCard(a));
-
-  const analysisFeed: FormattedArticleCardData[] = (
-    remainingArticles.length > 8 ? remainingArticles.slice(8) : remainingArticles
-  ).map((a) => mapSanityToCard(a));
-
-  const trendingRankings = articles.slice(0, 5).map((a, idx) => ({
-    id: a._id,
-    ranking: idx + 1,
-    title: a.title,
-    href: `/article/${a.slug}`,
-    category: a.category || 'TRENDING',
-    isBreaking: a.isBreaking,
-    author: a.author || 'Vice City Staff',
-    publishedAt: 'Trending now',
-  }));
+  const { leadStory, topFeed, spotlightFeed, analysisFeed, trendingRankings } =
+    partitionHomeFeeds(articles);
 
   return (
     <div className={`container ${styles.page}`}>
       {/* 1. HERO LEAD SECTION */}
-      <section className={styles.heroSection} aria-label="Lead Story">
-        <Grid cols={12} gap="xl">
-          {/* Main Lead Story (Left 7 Cols) */}
-          <Grid.Col span={12} spanLg={7}>
-            <ArticleCard
-              variant="featured"
-              category={leadStory.category}
-              isBreaking={leadStory.isBreaking}
-              title={leadStory.title}
-              summary={leadStory.summary}
-              author={leadStory.author}
-              publishedAt={leadStory.publishedAt}
-              href={leadStory.href}
-              image={leadStory.image}
-            />
-          </Grid.Col>
+      {leadStory && (
+        <section className={styles.heroSection} aria-label="Lead Story">
+          <Grid cols={12} gap="xl">
+            {/* Main Lead Story (Left 7 Cols) */}
+            <Grid.Col span={12} spanLg={7}>
+              <ArticleCard
+                variant="featured"
+                category={leadStory.category}
+                isBreaking={leadStory.isBreaking}
+                title={leadStory.title}
+                summary={leadStory.summary}
+                author={leadStory.author}
+                publishedAt={leadStory.publishedAt}
+                href={leadStory.href}
+                image={leadStory.image}
+              />
+            </Grid.Col>
 
-          {/* Right Feed (5 Cols) */}
-          <Grid.Col span={12} spanLg={5}>
-            <SectionTitle size="sm" actionText="More Breaking News" actionHref="/news">
-              Top Stories &amp; Breaking
-            </SectionTitle>
-            <div className={styles.storyList}>
-              {topFeed.map((story) => (
+            {/* Right Feed (5 Cols) */}
+            <Grid.Col span={12} spanLg={5}>
+              <SectionTitle size="sm" actionText="More Breaking News" actionHref="/news">
+                Top Stories &amp; Breaking
+              </SectionTitle>
+              <div className={styles.storyList}>
+                {topFeed.map((story) => (
+                  <ArticleCard
+                    key={story.id}
+                    variant="horizontal"
+                    title={story.title}
+                    href={story.href}
+                    image={story.image}
+                    category={story.category}
+                    isBreaking={story.isBreaking}
+                    author={story.author}
+                    publishedAt={story.publishedAt}
+                  />
+                ))}
+              </div>
+            </Grid.Col>
+          </Grid>
+        </section>
+      )}
+
+      {/* 2. SPOTLIGHT 4-COLUMN STRIP */}
+      {spotlightFeed.length > 0 && (
+        <section className={styles.spotlightSection} aria-label="Market Spotlight">
+          <SectionTitle size="md" actionText="Explore Sectors" actionHref="/markets">
+            Markets &amp; Tech Spotlight
+          </SectionTitle>
+
+          <Grid cols={12} gap="md">
+            {spotlightFeed.map((story) => (
+              <Grid.Col key={story.id} span={12} spanMd={6} spanLg={3}>
                 <ArticleCard
-                  key={story.id}
-                  variant="horizontal"
+                  variant="vertical"
                   title={story.title}
                   href={story.href}
                   image={story.image}
                   category={story.category}
-                  isBreaking={story.isBreaking}
                   author={story.author}
                   publishedAt={story.publishedAt}
                 />
-              ))}
-            </div>
-          </Grid.Col>
-        </Grid>
-      </section>
-
-      {/* 2. SPOTLIGHT 4-COLUMN STRIP */}
-      <section className={styles.spotlightSection} aria-label="Market Spotlight">
-        <SectionTitle size="md" actionText="Explore Sectors" actionHref="/markets">
-          Markets &amp; Tech Spotlight
-        </SectionTitle>
-
-        <Grid cols={12} gap="md">
-          {spotlightFeed.map((story) => (
-            <Grid.Col key={story.id} span={12} spanMd={6} spanLg={3}>
-              <ArticleCard
-                variant="vertical"
-                title={story.title}
-                href={story.href}
-                image={story.image}
-                category={story.category}
-                author={story.author}
-                publishedAt={story.publishedAt}
-              />
-            </Grid.Col>
-          ))}
-        </Grid>
-      </section>
+              </Grid.Col>
+            ))}
+          </Grid>
+        </section>
+      )}
 
       {/* 3. MAIN CONTENT & TRENDING RANKING GRID */}
       <Grid cols={12} gap="xl">
@@ -202,7 +161,12 @@ export default async function Home() {
               Get the biggest business stories, market movements, and tech analysis delivered to
               your inbox every morning.
             </p>
-            <Button variant="primary" size="md" href="#newsletter" style={{ width: '100%' }}>
+            <Button
+              variant="primary"
+              size="md"
+              href="#newsletter"
+              className={styles.newsletterButton}
+            >
               Get Free Newsletter
             </Button>
           </div>

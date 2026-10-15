@@ -89,3 +89,19 @@
   display: flex;
   flex-direction: column;
 }
+
+.emptyState {
+  text-align: center;
+  padding: var(--space-16) 0;
+  color: var(--color-text-muted);
+}
+
+.emptyStateText {
+  font-size: var(--font-size-lg);
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.newsletterButton {
+  width: 100%;
+}

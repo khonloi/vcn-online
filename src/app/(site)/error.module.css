@@ -1,0 +1,26 @@
+.errorContainer {
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-20);
+  text-align: center;
+}
+
+.serviceNotice {
+  display: inline-block;
+  letter-spacing: var(--letter-spacing-widest);
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.heading {
+  margin-bottom: var(--space-4);
+}
+
+.description {
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--space-6);
+}
+
+.referenceId {
+  font-family: monospace;
+  margin-bottom: var(--space-6);
+}

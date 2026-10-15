@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { Breadcrumb } from '@/components/ui';
 import { SITE_CONFIG } from '@/lib/constants';
 import styles from '@/styles/static-page.module.css';
 
@@ -16,13 +17,7 @@ export default function AboutPage() {
   return (
     <div className={styles.pageWrapper}>
       <div className={`container ${styles.inner}`}>
-        <nav aria-label="Breadcrumb" className={styles.breadcrumbs}>
-          <Link href="/" className={styles.breadcrumbLink}>
-            Home
-          </Link>
-          <span className={styles.breadcrumbDivider}>/</span>
-          <span className={styles.breadcrumbCurrent}>About</span>
-        </nav>
+        <Breadcrumb items={[{ name: 'Home', href: '/' }, { name: 'About' }]} />
 
         <header className={styles.header}>
           <span className={styles.kicker}>Company &amp; Newsroom</span>

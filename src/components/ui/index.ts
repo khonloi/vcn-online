@@ -11,6 +11,5 @@ export * from './Checkbox';
 export * from './Dialog';
 export * from './DropdownMenu';
 export * from './Tabs';
-
-// Domain feature re-exports (for backward compatibility)
-export * from '@/components/features';
+export * from './Breadcrumb';
+export * from './Skeleton';
