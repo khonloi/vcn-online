@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Button } from '@/components/ui';
+import { Button, MarketTicker } from '@/components/ui';
 import { CurrentDateTime } from './CurrentDateTime';
 import { NavLinks } from './NavLinks';
 import { HeaderSearch } from '@/components/features/search';
@@ -19,28 +19,7 @@ export const Header: React.FC = () => {
         {/* 1. Markets & Editions Top Strip */}
         <div className={styles.topBar}>
           <div className={`container ${styles.topBarContent}`}>
-            <div
-              className={styles.marketTicker}
-              aria-label="Market Data (Indicative snapshot, 15-min delay)"
-              title="Indicative market snapshot • Delayed 15m"
-            >
-              <span className={styles.tickerDelayBadge} aria-hidden="true">
-                15M DELAY
-              </span>
-              {MARKET_INDICES.map((idx) => (
-                <div key={idx.name} className={styles.tickerItem}>
-                  <span className={styles.tickerName}>{idx.name}</span>
-                  <span className={styles.tickerValue}>{idx.value}</span>
-                  <span
-                    className={`${styles.tickerChange} ${
-                      idx.positive ? styles.tickerPositive : styles.tickerNegative
-                    }`}
-                  >
-                    {idx.change}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <MarketTicker indices={MARKET_INDICES} />
 
             <div className={styles.topBarRight}>
               <CurrentDateTime className={styles.dateTime} />

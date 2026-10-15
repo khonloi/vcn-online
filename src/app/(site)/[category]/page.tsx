@@ -2,7 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Breadcrumb, Button, Grid } from '@/components/ui';
+import { Breadcrumb, Button, Grid, Badge } from '@/components/ui';
 import { SectionTitle, ArticleCard } from '@/components/features';
 import { getArticlesByCategory } from '@/services/articles';
 import {
@@ -142,8 +142,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </p>
             <div className={styles.sectorsList}>
               {quickSectors.map((sec) => (
-                <Link key={sec.href} href={sec.href} className={styles.sectorTag}>
-                  {sec.name}
+                <Link key={sec.href} href={sec.href}>
+                  <Badge variant="outline" size="md">
+                    {sec.name}
+                  </Badge>
                 </Link>
               ))}
             </div>

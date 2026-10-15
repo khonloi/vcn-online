@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { Card, Badge, Heading, Text } from '@/components/ui';
 import { ArticleImage } from './ArticleImage';
 import styles from './ArticleCard.module.css';
 import type { ArticleCardProps } from '@/types';
@@ -16,8 +17,11 @@ export const ArticleKicker: React.FC<{ category?: string; isBreaking?: boolean }
   isBreaking = false,
 }) => {
   if (!category) return null;
-  const kickerClass = `${styles.kicker} ${isBreaking ? styles.kickerBreaking : ''}`.trim();
-  return <span className={kickerClass}>{category}</span>;
+  return (
+    <Badge variant={isBreaking ? 'breaking' : 'default'} size="sm">
+      {category}
+    </Badge>
+  );
 };
 
 /**
@@ -30,9 +34,17 @@ export const ArticleMeta: React.FC<{ author?: string; publishedAt?: string }> = 
   if (!author && !publishedAt) return null;
   return (
     <div className={styles.meta}>
-      {author && <span className={styles.author}>{author}</span>}
-      {author && publishedAt && <span>&bull;</span>}
-      {publishedAt && <span>{publishedAt}</span>}
+      {author && (
+        <Text size="xs" weight="semibold" color="primary">
+          {author}
+        </Text>
+      )}
+      {author && publishedAt && <span aria-hidden="true">&bull;</span>}
+      {publishedAt && (
+        <Text size="xs" color="muted">
+          {publishedAt}
+        </Text>
+      )}
     </div>
   );
 };
@@ -52,7 +64,11 @@ export const ArticleCardHorizontal: React.FC<ArticleCardSubProps> = ({
   className = '',
 }) => {
   return (
-    <article className={`${styles.card} ${styles.horizontal} ${className}`.trim()}>
+    <Card
+      variant="flat"
+      orientation="horizontal"
+      className={`${styles.horizontal} ${className}`.trim()}
+    >
       {image && (
         <div className={styles.horizontalImageWrapper}>
           <Link href={href} tabIndex={-1} aria-hidden="true">
@@ -66,14 +82,14 @@ export const ArticleCardHorizontal: React.FC<ArticleCardSubProps> = ({
           </Link>
         </div>
       )}
-      <div className={styles.horizontalContent}>
+      <Card.Body>
         <ArticleKicker category={category} isBreaking={isBreaking} />
-        <h3 className={styles.title}>
+        <Heading as="h3" size="sm" font="headline" weight="bold" className={styles.cardHeading}>
           <Link href={href}>{title}</Link>
-        </h3>
+        </Heading>
         <ArticleMeta author={author} publishedAt={publishedAt} />
-      </div>
-    </article>
+      </Card.Body>
+    </Card>
   );
 };
 
@@ -91,16 +107,20 @@ export const ArticleCardMinimal: React.FC<ArticleCardSubProps> = ({
   className = '',
 }) => {
   return (
-    <article className={`${styles.card} ${styles.minimal} ${className}`.trim()}>
+    <Card
+      variant="flat"
+      orientation="horizontal"
+      className={`${styles.minimal} ${className}`.trim()}
+    >
       {ranking && <span className={styles.rankingNumber}>{ranking}</span>}
-      <div className={styles.minimalContent}>
+      <Card.Body>
         <ArticleKicker category={category} isBreaking={isBreaking} />
-        <h3 className={styles.title}>
+        <Heading as="h3" size="sm" font="headline" weight="bold" className={styles.cardHeading}>
           <Link href={href}>{title}</Link>
-        </h3>
+        </Heading>
         <ArticleMeta author={author} publishedAt={publishedAt} />
-      </div>
-    </article>
+      </Card.Body>
+    </Card>
   );
 };
 
@@ -120,27 +140,33 @@ export const ArticleCardFeatured: React.FC<ArticleCardSubProps> = ({
   className = '',
 }) => {
   return (
-    <article className={`${styles.card} ${styles.featured} ${className}`.trim()}>
+    <Card variant="flat" className={`${styles.featured} ${className}`.trim()}>
       {image && (
-        <Link href={href} tabIndex={-1} aria-hidden="true">
-          <ArticleImage
-            src={image.src}
-            alt={image.alt || title}
-            aspectRatio="16/9"
-            priority={priority}
-            sizes="(max-width: 1024px) 100vw, 66vw"
-          />
-        </Link>
+        <Card.Media>
+          <Link href={href} tabIndex={-1} aria-hidden="true">
+            <ArticleImage
+              src={image.src}
+              alt={image.alt || title}
+              aspectRatio="16/9"
+              priority={priority}
+              sizes="(max-width: 1024px) 100vw, 66vw"
+            />
+          </Link>
+        </Card.Media>
       )}
-      <div className={styles.featuredContent}>
+      <Card.Body>
         <ArticleKicker category={category} isBreaking={isBreaking} />
-        <h3 className={styles.title}>
+        <Heading as="h3" size="3xl" font="headline" weight="black" className={styles.cardHeading}>
           <Link href={href}>{title}</Link>
-        </h3>
-        {summary && <p className={styles.summary}>{summary}</p>}
+        </Heading>
+        {summary && (
+          <Text size="base" font="serif" color="secondary">
+            {summary}
+          </Text>
+        )}
         <ArticleMeta author={author} publishedAt={publishedAt} />
-      </div>
-    </article>
+      </Card.Body>
+    </Card>
   );
 };
 
@@ -160,27 +186,33 @@ export const ArticleCardVertical: React.FC<ArticleCardSubProps> = ({
   className = '',
 }) => {
   return (
-    <article className={`${styles.card} ${styles.vertical} ${className}`.trim()}>
+    <Card variant="flat" className={`${styles.vertical} ${className}`.trim()}>
       {image && (
-        <Link href={href} tabIndex={-1} aria-hidden="true">
-          <ArticleImage
-            src={image.src}
-            alt={image.alt || title}
-            aspectRatio="16/9"
-            priority={priority}
-            sizes="(max-width: 768px) 100vw, 33vw"
-          />
-        </Link>
+        <Card.Media>
+          <Link href={href} tabIndex={-1} aria-hidden="true">
+            <ArticleImage
+              src={image.src}
+              alt={image.alt || title}
+              aspectRatio="16/9"
+              priority={priority}
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
+          </Link>
+        </Card.Media>
       )}
-      <div className={styles.verticalContent}>
+      <Card.Body>
         <ArticleKicker category={category} isBreaking={isBreaking} />
-        <h3 className={styles.title}>
+        <Heading as="h3" size="lg" font="headline" weight="bold" className={styles.cardHeading}>
           <Link href={href}>{title}</Link>
-        </h3>
-        {summary && <p className={styles.summary}>{summary}</p>}
+        </Heading>
+        {summary && (
+          <Text size="sm" font="serif" color="secondary">
+            {summary}
+          </Text>
+        )}
         <ArticleMeta author={author} publishedAt={publishedAt} />
-      </div>
-    </article>
+      </Card.Body>
+    </Card>
   );
 };
 

@@ -105,23 +105,4 @@ export const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
 
 Flex.displayName = 'Flex';
 
-export interface StackProps extends Omit<FlexProps, 'direction'> {
-  direction?: 'vertical' | 'horizontal';
-}
-
-export const Stack = React.forwardRef<HTMLDivElement, StackProps>(
-  ({ direction = 'vertical', gap = 4, ...props }, ref) => {
-    return (
-      <Flex
-        ref={ref}
-        direction={direction === 'vertical' ? 'column' : 'row'}
-        gap={gap}
-        {...props}
-      />
-    );
-  }
-);
-
-Stack.displayName = 'Stack';
-
 export default Flex;

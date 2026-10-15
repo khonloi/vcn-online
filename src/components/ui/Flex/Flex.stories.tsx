@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { Flex, Stack } from './Flex';
+import { Flex } from './Flex';
 import { Button } from '../Button';
 
 const meta = {
@@ -42,7 +42,7 @@ export const VerticalStack: Story = {
     children: null,
   },
   render: () => (
-    <Stack gap={3} style={{ maxWidth: '300px' }}>
+    <Flex direction="column" gap={3} style={{ maxWidth: '300px' }}>
       <Button variant="secondary" size="md">
         Markets Dashboard
       </Button>
@@ -52,6 +52,6 @@ export const VerticalStack: Story = {
       <Button variant="secondary" size="md">
         Earnings Calendar
       </Button>
-    </Stack>
+    </Flex>
   ),
 };

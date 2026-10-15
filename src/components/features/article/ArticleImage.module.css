@@ -1,7 +1,7 @@
 .imageContainer {
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius-none);
+  border-radius: var(--radius-sm);
   background-color: var(--color-surface-muted);
   width: 100%;
 }
@@ -31,9 +31,9 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform var(--transition-slow);
+  transition: transform var(--transition-smooth);
 }
 
 .zoomOnHover:hover .image {
-  transform: scale(1.02);
+  transform: scale(1.03);
 }

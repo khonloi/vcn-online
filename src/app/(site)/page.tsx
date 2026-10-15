@@ -1,5 +1,4 @@
-import React from 'react';
-import { Button, Grid } from '@/components/ui';
+import { Button, Grid, Surface, Heading, Text } from '@/components/ui';
 import { ArticleCard, SectionTitle } from '@/components/features';
 import styles from './page.module.css';
 import { getLatestArticles } from '@/services/articles';
@@ -132,7 +131,14 @@ export default async function Home() {
 
         {/* Sidebar Column: Numbered Trending Rankings + Newsletter Widget (4 cols) */}
         <Grid.Col span={12} spanLg={4}>
-          <aside className={styles.sidebarWidget} aria-label="Trending Now">
+          <Surface
+            as="aside"
+            variant="card"
+            border="default"
+            padding="md"
+            aria-label="Trending Now"
+            className={styles.sidebarSurface}
+          >
             <SectionTitle size="sm" as="h3">
               Most Popular
             </SectionTitle>
@@ -152,15 +158,23 @@ export default async function Home() {
                 />
               ))}
             </div>
-          </aside>
+          </Surface>
 
           {/* Exclusive Newsletter Box */}
-          <div className={styles.newsletterWidget}>
-            <h3 className={styles.newsletterTitle}>Vice City Today</h3>
-            <p className={styles.newsletterText}>
+          <Surface variant="subtle" border="default" padding="lg">
+            <Heading
+              as="h3"
+              size="lg"
+              font="headline"
+              weight="black"
+              className={styles.newsletterHeading}
+            >
+              Vice City Today
+            </Heading>
+            <Text size="xs" color="secondary" className={styles.newsletterDescription}>
               Get the biggest business stories, market movements, and tech analysis delivered to
               your inbox every morning.
-            </p>
+            </Text>
             <Button
               variant="primary"
               size="md"
@@ -169,7 +183,7 @@ export default async function Home() {
             >
               Get Free Newsletter
             </Button>
-          </div>
+          </Surface>
         </Grid.Col>
       </Grid>
     </div>

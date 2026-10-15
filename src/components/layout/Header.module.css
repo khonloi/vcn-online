@@ -47,69 +47,6 @@
   align-items: center;
 }
 
-.marketTicker {
-  display: flex;
-  gap: var(--space-4);
-  align-items: center;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.marketTicker::-webkit-scrollbar {
-  display: none;
-}
-
-.tickerDelayBadge {
-  font-size: 10px;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-muted);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 1px 4px;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  white-space: nowrap;
-}
-
-.tickerItem,
-.marketItem {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  font-weight: var(--font-weight-medium);
-  font-size: 11px;
-  color: var(--color-text-secondary);
-  white-space: nowrap;
-}
-
-.tickerName {
-  color: var(--color-text-primary);
-  font-weight: var(--font-weight-bold);
-  margin-right: 2px;
-}
-
-.tickerValue {
-  color: var(--color-text-secondary);
-  margin-right: 2px;
-}
-
-.tickerChange {
-  font-weight: var(--font-weight-bold);
-}
-
-.tickerPositive,
-.marketPositive {
-  color: #08744c;
-  font-weight: var(--font-weight-bold);
-}
-
-.tickerNegative,
-.marketNegative {
-  color: var(--color-breaking);
-  font-weight: var(--font-weight-bold);
-}
-
 .topBarRight,
 .topBarActions {
   display: none;

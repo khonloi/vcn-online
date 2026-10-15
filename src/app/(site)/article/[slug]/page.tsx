@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Breadcrumb, Button } from '@/components/ui';
+import { Breadcrumb, Button, Badge, Surface } from '@/components/ui';
 import { ArticleImage, CustomPortableText, ArticleActions } from '@/components/features';
 import { getArticleBySlug } from '@/services/articles';
 import { urlFor } from '@/sanity/lib/image';
@@ -173,9 +173,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
         {/* Article Header */}
         <header className={styles.articleHeader}>
-          {article.isBreaking && <span className={styles.kickerBreaking}>BREAKING NEWS</span>}
+          {article.isBreaking && <Badge variant="breaking">BREAKING NEWS</Badge>}
           {!article.isBreaking && article.category && (
-            <span className={styles.kickerCategory}>{article.category}</span>
+            <Badge variant="default">{article.category}</Badge>
           )}
           <h1 className={styles.headline}>{article.title}</h1>
 
@@ -193,14 +193,20 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
         {/* Key Takeaways Box */}
         {article.takeaways && article.takeaways.length > 0 && (
-          <aside className={styles.takeawaysBox} aria-label="Key Takeaways">
+          <Surface
+            as="aside"
+            variant="subtle"
+            padding="md"
+            className={styles.takeawaysBox}
+            aria-label="Key Takeaways"
+          >
             <h3 className={styles.takeawaysTitle}>Key Takeaways</h3>
             <ul className={styles.takeawaysList}>
               {article.takeaways.map((takeaway: string, idx: number) => (
                 <li key={idx}>{takeaway}</li>
               ))}
             </ul>
-          </aside>
+          </Surface>
         )}
 
         {/* Main Image */}
