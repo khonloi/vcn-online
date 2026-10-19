@@ -35,7 +35,7 @@
     "sanity": "^5.31.2"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.13.0",
+    "@axe-core/playwright": "^4.14.0",
     "@chromatic-com/storybook": "latest",
     "@playwright/test": "^1.63.0",
     "@storybook/addon-a11y": "^10.6.1",
